@@ -1,0 +1,49 @@
+Base: 
+		Usuario{
+		Nombre : string
+		Apellido : String 
+		usser :String
+		password :string
+		}
+
+		Productos{
+		Nombre :String
+		Desripcion :String
+		Precio :float
+		Cantidad :int
+		Categoria :String
+		}
+
+		Clientes {
+		Nombre:string
+		Apellido:String
+		Direccion:String
+		Dni:String
+		Telefono:String
+		}
+
+		Proveedores{
+		Nombre:String
+		Apellido:String
+		Dni:String
+		Telefono:String
+		}
+
+		Pedidos{
+		fecha:date
+		Productos[]
+		Total:float
+		proveedor:string
+		}
+
+		Ventas{
+		fecha:date
+		Productos[]
+		Total:float
+		Coordenadas:string
+		cliente:string
+		}
+
+
+
+
