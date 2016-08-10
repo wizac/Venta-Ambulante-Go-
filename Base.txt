@@ -9,7 +9,8 @@ Base:
 		Productos{
 		Nombre :String
 		Desripcion :String
-		Precio :float
+		PrecioVenta :float
+		PrecioCompra:float
 		Cantidad :int
 		Categoria :String
 		}
@@ -42,6 +43,12 @@ Base:
 		Total:float
 		Coordenadas:string
 		cliente:string
+		}
+
+		Estadistica{
+		idventa:string
+		inversion:float?
+		beneficio:float?
 		}
 
 
