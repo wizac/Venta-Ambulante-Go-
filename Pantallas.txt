@@ -1,0 +1,13 @@
+Pantallas:
+	1_Log in
+	2_Registro
+	3_Ventas
+	4_Carga de Productos
+	5_Clientes
+	6_Proveedores
+	7_Mapa
+	8_Estadisticas
+	9_Perfil
+	10_Pedidos
+
+
