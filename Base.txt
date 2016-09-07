@@ -11,6 +11,7 @@ Base:
 		Desripcion :String
 		PrecioVenta :float
 		PrecioCompra:float
+		imagen: base64,
 		Cantidad :int
 		Categoria :String
 		}
@@ -19,7 +20,7 @@ Base:
 		Nombre:string
 		Apellido:String
 		Direccion:String
-		Dni:String
+			
 		Telefono:String
 		}
 
