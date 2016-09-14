@@ -121,11 +121,25 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('confirmarProductosCtrl', ['$scope', '$stateParams','$ionicPopup', '$timeout','$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('confirmarProductosCtrl', ['$scope', '$stateParams','$ionicPopup', '$timeout','$state','$http', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams,$ionicPopup, $timeout,$state) {
-
+function ($scope, $stateParams,$ionicPopup, $timeout,$state,$http) {
+   $http.get('http://localhost:3000/persona/list')
+      .then(function(data){
+		  console.log(data);
+	  });
+	data = {
+    "nombre": "gonsss",
+    "apellido": "podesss",
+    "documento": "32422233"
+	};
+	  $http.post('http://localhost:3000/persona/put',data)
+      .success(function(){
+		  
+	   console.log("Listo!");
+	  });
+	  
   $scope.prodConfirmar = productosSeleccionados;
 
    $scope.showConfirm = function() {
@@ -141,7 +155,7 @@ function ($scope, $stateParams,$ionicPopup, $timeout,$state) {
    });
  };
 
-
+ 
 }])
    
 .controller('seleccionarClienteCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller

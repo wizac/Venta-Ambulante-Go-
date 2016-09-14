@@ -3,13 +3,14 @@ var app = express();
 var data = Array();
 var lastId = 0;
 var bodyParser = require('body-parser');
-
+var cors = require('cors');
 
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.post("/persona/put",function(req, res){
