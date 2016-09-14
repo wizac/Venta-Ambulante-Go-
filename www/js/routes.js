@@ -80,10 +80,40 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('agregarClientes', {
-    url: '/agregarclientes',
-    templateUrl: 'templates/agregarClientes.html',
-    controller: 'agregarClientesCtrl'
+  .state('ventas.seleccionarCliente', {
+    url: '/selecclientes',
+    views: {
+      'tab5': {
+        templateUrl: 'templates/seleccionarCliente.html',
+        controller: 'seleccionarClienteCtrl'
+      }
+    }
+  })
+
+  .state('ventas.agregarCliente', {
+    url: '/agregCliente',
+    views: {
+      'tab5': {
+        templateUrl: 'templates/agregarCliente.html',
+        controller: 'agregarClienteCtrl'
+      }
+    }
+  })
+
+  .state('ventas.detalleDeVenta', {
+    url: '/detalleventa',
+    views: {
+      'tab1': {
+        templateUrl: 'templates/detalleDeVenta.html',
+        controller: 'detalleDeVentaCtrl'
+      }
+    }
+  })
+
+  .state('page', {
+    url: '/page13',
+    templateUrl: 'templates/page.html',
+    controller: 'pageCtrl'
   })
 
 $urlRouterProvider.otherwise('/tabventa/mapaventas')

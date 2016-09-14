@@ -1,24 +1,20 @@
-<ion-view style="" class=" " id="page2" title="Agregue Productos">
+<ion-view style="" id="page2" title="Agregue Productos">
     <ion-content class="has-header" padding="true">
-        <form class="list " id="agregueProductos-form5">
+        <form class="list" id="agregueProductos-form5">
             <label style="" class="item item-input">
                 <i class="icon ion-search placeholder-icon"></i>
                 <input placeholder="" type="search">
             </label>
         </form>
-        <ion-list class=" " id="agregueProductos-list5">
-            <ion-item style="" id="agregueProductos-list-item17" class="item-thumbnail-left  ">
-                <h2>Item 1</h2>
-            </ion-item>
-            <ion-item style="" id="agregueProductos-list-item18" class="item-thumbnail-left  ">
-                <h2>Item 2</h2>
-            </ion-item>
-            <ion-item style="" id="agregueProductos-list-item19" class="item-thumbnail-left  ">
-                <h2>Item 3</h2>
+         <ion-list class=" " id="agregueProductos-list5">
+            <ion-item ng-repeat="producto in productosStock" style="" id="agregueProductos-list-item17" class="" ng-click="seleccionarProducto(producto)">
+                <h2>{{producto.nombre}}</h2>
+                Precio de venta: {{producto.precioVenta}} <br>
+                Cantidad en stock: {{producto.cantidad}}
             </ion-item>
         </ion-list>
-        <div class=" button-bar " id="agregueProductos-button-bar3">
-            <a class=" button button-positive  button-block " id="agregueProductos-button17" ui-sref="ventas.confirmarProductos">Siguiente</a>
+        <div class="button-bar" id="agregueProductos-button-bar3">
+            <a class="button button-positive  button-block" id="agregueProductos-button17" ui-sref="ventas.confirmarProductos">Siguiente</a>
         </div>
     </ion-content>
 </ion-view>
