@@ -167,4 +167,59 @@ function ($scope, $stateParams) {
 
 
 }])
+
+.controller('loginCtrl', function ($scope, $state,$rootScope, API) {
+	
+	$rootScope.token = "";
+	
+	$scope.login = function(user, pass) {
+
+		$rootScope.token = API.logIn(user, pass, function(token){
+			$rootScope.token = token;
+			$state.go('menu.perfil');
+		}, function(error) {
+			$scope.errormessage = error;
+			console.log("error traje esto: "+ error);
+		});
+		
+	}
+	
+
+})
+
+
+.factory('API', function($http) {
+	return {
+		
+		logIn: function(user, pass, cexito, cerror){
+			
+			var data = {
+				"usuario": user,
+				"contraseña": pass,
+			};
+ 
+			$http.post('http://localhost:8080/autentificacion',data).success(function(response){
+		  
+				if (response.success) {
+					cexito(response.token);
+				} else {
+					cerror(response.message);
+				}
+				
+			});
+			
+		}
+		
+		
+		
+		
+	}
+	
+})
+
+
+
+
+
+
  
