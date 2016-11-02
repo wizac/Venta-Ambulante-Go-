@@ -1,0 +1,20 @@
+{ 
+    "_id" : ObjectId("5813adaf73b3ec3345ac208e"), 
+    "Nombre" : "String", 
+    "Desripcion" : ",String", 
+    "PrecioVenta" : "float", 
+    "PrecioCompra" : "float", 
+    "imagen" : "base64", 
+    "Cantidad" : 1.0, 
+    "Categoria" : "String"
+}
+{ 
+    "_id" : ObjectId("5813add273b3ec3345ac208f"), 
+    "Nombre" : "String", 
+    "Desripcion" : "String", 
+    "PrecioVenta" : "float", 
+    "PrecioCompra" : "float", 
+    "imagen" : "base64", 
+    "Cantidad" : 1.0, 
+    "Categoria" : "String"
+}

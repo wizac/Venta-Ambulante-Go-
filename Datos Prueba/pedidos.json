@@ -1,0 +1,9 @@
+{ 
+    "_id" : ObjectId("5813af7473b3ec3345ac2092"), 
+    "fecha" : "date", 
+    "Productos" : [
+
+    ], 
+    "Total" : 1.1, 
+    "proveedor" : "string"
+}

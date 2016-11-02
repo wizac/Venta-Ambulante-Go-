@@ -1,0 +1,10 @@
+{ 
+    "_id" : ObjectId("5813afcb73b3ec3345ac2093"), 
+    "fecha" : "date", 
+    "Productos" : [
+
+    ], 
+    "Total" : 1.1, 
+    "Coordenadas" : "string", 
+    "cliente" : "string"
+}
