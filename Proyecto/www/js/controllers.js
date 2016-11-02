@@ -174,7 +174,7 @@ function ($scope, $stateParams) {
 	
 	$scope.login = function(user, pass) {
 
-		$rootScope.token = API.logIn(user, pass, function(token){
+		    API.logIn(user, pass, function(token){
 			$rootScope.token = token;
 			$state.go('menu.perfil');
 		}, function(error) {
@@ -182,6 +182,19 @@ function ($scope, $stateParams) {
 			console.log("error traje esto: "+ error);
 		});
 		
+	}
+	
+	var productos;
+	
+	$scope.cargarProductos = function(){
+		
+		    API.getProductos(function(p){
+			productos = p;
+			
+		}, function(error) {
+			$scope.errormessage = error;
+			console.log("error traje esto: "+ error);
+		});
 	}
 	
 
@@ -194,8 +207,8 @@ function ($scope, $stateParams) {
 		logIn: function(user, pass, cexito, cerror){
 			
 			var data = {
-				"usuario": user,
-				"contraseña": pass,
+				"usser": user,
+				"password": pass,
 			};
  
 			$http.post('http://localhost:8080/autentificacion',data).success(function(response){
@@ -208,9 +221,22 @@ function ($scope, $stateParams) {
 				
 			});
 			
+		},
+		
+		getProductos: function(cexito, cerror){
+			
+			$http.get('http://localhost:8081/api/productos/list').success(function(response){
+				
+				if (response.success) {
+					cexito(response.docs);
+				} else {
+					cerror(response.message);
+				}
+			});
+			
 		}
 		
-		
+		getProductos: function
 		
 		
 	}
