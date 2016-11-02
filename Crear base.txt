@@ -1,0 +1,52 @@
+db.usuario.insert({
+		'Nombre': "admin",
+		'Apellido':'admin', 
+		'usser':'admin',
+		'password' :'admin'
+		})
+db.productos.insert({
+		'Nombre' :'String',
+		'Desripcion' :'String',
+		'PrecioVenta' :'float',
+		'PrecioCompra':'float',
+		'imagen': 'base64',
+		'Cantidad' :1,
+		'Categoria' :'String'
+		})
+		
+db.clientes.insert({
+		'Nombre':'string',
+		'Apellido':'String',
+		'Direccion':'String',
+		'Telefono':'String'
+		})
+db.proveedores.insert({
+		'Nombre':'String',
+		'Apellido':'String',
+		'Dni':'String',
+		'Telefono':'String'
+		})
+db.pedidos.insert({
+		'fecha':'date',
+		Productos:[],
+		'Total':1.1,
+		'proveedor':'string'
+		})
+		
+db.ventas.insert({
+		'fecha':'date',
+		Productos:[],
+		'Total':1.1,
+		'Coordenadas':'string',
+		'cliente':'string'
+		})
+		
+db.estadisticas.insert({
+		'idventa':'string',
+		'inversion':1.1,
+		'beneficio':1.1
+		})
+
+
+
+
