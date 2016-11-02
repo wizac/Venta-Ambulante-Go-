@@ -211,8 +211,15 @@ angular.module('app.routes', [])
       }
     }
   })
+  
+  
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'loginCtrl'
+  })
 
-$urlRouterProvider.otherwise('/side-menu21/page1')
+$urlRouterProvider.otherwise('login')
 
   
 

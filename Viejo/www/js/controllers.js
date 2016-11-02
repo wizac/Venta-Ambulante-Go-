@@ -89,10 +89,29 @@ function ($scope, $stateParams) {
 
 }])
          
-.controller('loginCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('loginCtrl', ['$scope', '$stateParams', '$rootScope', '$http',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+function ($scope, $stateParams,$rootScope, $http) {
+	$scope.user = "";
+	$scope.pass = "";
+	$rootScope.token = "";
+	
+	$scope.login = function(u, p){
+    
+		var data = {
+			"usuario": u,
+			"contraseña": p,
+		};
+ 
+		$http.post('http://localhost:8080/autentificacion',data).success(function(res){
+		  
+					console.log(res);
+					$rootScope.token = res;
+		});
+	  
+	}
+
 
 
 }])

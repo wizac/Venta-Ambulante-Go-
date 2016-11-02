@@ -116,7 +116,7 @@ angular.module('app.routes', [])
     controller: 'pageCtrl'
   })
 
-$urlRouterProvider.otherwise('/tabventa/mapaventas')
+$urlRouterProvider.otherwise('page5')
 
   
 

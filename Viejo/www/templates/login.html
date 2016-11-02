@@ -1,0 +1,20 @@
+<ion-view style="" id="page5" title="Login">
+    <ion-content class="has-header" padding="true">
+        <form class="list" id="login-form1">
+            <h1 style="color: rgb(0, 0, 0); text-align: center;" id="login-heading1">Venta Ambulante Go!</h1>
+            <ion-list id="login-list1">
+                <label id="login-input1" class="item item-input">
+                    <span class="input-label" >Username</span>
+                    <input placeholder="" ng-model="user" type="text">
+                </label>
+                <label id="login-input2" class="item item-input">
+                    <span class="input-label">Password</span>
+                    <input placeholder="" ng-model="pass" type="password">
+                </label>
+            </ion-list>
+            <div style="height: 40px;" class="spacer"></div>
+            <button class="button button-stable  button-block" id="login-button1" ng-click="login(user, pass)">Log in</button>
+            <a class="button button-positive  button-block button-clear" id="login-button2" ui-sref="signup">Or create an account</a>
+        </form>
+    </ion-content>
+</ion-view>
