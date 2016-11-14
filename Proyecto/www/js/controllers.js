@@ -60,34 +60,35 @@ function ($scope, $stateParams) {
 .controller('perfilCtrl',
 function (API, $scope, $stateParams) {
 	
-		var cantidadVisibles = 0;
-		var cantidadVerMas = 3;
-		$scope.ultimasVentas = [];
+	
+	var cantidadVisibles = 0;
+	var cantidadVerMas = 3;
+	$scope.ultimasVentas = [];
+	
 		
-		API.getProductos(function(p){
-			productos = p;
-			console.log(productos);
-		}, function(error) {
-			$scope.errormessage = error;
-			console.log("error al recuperar productos: "+ error);
-		});
-		
+	API.getProductos()
+	.then(function (result) {
+        console.log('la promesa se ha resuelto');
+        productos = result;
+		console.log(productos);
+			
 		if(cantidadVisibles + 1 <= productos.length){
-			console.log("si entra");
 			$scope.ultimasVentas.push(productos[productos.length - 1]);
 			cantidadVisibles = cantidadVisibles + 1;
 		}
-		else
-		{
-			console.log("no entra en el if " + (cantidadVisibles + 1) + " " + productos.length);
-			console.log(productos);
-		}
-		
-		$scope.verMas = function(){
+			
+    })
+    .catch(function (message) {
+        console.log('la promesa se ha rechazado ' + message);
+		$scope.errormessage = message;
+    });
+	
+	
+	$scope.verMas = function(){
 			if((cantidadVisibles + cantidadVerMas) <= productos.length){
 				for(var cant = cantidadVerMas; cant > 0; cant--){
-					$scope.ultimasVentas.push(productos[(productos.length - 1) - cantidadVisibles]);
-					cantidadVisibles = cantidadVisibles + 1;
+						$scope.ultimasVentas.push(productos[(productos.length - 1) - cantidadVisibles]);
+						cantidadVisibles = cantidadVisibles + 1;
 				}
 			}
 			else
@@ -104,7 +105,8 @@ function (API, $scope, $stateParams) {
 				}
 				while (copiaCantVerMas > 0 && (cantidadVisibles + copiaCantVerMas) > productos.length);
 			}
-		}
+	}
+		
 	
 })
    
@@ -226,12 +228,12 @@ function ($scope, $stateParams) {
 	$scope.login = function(user, pass) {
 
 		    API.logIn(user, pass, function(token){
-			$rootScope.token = token;
-			console.log("token devuelto: "+ token);
-			$state.go('menu.perfil');
-		}, function(error) {
-			$scope.errormessage = error;
-			console.log("error traje esto: "+ error);
+				$rootScope.token = token;
+				console.log("token devuelto: "+ token);
+				$state.go('menu.perfil');
+			}, function(error) {
+				$scope.errormessage = error;
+				console.log("error traje esto: "+ error);
 		});
 		
 	}
@@ -239,9 +241,12 @@ function ($scope, $stateParams) {
 })
 
 
-.factory('API', function($http, $rootScope) {
+.factory('API', function($http, $rootScope, $q) {
+	var deferred = $q.defer();
 	return {
 		
+		
+		// pasandole 2 callback 
 		logIn: function(user, pass, cexito, cerror){
 			
 			var data = {
@@ -260,24 +265,26 @@ function ($scope, $stateParams) {
 			});
 			
 		},
-		
-		getProductos: function(cexito, cerror){
+		// usando patron promise-deferred
+		getProductos: function(){
 			
 			if($rootScope != null && $rootScope != "")
 			{
 				$http.post('http://localhost:8080/api/productos/listar?token=' + $rootScope.token).success(function(response){
 					
 					if (response.success) {
-						cexito(response.res);
+						deferred.resolve(response.res);
 					} else {
-						cerror(response.message);
+						deferred.reject(response.message)
 					}
+					return deferred.promise;
 				});
 			}
 			else
 			{
-				cerror("conexion perdida!");
+				deferred.reject("conexion perdida")
 			}
+			return deferred.promise;
 			
 		}
 		
