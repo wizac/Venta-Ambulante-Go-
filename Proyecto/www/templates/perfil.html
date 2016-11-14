@@ -1,18 +1,20 @@
 <ion-view title="Perfil" id="page9">
   <ion-content padding="true" class="has-header">
     <h1 id="perfil-heading24" style="color:#000000;text-align:center;">Ultimas ventas</h1>
+	
     <div class="item item-body" id="perfil-list-item-container4">
-      <div id="perfil-markdown11">
-        <p style="margin-top:0px;color:#000000;">Nombre cliente: Brayam Ojeda</p>
-      </div>
-      <div id="perfil-markdown12">
-        <p style="margin-top:0px;color:#000000;">Ganancia total: $500</p>
-      </div>
-      <div id="perfil-markdown13">
-        <p style="margin-top:0px;color:#000000;">Fecha: 20/10/2016</p>
-      </div>
-      <button id="perfil-button13" style="font-size:16px;border-radius:51px 51px 51px 51px;" class="button button-positive button-small button-block">Ver mas</button>
+		<ion-list">
+            <ion-item ng-repeat="venta in ultimasVentas">
+                <p style="margin-top:0px;color:#000000;"> 
+					Nombre cliente: {{venta.PrecioVenta}} <br>
+				    Fecha: {{venta.Descripcion}} <br>
+					Ganancia total: {{venta.Cantidad}}
+				</p>
+            </ion-item>
+		</ion-list>
+      <button id="perfil-button13" style="font-size:16px;border-radius:51px 51px 51px 51px;" class="button button-positive button-small button-block" ng-click="verMas()">Ver mas</button>
     </div>
+	
     <div class="spacer" style="width: 300px; height: 29px;"></div>
     <h1 id="perfil-heading31" style="color:#000000;text-align:center;">Ultimos pedidos</h1>
     <div class="item item-body" id="perfil-list-item-container5">
