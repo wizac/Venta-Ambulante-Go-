@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
- angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services',])
+ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','leaflet-directive'])
 
 .config(function($ionicConfigProvider){
 
@@ -25,3 +25,26 @@
     }
   });
 })
+
+
+.controller("MarkerController", [ '$scope', function($scope) {
+    angular.extend($scope, {
+        osloCenter: {
+            lat: 59.91,
+            lng: 10.75,
+            zoom: 12
+        },
+        markers: {
+            osloMarker: {
+                lat: 59.91,
+                lng: 10.75,   
+                message: "I want to travel here!",
+                focus: true,
+                draggable: true
+            }
+        },
+        defaults: {
+            scrollWheelZoom: false
+        }
+    });
+}]);
