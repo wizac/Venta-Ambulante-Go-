@@ -41,10 +41,36 @@
                 message: "I want to travel here!",
                 focus: true,
                 draggable: true
-            }
-        },
+            },
+
+          anotherMarker: {
+                lat: 56.91,
+                lng: 11.75,   
+                message: "I want to travel there!",
+                focus: false,
+                draggable: true
+            },
         defaults: {
             scrollWheelZoom: false
         }
+}
+
     });
+
+
+ $scope.$on('leafletDirectiveMap.click', function(event,dat)
+ {
+        $scope.eventDetected = "Click";
+//esto agrega marcadores no encuentro como carajo hacerlo dinamico, el event siempre me llega en null asdkasdkjlaslkjasdkjls
+     $scope.markers.otro={
+                lat: 59.91,
+                lng: 11.75,   
+                message: "I want to travel there!",
+                focus: false,
+                draggable: true
+
+     };
+      console.log($scope.eventDetected.lat);
+    });
+
 }]);
