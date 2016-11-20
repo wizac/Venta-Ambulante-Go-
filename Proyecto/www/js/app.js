@@ -70,7 +70,7 @@
                 draggable: true
 
      };
-      console.log($scope.eventDetected.lat);
+      console.log($scope.eventDetected);
     });
 
 }]);

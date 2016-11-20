@@ -1,0 +1,28 @@
+{ 
+    "_id" : ObjectId("58312ce8a133d4e0cf393af2"), 
+    "nombre" : "Marcelo", 
+    "direccion" : "Albondiga", 
+    "cuit" : "4", 
+    "telefono" : "222"
+}
+{ 
+    "_id" : ObjectId("58312cf2a133d4e0cf393af3"), 
+    "nombre" : "Nombre", 
+    "direccion" : "Apellido", 
+    "cuit" : "43434", 
+    "telefono" : "2"
+}
+{ 
+    "_id" : ObjectId("58312cfca133d4e0cf393af4"), 
+    "nombre" : "mequedo", 
+    "direccion" : "sinideas", 
+    "cuit" : "435434", 
+    "telefono" : "2"
+}
+{ 
+    "_id" : ObjectId("58312d03a133d4e0cf393af5"), 
+    "nombre" : "tengo", 
+    "direccion" : "sueño", 
+    "cuit" : "435434", 
+    "telefono" : "2"
+}

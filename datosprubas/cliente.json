@@ -1,0 +1,32 @@
+{ 
+    "_id" : ObjectId("58312c94a133d4e0cf393aee"), 
+    "nombre" : "Miguel", 
+    "apellido" : "brazoroto", 
+    "dni" : "34444434", 
+    "direccion" : "Aca", 
+    "telefono" : "1223232"
+}
+{ 
+    "_id" : ObjectId("58312ca3a133d4e0cf393aef"), 
+    "nombre" : "Carlos", 
+    "apellido" : "Perez", 
+    "dni" : "34444434", 
+    "direccion" : "Aleatoria 123", 
+    "telefono" : "1223232"
+}
+{ 
+    "_id" : ObjectId("58312cb3a133d4e0cf393af0"), 
+    "nombre" : "Rodrigo", 
+    "apellido" : "Bertran", 
+    "dni" : "5", 
+    "direccion" : " Mardelplata", 
+    "telefono" : "1223232"
+}
+{ 
+    "_id" : ObjectId("58312cc7a133d4e0cf393af1"), 
+    "nombre" : "Osiris", 
+    "apellido" : "castillo", 
+    "dni" : "56664", 
+    "direccion" : " ningunlugar", 
+    "telefono" : "1223232"
+}

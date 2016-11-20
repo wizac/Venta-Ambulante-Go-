@@ -1,0 +1,28 @@
+{ 
+    "_id" : ObjectId("58312b38a133d4e0cf393aea"), 
+    "nombre" : "admin", 
+    "apellido" : "admin", 
+    "user" : "admin", 
+    "pass" : "admin"
+}
+{ 
+    "_id" : ObjectId("58312b49a133d4e0cf393aeb"), 
+    "nombre" : "gonza", 
+    "apellido" : "gonza", 
+    "user" : "gonza", 
+    "pass" : "gonza"
+}
+{ 
+    "_id" : ObjectId("58312b58a133d4e0cf393aec"), 
+    "nombre" : "wizzac", 
+    "apellido" : "wizzac", 
+    "user" : "wizzac", 
+    "pass" : "wizzac"
+}
+{ 
+    "_id" : ObjectId("58312b60a133d4e0cf393aed"), 
+    "nombre" : "prueba", 
+    "apellido" : "prueba", 
+    "user" : "prueba", 
+    "pass" : "prueba"
+}
