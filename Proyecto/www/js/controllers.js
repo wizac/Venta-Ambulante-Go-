@@ -1,4 +1,3 @@
-var productos = [];
 angular.module('app.controllers', [])
 .controller('misDatosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -57,55 +56,144 @@ function ($scope, $stateParams) {
 }])
    
 .controller('perfilCtrl',
-function (API, $scope, $stateParams) {
+function (API, $scope, $stateParams, $rootScope) {
 	
 	
-	var cantidadVisibles = 0;
+	var cantidadVisiblesVentas = 0;
+	var cantidadVisiblesPedidos = 0;
 	var cantidadVerMas = 3;
+	var cantidadVerMenos = 3;
 	$scope.ultimasVentas = [];
+	$scope.ultimosPedidos = [];
+	$rootScope.ventas = [];
+	$rootScope.pedidos = [];
 	
 		
-	API.getProductos()
-	.then(function (result) {
-        console.log('la promesa se ha resuelto');
-        productos = result;
-		console.log(productos);
-			
-		if(cantidadVisibles + 1 <= productos.length){
-			$scope.ultimasVentas.push(productos[productos.length - 1]);
-			cantidadVisibles = cantidadVisibles + 1;
+	API.getVentas(function(result){
+		console.log('las ventas se recuperaron con exito');
+        $rootScope.ventas = result;
+		console.log(result);
+		if(cantidadVisiblesVentas + 1 <= $rootScope.ventas.length){
+			$scope.ultimasVentas.push($rootScope.ventas[$rootScope.ventas.length - 1]);
+			cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
 		}
-			
-    })
-    .catch(function (message) {
-        console.log('la promesa se ha rechazado ' + message);
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + message);
 		$scope.errormessage = message;
-    });
+	});
 	
 	
-	$scope.verMas = function(){
-			if((cantidadVisibles + cantidadVerMas) <= productos.length){
+	
+	API.getPedidos(function(result){
+		console.log('los pedidos se recuperaron con exito');
+        $rootScope.pedidos = result;
+		console.log(result);
+		if(cantidadVisiblesPedidos + 1 <= $rootScope.pedidos.length){
+			$scope.ultimosPedidos.push($rootScope.pedidos[$rootScope.pedidos.length - 1]);
+			cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
+		}
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + message);
+		$scope.errormessage = message;
+	});
+	
+	
+	// ---------------------------- VER MAS VENTAS --------------------------------------
+	
+	$scope.verMasVentas = function(){
+			if((cantidadVisiblesVentas + cantidadVerMas) <= $rootScope.ventas.length){
 				for(var cant = cantidadVerMas; cant > 0; cant--){
-						$scope.ultimasVentas.push(productos[(productos.length - 1) - cantidadVisibles]);
-						cantidadVisibles = cantidadVisibles + 1;
+						$scope.ultimasVentas.push($rootScope.ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
+						cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
 				}
 			}
 			else
 			{
 				copiaCantVerMas = cantidadVerMas;
 				do {
-					if(--copiaCantVerMas > 0 && (cantidadVisibles + copiaCantVerMas) <= productos.length)
+					if(--copiaCantVerMas > 0 && (cantidadVisiblesVentas + copiaCantVerMas) <= $rootScope.ventas.length)
 					{
 						for(var cant = copiaCantVerMas; cant > 0; cant--){
-							$scope.ultimasVentas.push(productos[(productos.length - 1) - cantidadVisibles]);
-							cantidadVisibles = cantidadVisibles + 1;
+							$scope.ultimasVentas.push($rootScope.ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
+							cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
 						}
 					}
 				}
-				while (copiaCantVerMas > 0 && (cantidadVisibles + copiaCantVerMas) > productos.length);
+				while (copiaCantVerMas > 0 && (cantidadVisiblesVentas + copiaCantVerMas) > $rootScope.ventas.length);
 			}
 	}
-		
+	
+	$scope.verMenosVentas = function(){
+			if((cantidadVisiblesVentas - cantidadVerMenos) > 0){
+				for(var cant = cantidadVerMenos; cant > 0; cant--){
+						$scope.ultimasVentas.splice($scope.ultimasVentas.length - 1, 1);
+						cantidadVisiblesVentas = cantidadVisiblesVentas - 1;
+				}
+			}
+			else
+			{
+				copiaCantVerMenos = cantidadVerMenos;
+				do {
+					if(--copiaCantVerMenos > 0 && (cantidadVisiblesVentas - copiaCantVerMenos) > 0)
+					{
+						for(var cant = copiaCantVerMenos; cant > 0; cant--){
+							$scope.ultimasVentas.splice($scope.ultimasVentas.length - 1, 1);
+							cantidadVisiblesVentas = cantidadVisiblesVentas - 1;
+						}
+					}
+				}
+				while (copiaCantVerMenos > 0 && (cantidadVisiblesVentas - copiaCantVerMenos) < 1);
+			}
+	}
+	
+	
+    // ---------------------------- VER MAS PEDIDOS --------------------------------------
+	
+	$scope.verMasPedidos = function(){
+			if((cantidadVisiblesPedidos + cantidadVerMas) <= $rootScope.pedidos.length){
+				for(var cant = cantidadVerMas; cant > 0; cant--){
+						$scope.ultimosPedidos.push($rootScope.pedidos[($rootScope.pedidos.length - 1) - cantidadVisiblesPedidos]);
+						cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
+				}
+			}
+			else
+			{
+				copiaCantVerMas = cantidadVerMas;
+				do {
+					if(--copiaCantVerMas > 0 && (cantidadVisiblesPedidos + copiaCantVerMas) <= $rootScope.pedidos.length)
+					{
+						for(var cant = copiaCantVerMas; cant > 0; cant--){
+							$scope.ultimosPedidos.push($rootScope.pedidos[($rootScope.pedidos.length - 1) - cantidadVisiblesPedidos]);
+							cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
+						}
+					}
+				}
+				while (copiaCantVerMas > 0 && (cantidadVisiblesPedidos + copiaCantVerMas) > $rootScope.pedidos.length);
+			}
+	}
+	
+	$scope.verMenosPedidos = function(){
+			if((cantidadVisiblesPedidos - cantidadVerMenos) > 0){
+				for(var cant = cantidadVerMenos; cant > 0; cant--){
+						$scope.ultimosPedidos.splice($scope.ultimosPedidos.length - 1, 1);
+						cantidadVisiblesPedidos = cantidadVisiblesPedidos - 1;
+				}
+			}
+			else
+			{
+				copiaCantVerMenos = cantidadVerMenos;
+				do {
+					if(--copiaCantVerMenos > 0 && (cantidadVisiblesPedidos - copiaCantVerMenos) > 0)
+					{
+						for(var cant = copiaCantVerMenos; cant > 0; cant--){
+							$scope.ultimosPedidos.splice($scope.ultimosPedidos.length - 1, 1);
+							cantidadVisiblesVentas = cantidadVisiblesVentas - 1;
+						}
+					}
+				}
+				while (copiaCantVerMenos > 0 && (cantidadVisiblesPedidos - copiaCantVerMenos) < 1);
+			}
+	}
 	
 })
    
@@ -233,7 +321,8 @@ function ($scope, $stateParams) {
 			}, function(error) {
 				$scope.errormessage = error;
 				console.log("error traje esto: "+ error);
-		});
+			}	
+			);
 		
 	}
 
@@ -284,6 +373,46 @@ function ($scope, $stateParams) {
 				deferred.reject("conexion perdida")
 			}
 			return deferred.promise;
+			
+		},
+		
+		getVentas: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/ventas/listar?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getPedidos: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/pedidos/listar?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
 			
 		}
 		

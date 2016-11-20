@@ -6,28 +6,30 @@
 		<ion-list">
             <ion-item ng-repeat="venta in ultimasVentas">
                 <p style="margin-top:0px;color:#000000;"> 
-					Nombre cliente: {{venta.PrecioVenta}} <br>
-				    Fecha: {{venta.Descripcion}} <br>
-					Ganancia total: {{venta.Cantidad}}
+					Nombre cliente: {{venta._id}} <br>
+				    Fecha: {{venta.fecha}} <br>
+					Ganancia total: {{venta.Total}}
 				</p>
             </ion-item>
 		</ion-list>
-      <button id="perfil-button13" style="font-size:16px;border-radius:51px 51px 51px 51px;" class="button button-positive button-small button-block" ng-click="verMas()">Ver mas</button>
+		<button id="perfil-button1" style="font-size:16px;border-radius:51px 0px 0px 51px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="verMenosVentas()">Ver Menos</button>
+		<button id="perfil-button1" style="font-size:16px;border-radius:0px 51px 51px 0px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="verMasVentas()">Ver Más</button>
     </div>
 	
     <div class="spacer" style="width: 300px; height: 29px;"></div>
     <h1 id="perfil-heading31" style="color:#000000;text-align:center;">Ultimos pedidos</h1>
     <div class="item item-body" id="perfil-list-item-container5">
-      <div id="perfil-markdown15">
-        <p style="margin-top:0px;color:#000000;">Nombre proveedor: Alejo Gagliardi</p>
-      </div>
-      <div id="perfil-markdown16">
-        <p style="margin-top:0px;color:#000000;">Fecha: 24/5/2016</p>
-      </div>
-      <div id="perfil-markdown17">
-        <p style="margin-top:0px;color:#000000;">Total: $700</p>
-      </div>
-      <a ui-sref="menu.detallesPedido" id="perfil-button15" style="font-size:16px;border-radius:51px 51px 51px 51px;" class="button button-positive button-small button-block">Ver mas</a>
+		<ion-list">
+            <ion-item ng-repeat="pedido in ultimosPedidos">
+                <p style="margin-top:0px;color:#000000;"> 
+					Nombre proveedor: {{pedido._id}} <br>
+				    Fecha: {{pedido.fecha}} <br>
+					Total: {{pedido.Total}}
+				</p>
+            </ion-item>
+		</ion-list>
+	  <button id="perfil-button3" style="font-size:16px;border-radius:51px 0px 0px 51px; margin-top:10px" class="button button-positive button-small button-line" ng-click="verMenosPedidos()">Ver Menos</button>
+	  <button id="perfil-button4" style="font-size:16px;border-radius:0px 51px 51px 0px; margin-top:10px" class="button button-positive button-small button-line" ng-click="verMasPedidos()">Ver Más</button>
     </div>
     <div class="spacer" style="width: 300px; height: 49px;"></div>
     <h1 id="perfil-heading26" style="color:#000000;text-align:center;">Ganancias</h1>

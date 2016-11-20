@@ -8872,6 +8872,11 @@ button.button-full,
 .button-full > button.button,
 input.button.button-block {
   width: 100%; }
+  
+button.button-line{
+  display: line;
+  width: 49%; 
+}
 
 a.button {
   text-decoration: none; }

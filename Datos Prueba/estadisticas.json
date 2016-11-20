@@ -1,6 +1,0 @@
-{ 
-    "_id" : ObjectId("5813affe73b3ec3345ac2094"), 
-    "idventa" : "string", 
-    "inversion" : 1.1, 
-    "beneficio" : 1.1
-}

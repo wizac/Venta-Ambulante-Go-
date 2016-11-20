@@ -1,7 +1,0 @@
-{ 
-    "_id" : ObjectId("5813aed273b3ec3345ac2091"), 
-    "Nombre" : "String", 
-    "Apellido" : "String", 
-    "Dni" : "String", 
-    "Telefono" : "String"
-}
