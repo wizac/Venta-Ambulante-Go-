@@ -78,8 +78,8 @@ function (API, $scope, $stateParams, $rootScope) {
 			cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
 		}
 	}, function(error) {
-		console.log('la promesa se ha rechazado ' + message);
-		$scope.errormessage = message;
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
 	});
 	
 	
@@ -93,8 +93,8 @@ function (API, $scope, $stateParams, $rootScope) {
 			cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
 		}
 	}, function(error) {
-		console.log('la promesa se ha rechazado ' + message);
-		$scope.errormessage = message;
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
 	});
 	
 	
@@ -261,13 +261,80 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('ventasConfirmadasCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('ventasConfirmadasCtrl',
+function (API, $scope, $stateParams) {
+	
+	var cantidadVisiblesVentasConfirmadas = 0;
+	var cantidadVerMas = 5;
+	var cantidadVerMenos = 5;
+	$scope.ventasConfirmadas = [];
+	var ventas = [];
+	
+	API.getVentas(function(result){
+		console.log('las ventas se recuperaron con exito');
+        ventas = result;
+		console.log(result);
+		for(var i = 0; i < 5; i ++){
+			if(cantidadVisiblesVentasConfirmadas + 1 <= ventas.length){
+				$scope.ventasConfirmadas.push(ventas[$scope.ventasConfirmadas.length]);
+				cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas + 1;
+			}
+		}
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + message);
+		$scope.errormessage = error;
+	});
+	
+	
+	$scope.verMasVentasConfirmadas = function(){
+			if((cantidadVisiblesVentasConfirmadas + cantidadVerMas) <= ventas.length){
+				for(var cant = cantidadVerMas; cant > 0; cant--){
+						$scope.ventasConfirmadas.push(ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
+						cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
+				}
+			}
+			else
+			{
+				copiaCantVerMas = cantidadVerMas;
+				do {
+					if(--copiaCantVerMas > 0 && (cantidadVisiblesVentas + copiaCantVerMas) <= $rootScope.ventas.length)
+					{
+						for(var cant = copiaCantVerMas; cant > 0; cant--){
+							$scope.ultimasVentas.push($rootScope.ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
+							cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
+						}
+					}
+				}
+				while (copiaCantVerMas > 0 && (cantidadVisiblesVentas + copiaCantVerMas) > $rootScope.ventas.length);
+			}
+	}
+	
+	$scope.verMenosVentasConfirmadas = function(){
+			if((cantidadVisiblesVentas - cantidadVerMenos) > 0){
+				for(var cant = cantidadVerMenos; cant > 0; cant--){
+						$scope.ultimasVentas.splice($scope.ultimasVentas.length - 1, 1);
+						cantidadVisiblesVentas = cantidadVisiblesVentas - 1;
+				}
+			}
+			else
+			{
+				copiaCantVerMenos = cantidadVerMenos;
+				do {
+					if(--copiaCantVerMenos > 0 && (cantidadVisiblesVentas - copiaCantVerMenos) > 0)
+					{
+						for(var cant = copiaCantVerMenos; cant > 0; cant--){
+							$scope.ultimasVentas.splice($scope.ultimasVentas.length - 1, 1);
+							cantidadVisiblesVentas = cantidadVisiblesVentas - 1;
+						}
+					}
+				}
+				while (copiaCantVerMenos > 0 && (cantidadVisiblesVentas - copiaCantVerMenos) < 1);
+			}
+	}
+	
 
 
-}])
+})
    
 .controller('detalleVentaCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function

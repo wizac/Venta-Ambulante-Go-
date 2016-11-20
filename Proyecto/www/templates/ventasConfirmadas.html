@@ -1,28 +1,17 @@
 <ion-view title="Ventas Confirmadas" id="page18">
   <ion-content padding="true" class="has-header">
     <div class="item item-body" id="ventasConfirmadas-list-item-container10">
-      <div id="ventasConfirmadas-markdown7">
-        <p style="margin-top:0px;color:#000000;">Nombre cliente: Brayam Ojeda</p>
-      </div>
-      <div id="ventasConfirmadas-markdown8">
-        <p style="margin-top:0px;color:#000000;">Ganancia total: $500</p>
-      </div>
-      <div id="ventasConfirmadas-markdown9">
-        <p style="margin-top:0px;color:#000000;">Fecha: 20/10/2016</p>
-      </div>
-      <a ui-sref="menu.detalleVenta" id="ventasConfirmadas-button14" style="font-size:16px;border-radius:51px 51px 51px 51px;" class="button button-positive button-small button-block">Ver mas</a>
-    </div>
-    <div class="item item-body" id="ventasConfirmadas-list-item-container14">
-      <div id="ventasConfirmadas-markdown41">
-        <p style="margin-top:0px;color:#000000;">Nombre cliente: Carlos Habraham</p>
-      </div>
-      <div id="ventasConfirmadas-markdown42">
-        <p style="margin-top:0px;color:#000000;">Ganancia total: $940</p>
-      </div>
-      <div id="ventasConfirmadas-markdown43">
-        <p style="margin-top:0px;color:#000000;">Fecha: 13/4/2016</p>
-      </div>
-      <a ui-sref="menu.detalleVenta" id="ventasConfirmadas-button25" style="font-size:16px;border-radius:51px 51px 51px 51px;" class="button button-positive button-small button-block">Ver mas</a>
+      <ion-list">
+            <ion-item ng-repeat="venta in ventasConfirmadas">
+                <p style="margin-top:0px;color:#000000;"> 
+					Nombre cliente: {{venta._id}} <br>
+				    Fecha: {{venta.fecha}} <br>
+					Ganancia total: {{venta.Total}}
+				</p>
+            </ion-item>
+		</ion-list>
+	  <button id="ventasConfirmadas-button1" style="font-size:16px;border-radius:51px 0px 0px 51px; margin-top:10px" class="button button-positive button-small button-line" ng-click="verMenosVentasConfirmadas()">Ver Menos</button>
+	  <button id="ventasConfirmadas-button2" style="font-size:16px;border-radius:0px 51px 51px 0px; margin-top:10px" class="button button-positive button-small button-line" ng-click="verMasVentasConfirmadas()">Ver Más</button>
     </div>
   </ion-content>
 </ion-view>
