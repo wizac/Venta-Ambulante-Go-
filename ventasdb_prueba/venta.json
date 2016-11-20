@@ -1,6 +1,6 @@
 { 
     "_id" : ObjectId("58313132a133d4e0cf393afc"), 
-    "fecha" : "11-03-2015", 
+    "fecha" : ISODate("2012-12-25T05:50:58.047+0000"), 
     "producto" : [
         "58312c2a89ab2646fa84f83d"
     ], 
@@ -13,7 +13,7 @@
 }
 { 
     "_id" : ObjectId("5831313ea133d4e0cf393afd"), 
-    "fecha" : "11-03-2015", 
+    "fecha" : ISODate("2010-11-20T05:50:58.047+0000"), 
     "producto" : [
         "58312c2a89ab2646fa84f83d"
     ], 
@@ -27,7 +27,7 @@
 }
 { 
     "_id" : ObjectId("58313159a133d4e0cf393afe"), 
-    "fecha" : "11-03-2015", 
+    "fecha" : ISODate("2009-11-20T05:50:58.047+0000"), 
     "producto" : [
         "58312bf489ab2646fa84f83b"
     ], 
