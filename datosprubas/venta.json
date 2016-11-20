@@ -1,0 +1,40 @@
+{ 
+    "_id" : ObjectId("58313132a133d4e0cf393afc"), 
+    "fecha" : "11-03-2015", 
+    "producto" : [
+        "58312c2a89ab2646fa84f83d"
+    ], 
+    "total" : 35.5, 
+    "marcador" : [
+        "583130d4855835c0fed511da"
+    ], 
+    "cliente" : "58312cc7a133d4e0cf393af1", 
+    "estado" : true
+}
+{ 
+    "_id" : ObjectId("5831313ea133d4e0cf393afd"), 
+    "fecha" : "11-03-2015", 
+    "producto" : [
+        "58312c2a89ab2646fa84f83d"
+    ], 
+    "total" : 35.5, 
+    "marcador" : [
+        "583130d4855835c0fed511da", 
+        "583130df855835c0fed511db"
+    ], 
+    "cliente" : "58312cc7a133d4e0cf393af1", 
+    "estado" : true
+}
+{ 
+    "_id" : ObjectId("58313159a133d4e0cf393afe"), 
+    "fecha" : "11-03-2015", 
+    "producto" : [
+        "58312bf489ab2646fa84f83b"
+    ], 
+    "total" : 35.5, 
+    "marcador" : [
+        "583130e9855835c0fed511dc"
+    ], 
+    "cliente" : "58312cc7a133d4e0cf393af1", 
+    "estado" : true
+}

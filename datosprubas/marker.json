@@ -1,0 +1,24 @@
+{ 
+    "_id" : ObjectId("583130d4855835c0fed511da"), 
+    "lat" : 59.91, 
+    "lng" : 11.75, 
+    "message" : "Mensaje", 
+    "focus" : false, 
+    "draggable" : true
+}
+{ 
+    "_id" : ObjectId("583130df855835c0fed511db"), 
+    "lat" : 62.91, 
+    "lng" : 13.75, 
+    "message" : "Mensaje generico", 
+    "focus" : false, 
+    "draggable" : true
+}
+{ 
+    "_id" : ObjectId("583130e9855835c0fed511dc"), 
+    "lat" : 30.11, 
+    "lng" : 3.75, 
+    "message" : "Mensaje generico2", 
+    "focus" : false, 
+    "draggable" : true
+}

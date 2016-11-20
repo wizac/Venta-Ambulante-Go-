@@ -1,0 +1,40 @@
+{ 
+    "_id" : ObjectId("58312bf489ab2646fa84f83b"), 
+    "nombre" : "Auriculares", 
+    "descripcion" : "Especial para sordos", 
+    "precioVenta" : 5.4, 
+    "precioCompra" : 2.0, 
+    "imagen" : "", 
+    "cantidad" : 4.0, 
+    "categoria" : "Electronicos"
+}
+{ 
+    "_id" : ObjectId("58312c0f89ab2646fa84f83c"), 
+    "nombre" : "remera", 
+    "descripcion" : "Calentita", 
+    "precioVenta" : 52.4, 
+    "precioCompra" : 2.3, 
+    "imagen" : "", 
+    "cantidad" : 250.0, 
+    "categoria" : "Vestimenta"
+}
+{ 
+    "_id" : ObjectId("58312c2a89ab2646fa84f83d"), 
+    "nombre" : "Ganas de vivir", 
+    "descripcion" : "indispensables", 
+    "precioVenta" : 2.4, 
+    "precioCompra" : 3.3, 
+    "imagen" : "", 
+    "cantidad" : 2.0, 
+    "categoria" : "Motivacion"
+}
+{ 
+    "_id" : ObjectId("58312c4589ab2646fa84f83e"), 
+    "nombre" : "Caja ", 
+    "descripcion" : "La CAJA", 
+    "precioVenta" : 24.0, 
+    "precioCompra" : 33.0, 
+    "imagen" : "", 
+    "cantidad" : 24.0, 
+    "categoria" : "Varios"
+}

@@ -1,0 +1,32 @@
+{ 
+    "_id" : ObjectId("58312e01a133d4e0cf393af6"), 
+    "fecha" : "11-11-2001", 
+    "producto" : [
+        "508312bf489ab2646fa84f83b", 
+        "58312c0f89ab2646fa84f83c"
+    ], 
+    "total" : 11.5, 
+    "proveedor" : ObjectId("58312ce8a133d4e0cf393af2"), 
+    "estado" : true
+}
+{ 
+    "_id" : ObjectId("58312e4ba133d4e0cf393af7"), 
+    "fecha" : "13-01-2016", 
+    "producto" : [
+        "508312bf489ab2646fa84f83b"
+    ], 
+    "total" : 15.5, 
+    "proveedor" : "58312cfca133d4e0cf393af4", 
+    "estado" : true
+}
+{ 
+    "_id" : ObjectId("58312ebea133d4e0cf393af8"), 
+    "fecha" : "13-01-2016", 
+    "producto" : [
+        "508312bf489ab2646fa84f83b", 
+        "58312c4589ab2646fa84f83e"
+    ], 
+    "total" : 15.5, 
+    "proveedor" : "58312cfca133d4e0cf393af4", 
+    "estado" : true
+}
