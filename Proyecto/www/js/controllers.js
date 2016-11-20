@@ -56,7 +56,7 @@ function ($scope, $stateParams) {
 }])
    
 .controller('perfilCtrl',
-function (API, $scope, $stateParams, $rootScope) {
+function (API, $scope, $stateParams, $rootScope, $state, $filter) {
 	
 	
 	var cantidadVisiblesVentas = 0;
@@ -75,6 +75,7 @@ function (API, $scope, $stateParams, $rootScope) {
 		console.log(result);
 		if(cantidadVisiblesVentas + 1 <= $rootScope.ventas.length){
 			$scope.ultimasVentas.push($rootScope.ventas[$rootScope.ventas.length - 1]);
+			$scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha = $filter('date')($scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha, "dd/MM/yyyy");
 			cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
 		}
 	}, function(error) {
@@ -90,6 +91,7 @@ function (API, $scope, $stateParams, $rootScope) {
 		console.log(result);
 		if(cantidadVisiblesPedidos + 1 <= $rootScope.pedidos.length){
 			$scope.ultimosPedidos.push($rootScope.pedidos[$rootScope.pedidos.length - 1]);
+			$scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha = $filter('date')($scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha, "dd/MM/yyyy");
 			cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
 		}
 	}, function(error) {
@@ -104,6 +106,7 @@ function (API, $scope, $stateParams, $rootScope) {
 			if((cantidadVisiblesVentas + cantidadVerMas) <= $rootScope.ventas.length){
 				for(var cant = cantidadVerMas; cant > 0; cant--){
 						$scope.ultimasVentas.push($rootScope.ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
+						$scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha = $filter('date')($scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha, "dd/MM/yyyy");
 						cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
 				}
 			}
@@ -115,6 +118,7 @@ function (API, $scope, $stateParams, $rootScope) {
 					{
 						for(var cant = copiaCantVerMas; cant > 0; cant--){
 							$scope.ultimasVentas.push($rootScope.ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
+							$scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha = $filter('date')($scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha, "dd/MM/yyyy");
 							cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
 						}
 					}
@@ -147,12 +151,23 @@ function (API, $scope, $stateParams, $rootScope) {
 	}
 	
 	
+	
+	// ---------------------------- VER DETALLE VENTA ------------------------------------
+	
+	
+	$scope.verDetalleVenta = function(venta){
+		
+		$state.go('menu.detalleVenta');
+	}
+	
+	
     // ---------------------------- VER MAS PEDIDOS --------------------------------------
 	
 	$scope.verMasPedidos = function(){
 			if((cantidadVisiblesPedidos + cantidadVerMas) <= $rootScope.pedidos.length){
 				for(var cant = cantidadVerMas; cant > 0; cant--){
 						$scope.ultimosPedidos.push($rootScope.pedidos[($rootScope.pedidos.length - 1) - cantidadVisiblesPedidos]);
+						$scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha = $filter('date')($scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha, "dd/MM/yyyy");
 						cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
 				}
 			}
@@ -164,6 +179,7 @@ function (API, $scope, $stateParams, $rootScope) {
 					{
 						for(var cant = copiaCantVerMas; cant > 0; cant--){
 							$scope.ultimosPedidos.push($rootScope.pedidos[($rootScope.pedidos.length - 1) - cantidadVisiblesPedidos]);
+							$scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha = $filter('date')($scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha, "dd/MM/yyyy");
 							cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
 						}
 					}
@@ -468,6 +484,49 @@ function ($scope, $stateParams) {
 			if($rootScope != null && $rootScope != "")
 			{
 				$http.post('http://localhost:8080/api/pedido/listar?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getClientes: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/cliente/listar?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getClientesPorId: function(id, cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id": id
+				};
+				$http.post('http://localhost:8080/api/cliente/listar?token=' + $rootScope.token, data).success(function(response){
 					
 					if (response.success) {
 						cexito(response.res)

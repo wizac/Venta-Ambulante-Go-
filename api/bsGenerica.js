@@ -13,20 +13,39 @@ function listar(db)
 {
 	return function(req, res) {
 		
-		var dbEntidad = db.get(req.params.entidad);
-		dbEntidad.find(req.body,function(err,docs){
-			if(err){
-				res.send({ success: false, message: 'no se pudo listar la entidad, o no existe' });
-			}
-			else{
-				res.send({
-						success: true,
-						message: 'Lista de entidad exitosa!',
-						res:docs
-						});
-				console.log(docs);
-			}
-		});
+		if(req.body.id != '' && req.body.id != undefined){
+			
+			var dbEntidad = db.get(req.params.entidad);
+			dbEntidad.find(req.body.id,function(err,docs){
+				if(err){
+					res.send({ success: false, message: 'no se pudo listar la entidad por id, no existe o el id es invalido'});
+				}
+				else{
+					res.send({
+							success: true,
+							message: 'Lista de entidad por id exitosa!',
+							res:docs
+							});
+					console.log(docs);
+				}
+			});
+		}
+		else{
+			var dbEntidad = db.get(req.params.entidad);
+			dbEntidad.find(req.body,function(err,docs){
+				if(err){
+					res.send({ success: false, message: 'no se pudo listar la entidad, o no existe' });
+				}
+				else{
+					res.send({
+							success: true,
+							message: 'Lista de entidad exitosa!',
+							res:docs
+							});
+					console.log(docs);
+				}
+			});
+		}
 	}
 }
 
