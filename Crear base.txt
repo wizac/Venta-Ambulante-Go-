@@ -32,6 +32,7 @@ db.pedido.insert({
 		producto:[id_producto, id_producto...],
 		'total':double,
 		'proveedor':"id_proveedor"
+		estado:bool
 		})
 		
 db.venta.insert({
@@ -39,7 +40,8 @@ db.venta.insert({
 		producto:[id_producto, id_producto...],
 		'total':double,
 		'marcador':{collectionsMarker},
-		'cliente':'id_cliente'
+		'cliente':'id_cliente',
+		estado:bool
 		})
 		
 
