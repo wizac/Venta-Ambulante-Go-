@@ -405,8 +405,8 @@ function ($scope, $stateParams) {
 		logIn: function(user, pass, cexito, cerror){
 			
 			var data = {
-				"usser": user,
-				"password": pass,
+				"user": user,
+				"pass": pass,
 			};
  
 			$http.post('http://localhost:8080/autentificacion',data).success(function(response){
