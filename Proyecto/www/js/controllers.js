@@ -187,7 +187,7 @@ function (API, $scope, $stateParams, $rootScope) {
 					{
 						for(var cant = copiaCantVerMenos; cant > 0; cant--){
 							$scope.ultimosPedidos.splice($scope.ultimosPedidos.length - 1, 1);
-							cantidadVisiblesVentas = cantidadVisiblesVentas - 1;
+							cantidadVisiblesPedidos = cantidadVisiblesPedidos - 1;
 						}
 					}
 				}
@@ -425,7 +425,7 @@ function ($scope, $stateParams) {
 			
 			if($rootScope != null && $rootScope != "")
 			{
-				$http.post('http://localhost:8080/api/productos/listar?token=' + $rootScope.token).success(function(response){
+				$http.post('http://localhost:8080/api/producto/listar?token=' + $rootScope.token).success(function(response){
 					
 					if (response.success) {
 						deferred.resolve(response.res);
@@ -447,7 +447,7 @@ function ($scope, $stateParams) {
 			
 			if($rootScope != null && $rootScope != "")
 			{
-				$http.post('http://localhost:8080/api/ventas/listar?token=' + $rootScope.token).success(function(response){
+				$http.post('http://localhost:8080/api/venta/listar?token=' + $rootScope.token).success(function(response){
 					
 					if (response.success) {
 						cexito(response.res)
@@ -467,7 +467,7 @@ function ($scope, $stateParams) {
 			
 			if($rootScope != null && $rootScope != "")
 			{
-				$http.post('http://localhost:8080/api/pedidos/listar?token=' + $rootScope.token).success(function(response){
+				$http.post('http://localhost:8080/api/pedido/listar?token=' + $rootScope.token).success(function(response){
 					
 					if (response.success) {
 						cexito(response.res)
