@@ -370,12 +370,23 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('nuevoProductoCtrl', ['$scope', '$stateParams',
-
-function ($scope, $stateParams) {
+.controller('nuevoProductoCtrl',
+function ($scope, $stateParams, API) {
 	
+	$scope.nuevoProducto = function(nombre, descripcion, precioVenta, precioCompra, cantidad,categoria) {
 
-}])
+        API.nuevoProducto(nombre, descripcion, precioVenta, precioCompra, cantidad, categoria, function(result){
+        console.log(result.message);
+         //$state.go("menu.productos");
+      }, function(error) {
+        $scope.errormessage = error;
+        console.log("error traje esto: "+ error);
+      }
+      );
+
+  }
+
+})
 
 .controller('signupCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -453,6 +464,29 @@ function ($scope, $stateParams) {
 			
 		},
 		
+		nuevoProducto: function(nombre, descripcion, precioVenta, precioCompra, cantidad, categoria, cexito, cerror){
+
+				  var data = {
+					"nombre": nombre,
+					"descripcion": descripcion,
+					"precioVenta":precioVenta,
+					"precioCompra":precioCompra,
+					"cantidad":cantidad,
+					"categoria":categoria,
+				  };
+
+				  $http.post('http://localhost:8080/api/producto/insertar?token='+ $rootScope.token,data).success(function(response){
+
+					if (response.success) {
+					  cexito(response);
+					} else {
+					  cerror(response.message);
+					}
+
+				  });
+
+		},
+					
 		getVentas: function(cexito, cerror){
 			
 			if($rootScope != null && $rootScope != "")
@@ -663,7 +697,16 @@ function ($scope, $stateParams) {
 									
 									var totalVentas = 0;
 									var totalPedidos = 0;
-									for()
+									for(var i = 0; i < responseVenta.res.length; i++){
+										if(($filter('date')(responseVenta.res[i].fecha, "yyyy")) == ($filter('date')(new Date(), "yyyy"))){
+											totalVentas = totalVentas + responseVenta.res[i].total;
+										}
+									}
+									for(var i = 0; i < responsePedido.res.length; i++){
+										if(($filter('date')(responsePedido.res[i].fecha, "yyyy")) == ($filter('date')(new Date(), "yyyy"))){
+											totalPedidos = totalPedidos+ responsePedido.res[i].total;
+										}
+									}
 									
 								} else {
 									cerror(responsePedido.message);

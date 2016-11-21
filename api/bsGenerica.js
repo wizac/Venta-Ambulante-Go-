@@ -4,8 +4,18 @@ function insertar(db)
 		
 		var dbEntidad = db.get(req.params.entidad);
 		console.log(req.body);
-		dbEntidad.insert(req.body);
-		res.send({success: true, message: 'Se inserto correctamente!'});
+		dbEntidad.insert(req.body,function(err,docs){
+			if(err){
+				res.send({ success: false, message: 'No se pudo insertar el item en la entidad' })
+			}
+			else{
+				res.send({
+						success: true,
+						message: 'Se inserto correctamente el item en la entidad!',
+						res: docs
+						});
+			}
+		});
 	}
 }
 

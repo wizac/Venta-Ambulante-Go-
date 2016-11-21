@@ -3,29 +3,34 @@
     <h2 id="nuevoProducto-heading56" style="color:#000000;">Nombre</h2>
     <form id="nuevoProducto-form10" class="list">
       <label class="item item-input" id="nuevoProducto-input8">
-        <input type="text" placeholder="">
+        <input type="text" placeholder="" ng-model="nombre">
       </label>
       <h2 id="nuevoProducto-heading57" style="color:#000000;">Descripcion</h2>
       <label class="item item-input" id="nuevoProducto-input9">
-        <input type="text" placeholder="">
+        <input type="text" placeholder=""ng-model="descripcion">
       </label>
       <h2 id="nuevoProducto-heading58" style="color:#000000;">Precio venta</h2>
       <label class="item item-input" id="nuevoProducto-input11">
-        <input type="text" placeholder="">
+        <input type="number" placeholder=""ng-model="precioVenta">
       </label>
       <h2 id="nuevoProducto-heading59" style="color:#000000;">Precio compra</h2>
       <label class="item item-input" id="nuevoProducto-input24">
-        <input type="text" placeholder="">
+        <input type="number" placeholder=""ng-model="precioCompra">
       </label>
       <h2 id="nuevoProducto-heading62" style="color:#000000;">Imagen</h2>
       <div id="nuevoProducto-markdown54" style="text-align:center;">
         <p style="color:#000000;font-size:18px;">Imput tipo file</p>
       </div>
+      <h2 id="nuevoProducto-heading60" style="color:#000000;">Cantidad</h2>
+      <label class="item item-input" id="nuevoProducto-input26">
+        <input type="number" placeholder=""ng-model="cantidad">
+      </label>
       <h2 id="nuevoProducto-heading60" style="color:#000000;">Categoria</h2>
       <label class="item item-input" id="nuevoProducto-input26">
-        <input type="text" placeholder="">
+        <input type="text" placeholder=""ng-model="categoria">
       </label>
-      <a ui-sref="menu.productos" id="nuevoProducto-button35" class="button button-positive  button-block">Guardar</a>
+      <a ui-sref="menu.productos" id="nuevoProducto-button35" class="button button-positive
+      button-block" ng-click="nuevoProducto(nombre, descripcion, precioVenta, precioCompra, cantidad, categoria)">Guardar</a>
     </form>
   </ion-content>
 </ion-view>
