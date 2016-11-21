@@ -167,10 +167,32 @@ function registro(db){
 	}	
 }
 
+
+function productosConStock(db)
+{
+	return function(req, res) {
+		
+		var dbEntidad = db.get("producto");
+		dbEntidad.find({"cantidad" : {$gt : 2}},function(err,docs){
+			if(err){
+				res.send({ success: false, message: 'no se pudo listar los productos' });
+			}
+			else{
+				res.send({
+						success: true,
+						message: 'Lista de productos exitosa!',
+						res:docs
+						});
+			}
+		});
+	}
+}
+
 exports.ventasOrdenadas = ventasOrdenadas;
 exports.pedidosOrdenados = pedidosOrdenados;
 exports.ventasOrdenadasConfirmadas = ventasOrdenadasConfirmadas;
 exports.pedidosOrdenadosConfirmados = pedidosOrdenadosConfirmados;
 exports.ventasOrdenadasNoConfirmadas = ventasOrdenadasNoConfirmadas;
 exports.pedidosOrdenadosNoConfirmados = pedidosOrdenadosNoConfirmados;
-module.exports.registro = registro;
+exports.registro = registro;
+exports.productosConStock = productosConStock;

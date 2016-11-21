@@ -68,6 +68,8 @@ app.post("/api/ventasOrdenadasNoConfirmadas", funciones.ventasOrdenadasNoConfirm
 
 app.post("/api/pedidosOrdenadosNoConfirmados", funciones.pedidosOrdenadosNoConfirmados(db));
 
+app.post("/api/productosConStock", funciones.productosConStock(db));
+
  
 /* -------------------------------------------------------------- */
  

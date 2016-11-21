@@ -23,13 +23,21 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('elijaLosProductosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('elijaLosProductosCtrl', function ($scope, $stateParams, API) {
+	
+	$scope.productosStock = [];
+	
+	API.getProductosConStock(function(result){
+		
+		$scope.productosStock = result;
+		
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
+	});
 
 
-}])
+})
    
 .controller('informacionDeProductosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -609,6 +617,27 @@ function ($scope, $stateParams, API) {
 				deferred.reject("conexion perdida")
 			}
 			return deferred.promise;
+			
+		},
+		
+		getProductosConStock: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/productosConStock?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						console.log(response);
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
 			
 		},
 		
