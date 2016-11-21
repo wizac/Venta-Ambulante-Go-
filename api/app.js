@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var login = require("./autentificacion");
 var abm = require("./bsGenerica");
+var funciones = require("./funciones");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -52,6 +53,11 @@ app.post("/api/:entidad/listar", abm.listar(db));
 app.post("/api/:entidad/eliminar", abm.eliminar(db));
 
 app.post("/api/:entidad/actualizar", abm.actualizar(db));
+
+app.post("/api/ventasOrdenadas", funciones.ventasOrdenadas(db));
+
+app.post("/api/pedidosOrdenados", funciones.pedidosOrdenados(db));
+
  
 /* -------------------------------------------------------------- */
  

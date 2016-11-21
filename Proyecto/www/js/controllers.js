@@ -56,7 +56,7 @@ function ($scope, $stateParams) {
 }])
    
 .controller('perfilCtrl',
-function (API, $scope, $stateParams, $rootScope, $state, $filter) {
+function (API, $scope, $stateParams, $rootScope, $state) {
 	
 	
 	var cantidadVisiblesVentas = 0;
@@ -69,8 +69,9 @@ function (API, $scope, $stateParams, $rootScope, $state, $filter) {
 	$rootScope.pedidos = [];
 	
 		
-	API.getVentasConNombreCliente(function(result){
+	API.getVentasConNombreClienteOrdenado(function(result){
 		console.log('las ventas con nombre del cliente se recuperaron con exito');
+		var dia = new Date();
         $rootScope.ventas = result;
 		console.log($rootScope.ventas);
 		if(cantidadVisiblesVentas + 1 <= $rootScope.ventas.length){
@@ -81,16 +82,14 @@ function (API, $scope, $stateParams, $rootScope, $state, $filter) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
 	});
+
 	
-	
-	
-	API.getPedidos(function(result){
-		console.log('los pedidos se recuperaron con exito');
+	API.getPedidosConNombreProveedorOrdenado(function(result){
+		console.log('los pedidos con nombre proveedor se recuperaron con exito');
         $rootScope.pedidos = result;
-		console.log(result);
+		console.log($rootScope.pedidos);
 		if(cantidadVisiblesPedidos + 1 <= $rootScope.pedidos.length){
 			$scope.ultimosPedidos.push($rootScope.pedidos[$rootScope.pedidos.length - 1]);
-			$scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha = $filter('date')($scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha, "dd/MM/yyyy");
 			cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
 		}
 	}, function(error) {
@@ -164,7 +163,6 @@ function (API, $scope, $stateParams, $rootScope, $state, $filter) {
 			if((cantidadVisiblesPedidos + cantidadVerMas) <= $rootScope.pedidos.length){
 				for(var cant = cantidadVerMas; cant > 0; cant--){
 						$scope.ultimosPedidos.push($rootScope.pedidos[($rootScope.pedidos.length - 1) - cantidadVisiblesPedidos]);
-						$scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha = $filter('date')($scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha, "dd/MM/yyyy");
 						cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
 				}
 			}
@@ -176,7 +174,6 @@ function (API, $scope, $stateParams, $rootScope, $state, $filter) {
 					{
 						for(var cant = copiaCantVerMas; cant > 0; cant--){
 							$scope.ultimosPedidos.push($rootScope.pedidos[($rootScope.pedidos.length - 1) - cantidadVisiblesPedidos]);
-							$scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha = $filter('date')($scope.ultimosPedidos[$scope.ultimosPedidos.length - 1].fecha, "dd/MM/yyyy");
 							cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
 						}
 					}
@@ -538,10 +535,10 @@ function ($scope, $stateParams) {
 			
 		},
 		
-		getVentasConNombreCliente: function(cexito, cerror){
+		getVentasConNombreClienteOrdenado: function(cexito, cerror){
 			if($rootScope != null && $rootScope != "")
 			{
-				$http.post('http://localhost:8080/api/venta/listar?token=' + $rootScope.token).success(function(responseVenta){
+				$http.post('http://localhost:8080/api/ventasOrdenadas?token=' + $rootScope.token).success(function(responseVenta){
 					if (responseVenta.success) {
 						if($rootScope != null && $rootScope != ""){
 							responseVenta.res.forEach(function (itemVenta) {
@@ -569,6 +566,163 @@ function ($scope, $stateParams) {
 				});
 			}
 			else{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getPedidosConNombreProveedorOrdenado: function(cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/pedidosOrdenados?token=' + $rootScope.token).success(function(responsePedido){
+					if (responsePedido.success) {
+						if($rootScope != null && $rootScope != ""){
+							responsePedido.res.forEach(function (itemPedido) {
+								var data = {
+									"id": itemPedido.proveedor
+								}; 
+								$http.post('http://localhost:8080/api/proveedor/listar?token=' + $rootScope.token, data).success(function(responseProveedor){
+									if (responseProveedor.success) {
+										itemPedido.fecha = $filter('date')(itemPedido.fecha, "dd/MM/yyyy");
+										itemPedido.nombreProveedor = responseProveedor.res.nombre;
+									} else {
+										cerror(responseProveedor.message);
+									}
+								});
+							});
+						cexito(responsePedido.res)
+						}
+						else{
+							cerror("conexion perdida");
+						}
+
+					} else{
+							cerror(responsePedido.message);
+					}
+				});
+			}
+			else{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getVentasOrdenadas: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/ventasOrdenadas?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getPedidosOrdenados: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/pedidosOrdenados?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getGananciaAnual: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/venta/listar?token=' + $rootScope.token).success(function(responseVenta){
+					
+					if (responseVenta.success) {
+						
+						if($rootScope != null && $rootScope != "")
+						{
+							$http.post('http://localhost:8080/api/pedido/listar?token=' + $rootScope.token).success(function(responsePedido){
+					
+								if (responsePedido.success) {
+									
+									var totalVentas = 0;
+									var totalPedidos = 0;
+									for()
+									
+								} else {
+									cerror(responsePedido.message);
+								}
+							});
+						}
+						else
+						{
+							cerror("conexion perdida");
+						}
+						
+					} else {
+						cerror(responseVenta.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getGananciaMensual: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/pedidosOrdenados?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		
+		getGananciaSemanal: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/pedidosOrdenados?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
 				cerror("conexion perdida");
 			}
 			

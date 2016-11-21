@@ -2,10 +2,10 @@ function ventasOrdenadas(db)
 {
 	return function(req, res) {
 		
-		var dbEntidad = db.get(req.params.entidad);
-		dbEntidad.find(req.body,function(err,docs){
+		var dbEntidad = db.get("venta");
+		dbEntidad.find({},{"sort" : ['fecha', 'asc']},function(err,docs){
 			if(err){
-				res.send({ success: false, message: 'no se pudo listar la entidad, o no existe' });
+				res.send({ success: false, message: 'no se pudo listar las ventas' });
 			}
 			else{
 				res.send({
@@ -24,8 +24,8 @@ function pedidosOrdenados(db)
 {
 	return function(req, res) {
 		
-		var dbEntidad = db.get(req.params.entidad);
-		dbEntidad.find(req.body,function(err,docs){
+		var dbEntidad = db.get("pedido");
+		dbEntidad.find({},{"sort" : ['fecha', 'asc']},function(err,docs){
 			if(err){
 				res.send({ success: false, message: 'no se pudo listar la entidad, o no existe' });
 			}
@@ -41,4 +41,6 @@ function pedidosOrdenados(db)
 	}
 }
 
-exports.insertar = insertar;
+
+exports.ventasOrdenadas = ventasOrdenadas;
+exports.pedidosOrdenados = pedidosOrdenados;
