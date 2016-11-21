@@ -5,7 +5,7 @@ function autentificacion(db)
 	return function(req, res) {
 	
 		var dbUsuario = db.get('usuario');
-		dbUsuario.findOne({usuario: req.body.usuario}, function(err, user){
+		dbUsuario.findOne({user: req.body.user}, function(err, user){
 			if (err) throw err;
 			if (!user) 
 			{
@@ -13,7 +13,7 @@ function autentificacion(db)
 			} 
 			else if (user) 
 			{
-				if (user.password != req.body.password) 
+				if (user.pass != req.body.pass) 
 				{
 					console.log(user.password);
 					console.log(req.body.password)
