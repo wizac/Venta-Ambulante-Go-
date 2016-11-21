@@ -69,21 +69,13 @@ function (API, $scope, $stateParams, $rootScope, $state, $filter) {
 	$rootScope.pedidos = [];
 	
 		
-	API.getVentas(function(result){
-		console.log('las ventas se recuperaron con exito');
+	API.getVentasConNombreCliente(function(result){
+		console.log('las ventas con nombre del cliente se recuperaron con exito');
         $rootScope.ventas = result;
-		console.log(result);
+		console.log($rootScope.ventas);
 		if(cantidadVisiblesVentas + 1 <= $rootScope.ventas.length){
 			$scope.ultimasVentas.push($rootScope.ventas[$rootScope.ventas.length - 1]);
-			$scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha = $filter('date')($scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha, "dd/MM/yyyy");
-			var idCliente = $scope.ultimasVentas[$scope.ultimasVentas.length - 1].cliente;
-			API.getClientesPorId(idCliente,function(result){
-					 $scope.ultimasVentas[$scope.ultimasVentas.length - 1].nombreCliente = result.nombre + " " + result.apellido;
-					 cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
-			}, function(error) {
-					console.log('la promesa se ha rechazado ' + error);
-					$scope.errormessage = error;
-			});
+			cantidadVisiblesVentas = cantidadVisiblesVentas+ 1;
 		}
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
@@ -113,7 +105,6 @@ function (API, $scope, $stateParams, $rootScope, $state, $filter) {
 			if((cantidadVisiblesVentas + cantidadVerMas) <= $rootScope.ventas.length){
 				for(var cant = cantidadVerMas; cant > 0; cant--){
 						$scope.ultimasVentas.push($rootScope.ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
-						$scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha = $filter('date')($scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha, "dd/MM/yyyy");
 						cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
 				}
 			}
@@ -125,7 +116,6 @@ function (API, $scope, $stateParams, $rootScope, $state, $filter) {
 					{
 						for(var cant = copiaCantVerMas; cant > 0; cant--){
 							$scope.ultimasVentas.push($rootScope.ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
-							$scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha = $filter('date')($scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha, "dd/MM/yyyy");
 							cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
 						}
 					}
@@ -419,7 +409,7 @@ function ($scope, $stateParams) {
 })
 
 
-.factory('API', function($http, $rootScope, $q) {
+.factory('API', function($http, $rootScope, $q, $filter) {
 	var deferred = $q.defer();
 	return {
 		
@@ -543,6 +533,42 @@ function ($scope, $stateParams) {
 			}
 			else
 			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getVentasConNombreCliente: function(cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/venta/listar?token=' + $rootScope.token).success(function(responseVenta){
+					if (responseVenta.success) {
+						if($rootScope != null && $rootScope != ""){
+							responseVenta.res.forEach(function (itemVenta) {
+								var data = {
+									"id": itemVenta.cliente
+								}; 
+								$http.post('http://localhost:8080/api/cliente/listar?token=' + $rootScope.token, data).success(function(responseCliente){
+									if (responseCliente.success) {
+										itemVenta.fecha = $filter('date')(itemVenta.fecha, "dd/MM/yyyy");
+										itemVenta.nombreCliente = responseCliente.res.nombre + " " + responseCliente.res.apellido;
+									} else {
+										cerror(responseCliente.message);
+									}
+								});
+							});
+						cexito(responseVenta.res)
+						}
+						else{
+							cerror("conexion perdida");
+						}
+
+					} else{
+							cerror(responseVenta.message);
+					}
+				});
+			}
+			else{
 				cerror("conexion perdida");
 			}
 			
