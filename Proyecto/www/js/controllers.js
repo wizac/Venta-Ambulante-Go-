@@ -416,13 +416,23 @@ function ($scope, $stateParams, API) {
 
 })
 
-.controller('signupCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('signupCtrl', function ($scope, $stateParams, API) {
 
 
-}])
+	$scope.signup = function(nombre, apellido, user, pass) {
+
+		    API.signUp(nombre, apellido, user, pass, function(result){
+				console.log(result.message);
+			}, function(error) {
+				$scope.errormessage = error;
+				console.log("error traje esto: "+ error);
+			}	
+			);
+		
+	}
+
+
+})
 
 .controller('loginCtrl', function ($scope, $state,$rootScope, API) {
 	
@@ -462,6 +472,27 @@ function ($scope, $stateParams) {
 		  
 				if (response.success) {
 					cexito(response.token);
+				} else {
+					cerror(response.message);
+				}
+				
+			});
+			
+		},
+		
+		signUp: function(nombre, apellido, user, pass, cexito, cerror){
+			
+			var data = {
+				"nombre": nombre,
+				"apellido": apellido,
+				"user": user,
+				"pass": pass
+			};
+ 
+			$http.post('http://localhost:8080/registro',data).success(function(response){
+		  
+				if (response.success) {
+					cexito(response);
 				} else {
 					cerror(response.message);
 				}

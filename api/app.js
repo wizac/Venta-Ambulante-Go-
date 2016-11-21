@@ -46,6 +46,8 @@ function apiRoutes(req,res,next){
 
 app.post('/autentificacion', login.autentificacion(db));
 
+app.post('/registro', funciones.registro(db));
+
 app.post("/api/:entidad/insertar", abm.insertar(db));
 	
 app.post("/api/:entidad/listar", abm.listar(db));
