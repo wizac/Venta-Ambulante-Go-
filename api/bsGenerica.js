@@ -65,14 +65,36 @@ function eliminar(db)
 {
 	return function(req, res) {
 		
-		var entidad = db.get(req.params.entidad);
-		var id = req.query.id;
 		
 		entidad.remove({ _id: id }, function (err) {
 			if (err){
 			 res.send({ success: false, message: 'no se pudo eliminar el item' });
 			}
 			else res.send({ success: true, message: 'Se elimino de la entidad '+req.params.entidad+' con id '+id})
+		});
+		
+		var ObjectId = db.helper.id.ObjectID
+		var dbEntidad = db.get(req.params.entidad);
+		dbEntidad.findOne({"_id": new ObjectId(req.body.id)},function(err,doc){
+			if(err){
+				res.send({ success: false, message: 'se produjo un error cuando se intentaba buscar el item por el id enviado'});
+			}
+			else if(doc != null){
+				res.send({ success: false, message: 'el id enviado no existe'});
+			}
+			else{
+				dbEntidad.remove({"_id": new ObjectId(req.body.id)},function(err,docs){
+					if (err){
+						res.send({ success: false, message: 'no se pudo eliminar el item' });
+					}
+					else{ res.send({
+							success: true,
+							message: 'El item con el id ' + req.body.id + ' se elimino correctamente',
+							res:docs
+						});
+					}
+				});
+			}
 		});
 	}
 }

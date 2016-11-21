@@ -72,7 +72,7 @@ function (API, $scope, $stateParams, $rootScope, $state) {
 	$rootScope.pedidos = [];
 	
 		
-	API.getVentasConNombreClienteOrdenado(function(result){
+	API.getVentasConfirmadasConNombreClienteOrdenado(function(result){
 		console.log('las ventas con nombre del cliente se recuperaron con exito');
 		var dia = new Date();
         $rootScope.ventas = result;
@@ -307,19 +307,21 @@ function (API, $scope, $stateParams) {
 	var cantidadVerMenos = 5;
 	$scope.ventasConfirmadas = [];
 	var ventas = [];
+	var contador;
 	
-	API.getVentas(function(result){
+	API.getVentasConfirmadasConNombreClienteOrdenado(function(result){
 		console.log('las ventas se recuperaron con exito');
         ventas = result;
 		console.log(result);
+		contador = ventas.length;
 		for(var i = 0; i < 5; i ++){
 			if(cantidadVisiblesVentasConfirmadas + 1 <= ventas.length){
-				$scope.ventasConfirmadas.push(ventas[$scope.ventasConfirmadas.length]);
+				$scope.ventasConfirmadas.push(ventas[--contador]);
 				cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas + 1;
 			}
 		}
 	}, function(error) {
-		console.log('la promesa se ha rechazado ' + message);
+		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
 	});
 	
@@ -327,46 +329,46 @@ function (API, $scope, $stateParams) {
 	$scope.verMasVentasConfirmadas = function(){
 			if((cantidadVisiblesVentasConfirmadas + cantidadVerMas) <= ventas.length){
 				for(var cant = cantidadVerMas; cant > 0; cant--){
-						$scope.ventasConfirmadas.push(ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
-						cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
+						$scope.ventasConfirmadas.push(ventas[(ventas.length - 1) - cantidadVisiblesVentasConfirmadas]);
+						cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas + 1;
 				}
 			}
 			else
 			{
 				copiaCantVerMas = cantidadVerMas;
 				do {
-					if(--copiaCantVerMas > 0 && (cantidadVisiblesVentas + copiaCantVerMas) <= $rootScope.ventas.length)
+					if(--copiaCantVerMas > 0 && (cantidadVisiblesVentasConfirmadas + copiaCantVerMas) <= ventas.length)
 					{
 						for(var cant = copiaCantVerMas; cant > 0; cant--){
-							$scope.ultimasVentas.push($rootScope.ventas[($rootScope.ventas.length - 1) - cantidadVisiblesVentas]);
-							cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
+							$scope.ventasConfirmadas.push(ventas[(ventas.length - 1) - cantidadVisiblesVentasConfirmadas]);
+							cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas + 1;
 						}
 					}
 				}
-				while (copiaCantVerMas > 0 && (cantidadVisiblesVentas + copiaCantVerMas) > $rootScope.ventas.length);
+				while (copiaCantVerMas > 0 && (cantidadVisiblesVentasConfirmadas + copiaCantVerMas) > ventas.length);
 			}
 	}
 	
 	$scope.verMenosVentasConfirmadas = function(){
-			if((cantidadVisiblesVentas - cantidadVerMenos) > 0){
+			if((cantidadVisiblesVentasConfirmadas - cantidadVerMenos) > 0){
 				for(var cant = cantidadVerMenos; cant > 0; cant--){
-						$scope.ultimasVentas.splice($scope.ultimasVentas.length - 1, 1);
-						cantidadVisiblesVentas = cantidadVisiblesVentas - 1;
+						$scope.ventasConfirmadas.splice($scope.ventasConfirmadas.length - 1, 1);
+						cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas - 1;
 				}
 			}
 			else
 			{
 				copiaCantVerMenos = cantidadVerMenos;
 				do {
-					if(--copiaCantVerMenos > 0 && (cantidadVisiblesVentas - copiaCantVerMenos) > 0)
+					if(--copiaCantVerMenos > 0 && (cantidadVisiblesVentasConfirmadas - copiaCantVerMenos) > 0)
 					{
 						for(var cant = copiaCantVerMenos; cant > 0; cant--){
-							$scope.ultimasVentas.splice($scope.ultimasVentas.length - 1, 1);
-							cantidadVisiblesVentas = cantidadVisiblesVentas - 1;
+							$scope.ventasConfirmadas.splice($scope.ventasConfirmadas.length - 1, 1);
+							cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas - 1;
 						}
 					}
 				}
-				while (copiaCantVerMenos > 0 && (cantidadVisiblesVentas - copiaCantVerMenos) < 1);
+				while (copiaCantVerMenos > 0 && (cantidadVisiblesVentasConfirmadas - copiaCantVerMenos) < 1);
 			}
 	}
 	
@@ -382,13 +384,100 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('ventasPendientesCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('ventasPendientesCtrl', function ($scope, $stateParams, API) {
+
+var cantidadVisiblesVentasNoConfirmadas = 0;
+	var cantidadVerMas = 5;
+	var cantidadVerMenos = 5;
+	$scope.ventasNoConfirmadas = [];
+	var ventas = [];
+	var contador;
+	
+	API.getVentasNoConfirmadasConNombreClienteOrdenado(function(result){
+		console.log('las ventas se recuperaron con exito');
+        ventas = result;
+		console.log(result);
+		contador = ventas.length;
+		for(var i = 0; i < 5; i ++){
+			if(cantidadVisiblesVentasNoConfirmadas + 1 <= ventas.length){
+				$scope.ventasNoConfirmadas.push(ventas[--contador]);
+				cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas + 1;
+			}
+		}
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
+	});
+	
+	
+	$scope.verMasVentasNoConfirmadas = function(){
+			if((cantidadVisiblesVentasNoConfirmadas + cantidadVerMas) <= ventas.length){
+				for(var cant = cantidadVerMas; cant > 0; cant--){
+						$scope.ventasNoConfirmadas.push(ventas[(ventas.length - 1) - cantidadVisiblesVentasNoConfirmadas]);
+						cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas + 1;
+				}
+			}
+			else
+			{
+				copiaCantVerMas = cantidadVerMas;
+				do {
+					if(--copiaCantVerMas > 0 && (cantidadVisiblesVentasNoConfirmadas + copiaCantVerMas) <= ventas.length)
+					{
+						for(var cant = copiaCantVerMas; cant > 0; cant--){
+							$scope.ventasNoConfirmadas.push(ventas[(ventas.length - 1) - cantidadVisiblesVentasNoConfirmadas]);
+							cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas + 1;
+						}
+					}
+				}
+				while (copiaCantVerMas > 0 && (cantidadVisiblesVentasNoConfirmadas + copiaCantVerMas) > ventas.length);
+			}
+	}
+	
+	$scope.verMenosVentasNoConfirmadas = function(){
+			if((cantidadVisiblesVentasNoConfirmadas - cantidadVerMenos) > 0){
+				for(var cant = cantidadVerMenos; cant > 0; cant--){
+						$scope.ventasNoConfirmadas.splice($scope.ventasNoConfirmadas.length - 1, 1);
+						cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas - 1;
+				}
+			}
+			else
+			{
+				copiaCantVerMenos = cantidadVerMenos;
+				do {
+					if(--copiaCantVerMenos > 0 && (cantidadVisiblesVentasNoConfirmadas - copiaCantVerMenos) > 0)
+					{
+						for(var cant = copiaCantVerMenos; cant > 0; cant--){
+							$scope.ventasNoConfirmadas.splice($scope.ventasNoConfirmadas.length - 1, 1);
+							cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas - 1;
+						}
+					}
+				}
+				while (copiaCantVerMenos > 0 && (cantidadVisiblesVentasNoConfirmadas - copiaCantVerMenos) < 1);
+			}
+	}
+	
+	$scope.eliminarVentaNoConfirmada = function(venta){
+		
+		API.eliminarVentaNoConfirmada(function(result){
+		console.log('las ventas se recuperaron con exito');
+        ventas = result;
+		console.log(result);
+		contador = ventas.length;
+		for(var i = 0; i < 5; i ++){
+			if(cantidadVisiblesVentasNoConfirmadas + 1 <= ventas.length){
+				$scope.ventasNoConfirmadas.push(ventas[--contador]);
+				cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas + 1;
+			}
+		}
+		}, function(error) {
+			console.log('la promesa se ha rechazado ' + error);
+			$scope.errormessage = error;
+		});
+		
+	}
 
 
-}])
+})
    
 .controller('productosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -626,10 +715,46 @@ function ($scope, $stateParams, API) {
 			
 		},
 		
-		getVentasConNombreClienteOrdenado: function(cexito, cerror){
+		getVentasConfirmadasConNombreClienteOrdenado: function(cexito, cerror){
 			if($rootScope != null && $rootScope != "")
 			{
 				$http.post('http://localhost:8080/api/ventasOrdenadasConfirmadas?token=' + $rootScope.token).success(function(responseVenta){
+					if (responseVenta.success) {
+						if($rootScope != null && $rootScope != ""){
+							responseVenta.res.forEach(function (itemVenta) {
+								var data = {
+									"id": itemVenta.cliente
+								}; 
+								$http.post('http://localhost:8080/api/cliente/listar?token=' + $rootScope.token, data).success(function(responseCliente){
+									if (responseCliente.success) {
+										itemVenta.fecha = $filter('date')(itemVenta.fecha, "dd/MM/yyyy");
+										itemVenta.nombreCliente = responseCliente.res.nombre + " " + responseCliente.res.apellido;
+									} else {
+										cerror(responseCliente.message);
+									}
+								});
+							});
+						cexito(responseVenta.res)
+						}
+						else{
+							cerror("conexion perdida");
+						}
+
+					} else{
+							cerror(responseVenta.message);
+					}
+				});
+			}
+			else{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getVentasNoConfirmadasConNombreClienteOrdenado: function(cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/ventasOrdenadasNoConfirmadas?token=' + $rootScope.token).success(function(responseVenta){
 					if (responseVenta.success) {
 						if($rootScope != null && $rootScope != ""){
 							responseVenta.res.forEach(function (itemVenta) {
@@ -950,6 +1075,28 @@ function ($scope, $stateParams, API) {
 						
 					} else {
 						cerror(responseVenta.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		eliminarVentaNoConfirmada: function(venta, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id": venta._id
+				};
+				$http.post('http://localhost:8080/api/eliminar/listar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
 					}
 				});
 			}
