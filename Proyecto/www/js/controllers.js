@@ -76,7 +76,14 @@ function (API, $scope, $stateParams, $rootScope, $state, $filter) {
 		if(cantidadVisiblesVentas + 1 <= $rootScope.ventas.length){
 			$scope.ultimasVentas.push($rootScope.ventas[$rootScope.ventas.length - 1]);
 			$scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha = $filter('date')($scope.ultimasVentas[$scope.ultimasVentas.length - 1].fecha, "dd/MM/yyyy");
-			cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
+			var idCliente = $scope.ultimasVentas[$scope.ultimasVentas.length - 1].cliente;
+			API.getClientesPorId(idCliente,function(result){
+					 $scope.ultimasVentas[$scope.ultimasVentas.length - 1].nombreCliente = result.nombre + " " + result.apellido;
+					 cantidadVisiblesVentas = cantidadVisiblesVentas + 1;
+			}, function(error) {
+					console.log('la promesa se ha rechazado ' + error);
+					$scope.errormessage = error;
+			});
 		}
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
@@ -520,7 +527,6 @@ function ($scope, $stateParams) {
 		},
 		
 		getClientesPorId: function(id, cexito, cerror){
-			
 			if($rootScope != null && $rootScope != "")
 			{
 				var data = {

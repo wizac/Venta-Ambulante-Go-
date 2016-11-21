@@ -15,12 +15,14 @@ function listar(db)
 		
 		if(req.body.id != '' && req.body.id != undefined){
 			
+			var ObjectId = db.helper.id.ObjectID
 			var dbEntidad = db.get(req.params.entidad);
-			dbEntidad.find(req.body.id,function(err,docs){
+			dbEntidad.findOne({"_id": new ObjectId(req.body.id)},function(err,docs){
 				if(err){
 					res.send({ success: false, message: 'no se pudo listar la entidad por id, no existe o el id es invalido'});
 				}
 				else{
+					console.log("si entro");
 					res.send({
 							success: true,
 							message: 'Lista de entidad por id exitosa!',
