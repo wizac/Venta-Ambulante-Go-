@@ -78,8 +78,10 @@ function (API, $scope, $stateParams, $rootScope, $state) {
         $rootScope.ventas = result;
 		console.log($rootScope.ventas);
 		if(cantidadVisiblesVentas + 1 <= $rootScope.ventas.length){
-			$scope.ultimasVentas.push($rootScope.ventas[$rootScope.ventas.length - 1]);
-			cantidadVisiblesVentas = cantidadVisiblesVentas+ 1;
+			if($rootScope.ventas[$rootScope.ventas.length - 1].estado){
+				$scope.ultimasVentas.push($rootScope.ventas[$rootScope.ventas.length - 1]);
+				cantidadVisiblesVentas = cantidadVisiblesVentas+ 1;
+			}
 		}
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
@@ -92,8 +94,10 @@ function (API, $scope, $stateParams, $rootScope, $state) {
         $rootScope.pedidos = result;
 		console.log($rootScope.pedidos);
 		if(cantidadVisiblesPedidos + 1 <= $rootScope.pedidos.length){
-			$scope.ultimosPedidos.push($rootScope.pedidos[$rootScope.pedidos.length - 1]);
-			cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
+			if($rootScope.pedidos[$rootScope.pedidos.length - 1].estado){
+				$scope.ultimosPedidos.push($rootScope.pedidos[$rootScope.pedidos.length - 1]);
+				cantidadVisiblesPedidos = cantidadVisiblesPedidos + 1;
+			}
 		}
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
@@ -594,7 +598,7 @@ function ($scope, $stateParams) {
 		getVentasConNombreClienteOrdenado: function(cexito, cerror){
 			if($rootScope != null && $rootScope != "")
 			{
-				$http.post('http://localhost:8080/api/ventasOrdenadas?token=' + $rootScope.token).success(function(responseVenta){
+				$http.post('http://localhost:8080/api/ventasOrdenadasConfirmadas?token=' + $rootScope.token).success(function(responseVenta){
 					if (responseVenta.success) {
 						if($rootScope != null && $rootScope != ""){
 							responseVenta.res.forEach(function (itemVenta) {
@@ -630,7 +634,7 @@ function ($scope, $stateParams) {
 		getPedidosConNombreProveedorOrdenado: function(cexito, cerror){
 			if($rootScope != null && $rootScope != "")
 			{
-				$http.post('http://localhost:8080/api/pedidosOrdenados?token=' + $rootScope.token).success(function(responsePedido){
+				$http.post('http://localhost:8080/api/pedidosOrdenadosConfirmados?token=' + $rootScope.token).success(function(responsePedido){
 					if (responsePedido.success) {
 						if($rootScope != null && $rootScope != ""){
 							responsePedido.res.forEach(function (itemPedido) {
@@ -707,13 +711,13 @@ function ($scope, $stateParams) {
 			
 			if($rootScope != null && $rootScope != "")
 			{
-				$http.post('http://localhost:8080/api/venta/listar?token=' + $rootScope.token).success(function(responseVenta){
+				$http.post('http://localhost:8080/api/ventasOrdenadasConfirmadas?token=' + $rootScope.token).success(function(responseVenta){
 					
 					if (responseVenta.success) {
 						
 						if($rootScope != null && $rootScope != "")
 						{
-							$http.post('http://localhost:8080/api/pedido/listar?token=' + $rootScope.token).success(function(responsePedido){
+							$http.post('http://localhost:8080/api/pedidosOrdenadosConfirmados?token=' + $rootScope.token).success(function(responsePedido){
 					
 								if (responsePedido.success) {
 									
@@ -758,13 +762,13 @@ function ($scope, $stateParams) {
 			
 			if($rootScope != null && $rootScope != "")
 			{
-				$http.post('http://localhost:8080/api/venta/listar?token=' + $rootScope.token).success(function(responseVenta){
+				$http.post('http://localhost:8080/api/ventasOrdenadasConfirmadas?token=' + $rootScope.token).success(function(responseVenta){
 					
 					if (responseVenta.success) {
 						
 						if($rootScope != null && $rootScope != "")
 						{
-							$http.post('http://localhost:8080/api/pedido/listar?token=' + $rootScope.token).success(function(responsePedido){
+							$http.post('http://localhost:8080/api/pedidosOrdenadosConfirmados?token=' + $rootScope.token).success(function(responsePedido){
 					
 								if (responsePedido.success) {
 									
@@ -810,13 +814,13 @@ function ($scope, $stateParams) {
 			
 			if($rootScope != null && $rootScope != "")
 			{
-				$http.post('http://localhost:8080/api/venta/listar?token=' + $rootScope.token).success(function(responseVenta){
+				$http.post('http://localhost:8080/api/ventasOrdenadasConfirmadas?token=' + $rootScope.token).success(function(responseVenta){
 					
 					if (responseVenta.success) {
 						
 						if($rootScope != null && $rootScope != "")
 						{
-							$http.post('http://localhost:8080/api/pedido/listar?token=' + $rootScope.token).success(function(responsePedido){
+							$http.post('http://localhost:8080/api/pedidosOrdenadosConfirmados?token=' + $rootScope.token).success(function(responsePedido){
 					
 								if (responsePedido.success) {
 									
@@ -824,12 +828,80 @@ function ($scope, $stateParams) {
 									var totalPedidos = 0;
 									for(var i = 0; i < responseVenta.res.length; i++){
 										if(($filter('date')(responseVenta.res[i].fecha, "MM/yyyy")) == ($filter('date')(new Date(), "MM/yyyy"))){
-											totalVentas = totalVentas + responseVenta.res[i].total;
+											if(($filter('date')(new Date(), "EEEE")) == "Monday"){					
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" ){
+													totalVentas = totalVentas + responseVenta.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Tuesday"){
+											if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" ){
+													totalVentas = totalVentas + responseVenta.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Wednesday"){
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday"){
+													totalVentas = totalVentas + responseVenta.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Thursday"){
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Thursday"){
+													totalVentas = totalVentas + responseVenta.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Friday"){
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Thursday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Friday"){
+													totalVentas = totalVentas + responseVenta.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Saturday"){
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Thursday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Friday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Saturday"){
+													totalVentas = totalVentas + responseVenta.res[i].total;
+												}
+											}
+											else{
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Thursday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Friday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Saturday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Sunday"){
+													totalVentas = totalVentas + responseVenta.res[i].total;
+												}
+											}
 										}
 									}
 									for(var i = 0; i < responsePedido.res.length; i++){
 										if(($filter('date')(responsePedido.res[i].fecha, "MM/yyyy")) == ($filter('date')(new Date(), "MM/yyyy"))){
-											totalPedidos = totalPedidos+ responsePedido.res[i].total;
+											if(($filter('date')(new Date(), "EEEE")) == "Monday"){					
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" ){
+													totalPedidos = totalPedidos+ responsePedido.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Tuesday"){
+											if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" ){
+													totalPedidos = totalPedidos+ responsePedido.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Wednesday"){
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday"){
+													totalPedidos = totalPedidos+ responsePedido.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Thursday"){
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Thursday"){
+													totalPedidos = totalPedidos+ responsePedido.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Friday"){
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Thursday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Friday"){
+													totalPedidos = totalPedidos+ responsePedido.res[i].total;
+												}
+											}
+											else if(($filter('date')(new Date(), "EEEE")) == "Saturday"){
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Thursday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Friday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Saturday"){
+													totalPedidos = totalPedidos+ responsePedido.res[i].total;
+												}
+											}
+											else{
+												if(($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Monday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Tuesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Wednesday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Thursday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Friday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Saturday" || ($filter('date')(responseVenta.res[i].fecha, "EEEE")) == "Sunday"){
+													totalPedidos = totalPedidos+ responsePedido.res[i].total;
+												}
+											}
 										}
 									}
 									

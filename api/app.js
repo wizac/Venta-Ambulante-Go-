@@ -58,6 +58,14 @@ app.post("/api/ventasOrdenadas", funciones.ventasOrdenadas(db));
 
 app.post("/api/pedidosOrdenados", funciones.pedidosOrdenados(db));
 
+app.post("/api/ventasOrdenadasConfirmadas", funciones.ventasOrdenadasConfirmadas(db));
+
+app.post("/api/pedidosOrdenadosConfirmados", funciones.pedidosOrdenadosConfirmados(db));
+
+app.post("/api/ventasOrdenadasNoConfirmadas", funciones.ventasOrdenadasNoConfirmadas(db));
+
+app.post("/api/pedidosOrdenadosNoConfirmados", funciones.pedidosOrdenadosNoConfirmados(db));
+
  
 /* -------------------------------------------------------------- */
  
