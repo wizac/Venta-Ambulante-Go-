@@ -42,12 +42,12 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('menu.informacionDeProductos', {
+  .state('menu.confirmarProductos', {
     url: '/page6',
     views: {
       'side-menu21': {
-        templateUrl: 'templates/informacionDeProductos.html',
-        controller: 'informacionDeProductosCtrl'
+        templateUrl: 'templates/confirmarProductos.html',
+        controller: 'confirmarProductosCtrl'
       }
     }
   })
@@ -88,6 +88,26 @@ angular.module('app.routes', [])
       'side-menu21': {
         templateUrl: 'templates/modificarDatos.html',
         controller: 'modificarDatosCtrl'
+      }
+    }
+  })
+  
+  .state('menu.clientes', {
+    url: '/clientes',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/clientes.html',
+        controller: 'clientesCtrl'
+      }
+    }
+  })
+
+  .state('menu.nuevoCliente', {
+    url: '/nuevoCliente',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/nuevoCliente.html',
+        controller: 'nuevoClienteCtrl'
       }
     }
   })

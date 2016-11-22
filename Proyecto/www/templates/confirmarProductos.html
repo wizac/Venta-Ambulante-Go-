@@ -1,0 +1,21 @@
+<ion-view title="Confirmar Productos" id="page6">
+  <ion-content padding="true" class="has-header">
+    <h3 id="confirmarProductos-heading10" style="color:#000000;text-align:center;">Paso 2/4</h3>
+    <div class="spacer" style="width: 300px; height: 30px;"></div>
+     <div class="item item-body" id="confirmarProductos-list-item-container1">
+			 <ion-list class=" " id="confirmarProductos-list5">
+				<ion-item ng-repeat="producto in productosSeleccionados" style="" id="confirmarProductos-list-item17" class="">
+					<h2>{{producto.nombre}}</h2>
+					<h2 style="float:right"> + {{producto.cantidadSeleccionados}}</h2>
+					Categoria: {{producto.categoria}} <br>
+					Precio de venta: {{producto.precioVenta}} <br>
+					Cantidad en stock: {{producto.cantidad}}<br>
+					<button id="perfil-button1" style="font-size:16px;border-radius:51px 0px 0px 51px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="quitarProductoSeleccionado(producto)">Quitar</button>
+					<button id="perfil-button1" style="font-size:16px;border-radius:0px 51px 51px 0px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="agregarProductoSeleccionado(producto)">Añadir</button>
+				</ion-item>
+			</ion-list>
+	</div>
+    <h3 ng-bind-html="precioTotal" id="confirmarProductos-heading14" style="color:#000000; margin-top:25px; margin-bottom:25px;">Precio total: $0</h3>
+    <a ui-sref="menu.elijaCliente" id="confirmarProductos-button16" class="button button-positive  button-block">Siguiente</a>
+  </ion-content>
+</ion-view>

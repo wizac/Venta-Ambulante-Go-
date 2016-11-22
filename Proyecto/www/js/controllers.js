@@ -23,9 +23,10 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('elijaLosProductosCtrl', function ($scope, $stateParams, API) {
+.controller('elijaLosProductosCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
 	
 	$scope.productosStock = [];
+	$rootScope.productosSeleccionados = [];
 	
 	API.getProductosConStock(function(result){
 		
@@ -35,17 +36,106 @@ function ($scope, $stateParams) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
 	});
+	
+	
+	$scope.agregarProducto = function(producto){
+		for(var i = 0; i < $scope.productosStock.length; i ++){
+			if($scope.productosStock[i]._id == producto._id){
+				if($scope.productosStock[i].cantidad > $scope.productosStock[i].cantidadSeleccionados){
+					$scope.productosStock[i].cantidadSeleccionados += 1;
+				}
+			}
+		}
+		
+	}
+	
+	
+	$scope.quitarProducto = function(producto){
+		for(var i = 0; i < $scope.productosStock.length; i ++){
+			if($scope.productosStock[i]._id == producto._id){
+				if($scope.productosStock[i].cantidadSeleccionados > 0){
+					$scope.productosStock[i].cantidadSeleccionados -= 1;
+				}
+			}
+		}
+		
+	}
+	
+	$scope.confirmarProductos = function(){
+		$rootScope.productosSeleccionados = [];
+		for(var i = 0; i < $scope.productosStock.length; i ++){
+			if($scope.productosStock[i].cantidadSeleccionados > 0){
+				$rootScope.productosSeleccionados.push($scope.productosStock[i]);
+			}
+		}
+		if($rootScope.productosSeleccionados.length > 0){
+			$state.go("menu.confirmarProductos");
+		}
+		else{
+			console.log("debe seleccionar algún producto para realizar la venta");
+		}
+	}
+	
+	$scope.limpiar = function(){
+		for(var i = 0; i < $scope.productosStock.length; i ++){
+			$scope.productosStock[i].cantidadSeleccionados = 0;
+		}
+	}
 
 
 })
    
-.controller('informacionDeProductosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('confirmarProductosCtrl', function ($scope, $stateParams, $rootScope) {
+	
+	
+	$scope.productosSeleccionados = $rootScope.productosSeleccionados;
+	
+	$scope.agregarProductoSeleccionado = function(producto){
+		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+			if($scope.productosSeleccionados[i]._id == producto._id){
+				if($scope.productosSeleccionados[i].cantidad > $scope.productosSeleccionados[i].cantidadSeleccionados){
+					$scope.productosStock[i].cantidadSeleccionados += 1;
+				}
+			}
+			$rootScope.productosSeleccionados = $scope.productosSeleccionados;
+		}
+		
+		var precioTotal = 0;
+		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+			precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
+		}
+		$scope.precioTotal = "Precio total: $" + precioTotal;
+		
+	}
+	
+	
+	$scope.quitarProductoSeleccionado = function(producto){
+		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+			if($scope.productosSeleccionados[i]._id == producto._id){
+				if($scope.productosSeleccionados[i].cantidadSeleccionados > 1){
+					$scope.productosSeleccionados[i].cantidadSeleccionados -= 1;
+				}
+				else{
+					$scope.productosSeleccionados.splice(i, 1);
+				}
+			}
+		}
+		$rootScope.productosSeleccionados = $scope.productosSeleccionados;
+		
+		var precioTotal = 0;
+		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+			precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
+		}
+		$scope.precioTotal = "Precio total: $" + precioTotal;
+	}
 
+	var precioTotal = 0;
+	for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+		precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados)
+	}
+	$scope.precioTotal = "Precio total: $" + precioTotal;
 
-}])
+})
    
 .controller('elijaClienteCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -250,6 +340,22 @@ function ($scope, $stateParams) {
 
 
 }])
+   
+.controller('clientesCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams) {
+
+
+}])
+   
+.controller('nuevoClienteCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams) {
+
+
+}]) 
    
 .controller('proveedoresCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -627,6 +733,9 @@ function ($scope, $stateParams, API) {
 				$http.post('http://localhost:8080/api/productosConStock?token=' + $rootScope.token).success(function(response){
 					
 					if (response.success) {
+						response.res.forEach(function (itemProducto) {
+							itemProducto.cantidadSeleccionados = 0;
+						});
 						console.log(response);
 						cexito(response.res)
 					} else {
