@@ -6,35 +6,30 @@
         <i class="icon ion-search placeholder-icon"></i>
         <input type="search" placeholder="">
       </label>
-      <div class="spacer" style="width: 300px; height: 54px;"></div>
+      <div class="spacer" style="width: 300px; height: 10px;"></div>
     </form>
-    <div class="item item-body" id="productos-list-item-container11">
-      <div>
-        <img src="img/vdA28BaOQMq0rD7duMDl_f254782e409a2635d4b69a6f8ad7eecd.jpg" width="100%" height="100" style="display: block; margin-left: auto; margin-right: auto;">
-      </div>
-      <div id="productos-markdown10">
-        <p style="margin-top:0px;color:#000000;">Nombre: Vasos descartables</p>
-      </div>
-      <div id="productos-markdown14">
-        <p style="margin-top:0px;color:#000000;">Descripcion: Vaso desechable 1 litro</p>
-      </div>
-      <div id="productos-markdown47">
-        <p style="margin-top:0px;color:#000000;">Categoria: Cotillon</p>
-      </div>
-      <div id="productos-markdown49">
-        <p style="margin-top:0px;color:#000000;">Stock: 1000</p>
-      </div>
-      <div id="productos-markdown51">
-        <p style="margin-top:0px;color:#000000;">Precio de compra: $0,15</p>
-      </div>
-      <div id="productos-markdown52">
-        <p style="margin-top:0px;color:#000000;">Precio de venta: $0,30</p>
-      </div>
-      <div id="productos-button-bar5" class="button-bar">
-        <button id="productos-button30" class="button button-positive  button-block">Pedir mas</button>
-        <button id="productos-button31" class="button button-positive  button-block">Eliminar</button>
-      </div>
-    </div>
-    <a ui-sref="menu.nuevoProducto" id="productos-button26" class="button button-positive  button-block">Nuevo producto</a>
+		<div class="item item-body" id="productos-list-item-container1">
+			 <ion-list class=" " id="productos-list5">
+				<ion-item ng-repeat="producto in productos" style="" id="productos-list-item17" class="">
+					<div>
+						<img src="img/W6NDcAM7RFKYErD69Ay0_venta-de-productos.jpg" width="100%" height="100" style="display: block; margin-left: auto; margin-right: auto;">
+					</div>
+					Nombre: {{producto.nombre}} <br>
+					Descripcion: {{producto.descripcion}} <br>
+					Categoria: {{producto.categoria}} <br>
+					Stock: {{producto.cantidad}}<br>
+					Precio compra: {{producto.precioCompra}}<br>
+					Precio venta: {{producto.precioVenta}}<br>
+					<div id="productos-button-bar5" class="button-bar">
+						<button id="productos-button31" class="button button-positive  button-block">Eliminar</button>
+						<button id="productos-button30" class="button button-positive  button-block">Añadir Stock</button>
+					</div>
+				</ion-item>
+			</ion-list>
+		</div>
   </ion-content>
 </ion-view>
+
+<ion-footer-bar style="height: 60px;">
+  <button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="nuevoProducto()">Nuevo producto</button>
+</ion-footer-bar>

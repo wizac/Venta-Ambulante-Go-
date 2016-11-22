@@ -2,26 +2,29 @@
   <ion-content padding="true" class="has-header">
     <h2 id="nuevoPedido-heading48" style="color:#000000;text-align:center;">1/2</h2>
     <h2 id="nuevoPedido-heading46" style="color:#000000;text-align:center;">Seleccione productos</h2>
-    <div class="item item-body" id="nuevoPedido-list-item-container6">
-      <div id="nuevoPedido-markdown19">
-        <p style="margin-top:0px;color:#000000;">Nombre:</p>
-      </div>
-      <form id="nuevoPedido-form23" class="list">
-        <ion-item class="range range-positive" id="nuevoPedido-range5">Cantidad
-          <input type="range" value="0" min="0" max="100" step="1">
-        </ion-item>
-      </form>
-    </div>
-    <div class="item item-body" id="nuevoPedido-list-item-container7">
-      <div id="nuevoPedido-markdown20">
-        <p style="margin-top:0px;color:#000000;">Nombre:</p>
-      </div>
-      <form id="nuevoPedido-form24" class="list">
-        <ion-item class="range range-positive" id="nuevoPedido-range6">Cantidad
-          <input type="range" value="0" min="0" max="100" step="1">
-        </ion-item>
-      </form>
-    </div>
-    <a ui-sref="menu.elijaProveedor" id="nuevoPedido-button21" class="button button-positive  button-block">Siguiente</a>
+    <form class="list" id="nuevoPedido-form5">
+				<label style="" class="item item-input">
+					<i class="icon ion-search placeholder-icon"></i>
+					<input placeholder="" type="search">
+				</label>
+		</form>
+		<div class="item item-body" id="elijaLosProductos-list-item-container1">
+			 <ion-list class=" " id="nuevoPedido-list5">
+				<ion-item ng-repeat="producto in productos" style="" id="nuevoPedido-list-item17" class="">
+					<h2>{{producto.nombre}}</h2>
+					<h2 style="float:right"> + {{producto.cantidadSeleccionados}}</h2>
+					Categoria: {{producto.categoria}} <br>
+					Precio de venta: {{producto.precioVenta}} <br>
+					Cantidad en stock: {{producto.cantidad}}<br>
+					<button id="perfil-button1" style="font-size:16px;border-radius:51px 0px 0px 51px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="quitarProducto(producto)">Quitar</button>
+					<button id="perfil-button1" style="font-size:16px;border-radius:0px 51px 51px 0px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="agregarProducto(producto)">Añadir</button>
+				</ion-item>
+			</ion-list>
+		</div>
+   
   </ion-content>
 </ion-view>
+<ion-footer-bar style="height: 55px;">
+<button  style="height: 40px; font-size:18px;" class="button button-positive  button-line" ng-click="limpiar()">Limpiar</button>
+  <button  style="height: 40px; font-size:18px;" class="button button-positive  button-line" ng-click="confirmarProductos()">Siguiente</button>
+</ion-footer-bar>

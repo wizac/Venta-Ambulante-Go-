@@ -568,13 +568,84 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('pedidosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('pedidosCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
 
+	var cantidadVisiblesPedidosConfirmados = 0;
+	var cantidadVerMas = 5;
+	var cantidadVerMenos = 5;
+	$scope.pedidosConfirmados = [];
+	var pedidos = [];
+	var contador;
+	
+	API.getPedidosConNombreProveedorOrdenado(function(result){
+		console.log('los pedidos se recuperaron con exito');
+        pedidos = result;
+		console.log(result);
+		contador = pedidos.length;
+		for(var i = 0; i < 5; i ++){
+			if(cantidadVisiblesPedidosConfirmados + 1 <= pedidos.length){
+				$scope.pedidosConfirmados.push(pedidos[--contador]);
+				cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados + 1;
+			}
+		}
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
+	});
+	
+	
+	$scope.verMasPedidos = function(){
+			if((cantidadVisiblesPedidosConfirmados + cantidadVerMas) <= pedidos.length){
+				for(var cant = cantidadVerMas; cant > 0; cant--){
+						$scope.pedidosConfirmados.push(pedidos[(pedidos.length - 1) - cantidadVisiblesPedidosConfirmados]);
+						cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados + 1;
+				}
+			}
+			else
+			{
+				copiaCantVerMas = cantidadVerMas;
+				do {
+					if(--copiaCantVerMas > 0 && (cantidadVisiblesPedidosConfirmados + copiaCantVerMas) <= pedidos.length)
+					{
+						for(var cant = copiaCantVerMas; cant > 0; cant--){
+							$scope.pedidosConfirmados.push(pedidos[(pedidos.length - 1) - cantidadVisiblesPedidosConfirmados]);
+							cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados + 1;
+						}
+					}
+				}
+				while (copiaCantVerMas > 0 && (cantidadVisiblesPedidosConfirmados + copiaCantVerMas) > pedidos.length);
+			}
+	}
+	
+	$scope.verMenosPedidos = function(){
+			if((cantidadVisiblesPedidosConfirmados - cantidadVerMenos) > 0){
+				for(var cant = cantidadVerMenos; cant > 0; cant--){
+						$scope.pedidosConfirmados.splice($scope.pedidosConfirmados.length - 1, 1);
+						cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados - 1;
+				}
+			}
+			else
+			{
+				copiaCantVerMenos = cantidadVerMenos;
+				do {
+					if(--copiaCantVerMenos > 0 && (cantidadVisiblesPedidosConfirmados - copiaCantVerMenos) > 0)
+					{
+						for(var cant = copiaCantVerMenos; cant > 0; cant--){
+							$scope.pedidosConfirmados.splice($scope.pedidosConfirmados.length - 1, 1);
+							cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados - 1;
+						}
+					}
+				}
+				while (copiaCantVerMenos > 0 && (cantidadVisiblesPedidosConfirmados - copiaCantVerMenos) < 1);
+			}
+	}
+	
+	$scope.nuevoPedido = function(){
+		
+		$state.go("menu.nuevoPedido");
+	}
 
-}])
+})
    
 .controller('detallesPedidoCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -584,8 +655,7 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('ventasConfirmadasCtrl',
-function (API, $scope, $stateParams) {
+.controller('ventasConfirmadasCtrl', function (API, $scope, $stateParams) {
 	
 	var cantidadVisiblesVentasConfirmadas = 0;
 	var cantidadVerMas = 5;
@@ -764,13 +834,35 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 
 })
    
-.controller('productosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('productosCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
+	
+	var cantidadVisiblesProductos = 0;
+	var cantidadVerMas = 5;
+	var cantidadVerMenos = 5;
+	$scope.productos = [];
+	var productos = [];
+	
+	API.getProductos(function(result){
+		console.log('Los productos se recuperaron con exito');
+        productos = result;
+		console.log(result);
+		for(var i = 0; i < productos.length; i ++){
+			if(cantidadVisiblesProductos + 1 <= productos.length){
+				$scope.productos.push(productos[$scope.productos.length]);
+				cantidadVisiblesProductos = cantidadVisiblesProductos + 1;
+			}
+		}
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
+	});
+	
+	$scope.nuevoProducto = function(){
+		
+		$state.go("menu.nuevoProducto");
+	}
 
-
-}])
+})
    
 .controller('nuevoProductoCtrl', function ($scope, $stateParams, API) {
 	
@@ -874,7 +966,7 @@ function ($scope, $stateParams) {
 			
 		},
 		// usando patron promise-deferred
-		getProductos: function(){
+		getProductosDeferred: function(){
 			
 			if($rootScope != null && $rootScope != "")
 			{
@@ -893,6 +985,26 @@ function ($scope, $stateParams) {
 				deferred.reject("conexion perdida")
 			}
 			return deferred.promise;
+			
+		},
+		
+		getProductos: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/producto/listar?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
 			
 		},
 		
