@@ -8,13 +8,20 @@
 		</form>
 		<div class="item item-body" id="elijaLosProductos-list-item-container1">
 			 <ion-list class=" " id="agregueProductos-list5">
-				<ion-item ng-repeat="producto in productosStock" style="" id="agregueProductos-list-item17" class="" ng-click="elegirProductos(producto)">
+				<ion-item ng-repeat="producto in productosStock" style="" id="agregueProductos-list-item17" class="">
 					<h2>{{producto.nombre}}</h2>
+					<h2 style="float:right"> + 0</h2>
+					Categoria: {{producto.categoria}} <br>
 					Precio de venta: {{producto.precioVenta}} <br>
-					Cantidad en stock: {{producto.cantidad}}
+					Cantidad en stock: {{producto.cantidad}}<br>
+					<button id="perfil-button1" style="font-size:16px;border-radius:51px 0px 0px 51px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="verMenosVentas()">Quitar</button>
+					<button id="perfil-button1" style="font-size:16px;border-radius:0px 51px 51px 0px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="verMasVentas()">Añadir</button>
 				</ion-item>
 			</ion-list>
 		</div>
-    <a ui-sref="menu.informacionDeProductos" id="elijaLosProductos-button9" class="button button-positive  button-block">Siguiente</a>
+   
   </ion-content>
 </ion-view>
+<ion-footer-bar style="height: 70px;">
+  <button  style="height: 45px; font-size:18px;" class="button button-positive  button-block">Siguiente</button>
+</ion-footer-bar>
