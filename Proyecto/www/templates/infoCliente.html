@@ -1,0 +1,38 @@
+<ion-view title="Información cliente" id="page13">
+  <ion-content padding="true" class="has-header">
+    <h2 id="infoCliente-heading1" style="color:#000000;">Nombre</h2>
+    <form id="infoCliente-form20" class="list">
+      <label class="item item-input" id="infoCliente-input20">
+        <input type="text" placeholder="" ng-model="nombreCliente">
+      </label>
+    </form>
+    <h2 id="infoCliente-heading2" style="color:#000000;">Apellido</h2>
+    <form id="infoCliente-form19" class="list">
+      <label class="item item-input" id="infoCliente-input19">
+        <input type="text" placeholder="" ng-model="apellidoCliente">
+      </label>
+    </form>
+    <h2 id="infoCliente-heading3" style="color:#000000;">DNI</h2>
+    <form id="infoCliente-form21" class="list">
+      <label class="item item-input" id="infoCliente-input22">
+        <input type="text" placeholder="" ng-model="dniCliente">
+      </label>
+    </form>
+	<h2 id="infoCliente-heading4" style="color:#000000;">Dirección</h2>
+    <form id="infoCliente-form19" class="list">
+      <label class="item item-input" id="infoCliente-input19">
+        <input type="text" placeholder="" ng-model="direccionCliente">
+      </label>
+    </form>
+    <h2 id="infoCliente-heading5" style="color:#000000;">Telefono</h2>
+    <form id="infoCliente-form22" class="list">
+      <label class="item item-input" id="infoCliente-input21">
+        <input type="text" placeholder="" ng-model="telefonoCliente">
+      </label>
+    </form>
+</ion-view>
+
+<ion-footer-bar style="height: 55px;">
+<button  style="height: 40px; font-size:18px;" class="button button-positive  button-line" ng-click="eliminarCliente()">Eliminar</button>
+<button  style="height: 40px; font-size:18px;" class="button button-positive  button-line" ng-click="guardarCambios(nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoCliente)">Guardar cambios</button>
+</ion-footer-bar>

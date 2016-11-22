@@ -65,21 +65,13 @@ function eliminar(db)
 {
 	return function(req, res) {
 		
-		
-		entidad.remove({ _id: id }, function (err) {
-			if (err){
-			 res.send({ success: false, message: 'no se pudo eliminar el item' });
-			}
-			else res.send({ success: true, message: 'Se elimino de la entidad '+req.params.entidad+' con id '+id})
-		});
-		
 		var ObjectId = db.helper.id.ObjectID
 		var dbEntidad = db.get(req.params.entidad);
 		dbEntidad.findOne({"_id": new ObjectId(req.body.id)},function(err,doc){
 			if(err){
 				res.send({ success: false, message: 'se produjo un error cuando se intentaba buscar el item por el id enviado'});
 			}
-			else if(doc != null){
+			else if(doc == null){
 				res.send({ success: false, message: 'el id enviado no existe'});
 			}
 			else{
@@ -108,10 +100,28 @@ function actualizar(db)
 			res.send({ success: false, message: 'debes enviar el id' })
 		}
 		else{
-			
-			var dbEntidad = db.get(req.params.entidad)
-			dbEntidad.updateById(req.body.id,req.body, function(){
-				res.send({ success: true, message: 'actualización exitosa!' })
+			var ObjectId = db.helper.id.ObjectID
+			var dbEntidad = db.get(req.params.entidad);
+			dbEntidad.findOne({"_id": new ObjectId(req.body.id)},function(err,doc){
+				if(err){
+					res.send({ success: false, message: 'se produjo un error cuando se intentaba buscar el item por el id enviado'});
+				}
+				else if(doc == null){
+					res.send({ success: false, message: 'el id enviado no existe'});
+				}
+				else{
+					dbEntidad.updateById(req.body.id, req.body,function(err,docs){
+						if (err){
+							res.send({ success: false, message: 'no se pudo eliminar el item' });
+						}
+						else{ res.send({
+								success: true,
+								message: 'El item con el id ' + req.body.id + ' se actualizo correctamente',
+								res:docs
+							});
+						}
+					});
+				}
 			});
 		}
 	}

@@ -1,33 +1,35 @@
-<ion-view title="Nuevo proveedor" id="page12">
+<ion-view title="Nuevo cliente" id="page13">
   <ion-content padding="true" class="has-header">
-    <h2 id="nuevoProveedor-heading37" style="color:#000000;">Nombre</h2>
-    <form id="nuevoProveedor-form15" class="list">
-      <label class="item item-input" id="nuevoProveedor-input15">
-        <span class="input-label">Input</span>
-        <input type="text" placeholder="">
+    <h2 id="nuevoCliente-heading1" style="color:#000000;">Nombre</h2>
+    <form id="nuevoCliente-form20" class="list">
+      <label class="item item-input" id="nuevoCliente-input20">
+        <input type="text" placeholder="" ng-model="nombreCliente">
       </label>
     </form>
-    <h2 id="nuevoProveedor-heading38" style="color:#000000;">Direccion</h2>
-    <form id="nuevoProveedor-form16" class="list">
-      <label class="item item-input" id="nuevoProveedor-input18">
-        <span class="input-label">Input</span>
-        <input type="text" placeholder="">
+    <h2 id="nuevoCliente-heading2" style="color:#000000;">Apellido</h2>
+    <form id="nuevoCliente-form19" class="list">
+      <label class="item item-input" id="nuevoCliente-input19">
+        <input type="text" placeholder="" ng-model="apellidoCliente">
       </label>
     </form>
-    <h2 id="nuevoProveedor-heading39" style="color:#000000;">CUIT</h2>
-    <form id="nuevoProveedor-form17" class="list">
-      <label class="item item-input" id="nuevoProveedor-input16">
-        <span class="input-label">Input</span>
-        <input type="text" placeholder="">
+    <h2 id="nuevoCliente-heading3" style="color:#000000;">DNI</h2>
+    <form id="nuevoCliente-form21" class="list">
+      <label class="item item-input" id="nuevoCliente-input22">
+        <input type="text" placeholder="" ng-model="dniCliente">
       </label>
     </form>
-    <h2 id="nuevoProveedor-heading40" style="color:#000000;">Telefono</h2>
-    <form id="nuevoProveedor-form18" class="list">
-      <label class="item item-input" id="nuevoProveedor-input17">
-        <span class="input-label">Input</span>
-        <input type="text" placeholder="">
+	<h2 id="nuevoCliente-heading4" style="color:#000000;">Dirección</h2>
+    <form id="nuevoCliente-form19" class="list">
+      <label class="item item-input" id="nuevoCliente-input19">
+        <input type="text" placeholder="" ng-model="direccionCliente">
       </label>
-      <a ui-sref="menu.proveedores" id="nuevoProveedor-button19" class="button button-positive  button-block">Terminar</a>
     </form>
+    <h2 id="nuevoCliente-heading5" style="color:#000000;">Telefono</h2>
+    <form id="nuevoCliente-form22" class="list">
+      <label class="item item-input" id="nuevoCliente-input21">
+        <input type="text" placeholder="" ng-model="telefonoCliente">
+      </label>
+    </form>
+    <button  style="height: 40px; font-size:18px;" class="button button-positive  button-block" ng-click="nuevoCliente(nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoProveedor)">Añadir</button>
   </ion-content>
 </ion-view>

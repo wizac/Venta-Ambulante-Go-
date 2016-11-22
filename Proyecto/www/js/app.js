@@ -8,6 +8,8 @@
  angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','leaflet-directive'])
 
 .config(function($ionicConfigProvider){
+	
+	$ionicConfigProvider.views.maxCache(0);
 
 })
 

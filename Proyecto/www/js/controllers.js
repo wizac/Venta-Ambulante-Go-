@@ -341,45 +341,216 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('clientesCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('clientesCtrl', function ($scope, $stateParams,$rootScope, $state, API) {
+	
+	
+	$scope.clientes = [];
+	$rootScope.cliente;
+
+	API.getClientes(function(result){
+		$scope.clientes = result;
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
+	});
+	
+	$scope.informacionCliente = function(cliente){
+		$rootScope.cliente = cliente;
+		$state.go("menu.infoCliente");
+	}
+	
+	
+	$scope.nuevoCliente = function(){
+		$state.go("menu.nuevoCliente");
+	}
 
 
-}])
+})
    
-.controller('nuevoClienteCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('nuevoClienteCtrl', function ($scope, $stateParams,$rootScope, $state, API) {
+	
+	$scope.nombreCliente = "";
+	$scope.apellidoCliente = "";
+	$scope.dniCliente = "";
+	$scope.direccionCliente = "";
+	$scope.telefonoCliente = "";
+	
+	$scope.nuevoCliente = function(nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoCliente){
+		
+		API.nuevoCliente( nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoCliente,
+			function(result){
+				console.log(result.message);
+				$state.go("menu.clientes");
+
+			}, function(error) {
+				console.log('la promesa se ha rechazado ' + error);
+				$scope.errormessage = error;
+			});
+	}
 
 
-}]) 
+}) 
+
+.controller('infoClienteCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
+
+	$scope.nombreCliente = "";
+	$scope.apellidoCliente = "";
+	$scope.dniCliente = "";
+	$scope.direccionCliente = "";
+	$scope.telefonoCliente = "";
+	
+	if($rootScope.cliente != null){
+		
+		$scope.nombreCliente = $rootScope.cliente.nombre;
+		$scope.apellidoCliente = $rootScope.cliente.apellido;
+		$scope.dniCliente = $rootScope.cliente.dni;
+		$scope.direccionCliente = $rootScope.cliente.direccion;
+		$scope.telefonoCliente = $rootScope.cliente.telefono;
+	}
+	else{
+		console.log("no hay cliente");
+	}
+	
+	$scope.guardarCambios = function(nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoCliente){
+		
+		if($rootScope.cliente != null){
+			console.log($scope.nombreCliente);
+			API.actualizarCliente($rootScope.cliente._id, nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoCliente,
+			function(result){
+				console.log(result.message);
+				$state.go("menu.clientes");
+
+			}, function(error) {
+				console.log('la promesa se ha rechazado ' + error);
+				$scope.errormessage = error;
+			});
+		}
+		else{
+			console.log("no hay cliente");
+		}
+	}
+	
+	
+	$scope.eliminarCliente = function(){
+		
+		if($rootScope.cliente != null){
+			API.eliminarCliente($rootScope.cliente._id, function(result){
+				console.log(result.message);
+				$state.go("menu.clientes");
+			}, function(error) {
+				console.log('la promesa se ha rechazado ' + error);
+				$scope.errormessage = error;
+			});
+		}
+		else{
+			console.log("no hay cliente");
+		}
+		
+	}
+
+})
    
-.controller('proveedoresCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('proveedoresCtrl', function ($scope, $stateParams,$rootScope, $state, API) {
 
+	$scope.proveedores = [];
+	$rootScope.proveedor;
 
-}])
+	API.getProveedores(function(result){
+		$scope.proveedores = result;
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
+	});
+	
+	$scope.informacionProveedor = function(proveedor){
+		$rootScope.proveedor = proveedor;
+		$state.go("menu.infoProveedor");
+	}
+	
+	$scope.nuevoProveedor = function(){
+		$state.go("menu.nuevoProveedor");
+	}
+})
    
-.controller('nuevoProveedorCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('nuevoProveedorCtrl', function ($scope, $stateParams,$rootScope, $state, API) {
 
+	$scope.nombreProveedor = "";
+	$scope.direccionProveedor = "";
+	$scope.cuitProveedor = "";
+	$scope.telefonoProveedor = "";
+	
+	
+	$scope.nuevoProveedor = function(nombreProveedor, direccionProveedor, cuitProveedor, telefonoProveedor){
+		
+		API.nuevoProveedor(nombreProveedor, direccionProveedor, cuitProveedor, telefonoProveedor, 
+		function(result){
+			console.log(result.message);
+			$state.go("menu.proveedores");
 
-}])
+		}, function(error) {
+			console.log('la promesa se ha rechazado ' + error);
+			$scope.errormessage = error;
+		});
+		
+	}
+
+})
    
-.controller('infoProveedorCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('infoProveedorCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
 
+	$scope.nombreProveedor = "";
+	$scope.direccionProveedor = "";
+	$scope.cuitProveedor = "";
+	$scope.telefonoProveedor = "";
+	
+	if($rootScope.proveedor != null){
+		
+		$scope.nombreProveedor = $rootScope.proveedor.nombre;
+		$scope.direccionProveedor = $rootScope.proveedor.direccion;
+		$scope.cuitProveedor = $rootScope.proveedor.cuit;
+		$scope.telefonoProveedor = $rootScope.proveedor.telefono;
+	}
+	else{
+		console.log("no hay proveedor");
+	}
+	
+	$scope.guardarCambios = function(nombreProveedor, direccionProveedor, cuitProveedor, telefonoProveedor){
+		
+		if($rootScope.proveedor != null){
+			console.log($scope.nombreProveedor);
+			API.actualizarProveedor($rootScope.proveedor._id, nombreProveedor, direccionProveedor, cuitProveedor, telefonoProveedor, 
+			function(result){
+				console.log(result.message);
+				$state.go("menu.proveedores");
 
-}])
+			}, function(error) {
+				console.log('la promesa se ha rechazado ' + error);
+				$scope.errormessage = error;
+			});
+		}
+		else{
+			console.log("no hay proveedor");
+		}
+	}
+	
+	$scope.eliminarProveedor = function(){
+		
+		if($rootScope.proveedor != null){
+			API.eliminarProveedor($rootScope.proveedor._id, function(result){
+				console.log(result.message);
+				$state.go("menu.proveedor");
+			}, function(error) {
+				console.log('la promesa se ha rechazado ' + error);
+				$scope.errormessage = error;
+			});
+		}
+		else{
+			console.log("no hay proveedor");
+		}
+		
+	}
+
+})
    
 .controller('nuevoPedidoCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -601,8 +772,7 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('nuevoProductoCtrl',
-function ($scope, $stateParams, API) {
+.controller('nuevoProductoCtrl', function ($scope, $stateParams, API) {
 	
 	$scope.nuevoProducto = function(nombre, descripcion, precioVenta, precioCompra, cantidad,categoria) {
 
@@ -816,6 +986,26 @@ function ($scope, $stateParams, API) {
 			if($rootScope != null && $rootScope != "")
 			{
 				$http.post('http://localhost:8080/api/cliente/listar?token=' + $rootScope.token).success(function(response){
+					
+					if (response.success) {
+						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		getProveedores: function(cexito, cerror){
+			
+			if($rootScope != null && $rootScope != "")
+			{
+				$http.post('http://localhost:8080/api/proveedor/listar?token=' + $rootScope.token).success(function(response){
 					
 					if (response.success) {
 						cexito(response.res)
@@ -1233,6 +1423,154 @@ function ($scope, $stateParams, API) {
 					
 					if (response.success) {
 						cexito(response.res)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		actualizarProveedor: function(id, nombre, direccion, cuit, telefono, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id" : id,
+					"nombre": nombre,
+					"direccion": direccion,
+					"cuit": cuit,
+					"telefono": telefono
+				};
+				$http.post('http://localhost:8080/api/proveedor/actualizar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		actualizarCliente: function(id, nombre, apellido, dni, direccion, telefono, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id" : id,
+					"nombre": nombre,
+					"apellido": apellido,
+					"dni": dni,
+					"direccion": direccion,
+					"telefono": telefono
+				};
+				$http.post('http://localhost:8080/api/cliente/actualizar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		nuevoProveedor: function(nombre, direccion, cuit, telefono, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"nombre": nombre,
+					"direccion": direccion,
+					"cuit": cuit,
+					"telefono": telefono
+				};
+				$http.post('http://localhost:8080/api/proveedor/insertar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		nuevoCliente: function(nombre, apellido, dni, direccion, telefono, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"nombre": nombre,
+					"apellido": apellido,
+					"dni": dni,
+					"direccion": direccion,
+					"telefono": telefono
+				};
+				$http.post('http://localhost:8080/api/cliente/insertar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		eliminarProveedor: function(id, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id" : id
+				};
+				$http.post('http://localhost:8080/api/proveedor/eliminar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		eliminarCliente: function(id, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id" : id
+				};
+				$http.post('http://localhost:8080/api/cliente/eliminar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
 					} else {
 						cerror(response.message);
 					}

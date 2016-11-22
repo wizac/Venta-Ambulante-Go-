@@ -4,15 +4,18 @@
       <h3 id="proveedores-heading41" style="color:#000000;text-align:center;">Busque por nombre</h3>
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
-        <input type="search" placeholder="Ingrese nombre">
+        <input type="search" placeholder="Ingrese nombre"/>
       </label>
-      <ion-item class="item-icon-left" id="proveedores-list-item20" ui-sref="menu.infoProveedor">
-        <i class="icon ion-android-person"></i>Alejo Gagliardi</ion-item>
-      <ion-item class="item-icon-left" id="proveedores-list-item24">
-        <i class="icon ion-android-person"></i>Franco Suarez</ion-item>
-      <ion-item class="item-icon-left" id="proveedores-list-item25">
-        <i class="icon ion-android-person"></i>Marta Ramirez</ion-item>
+	  <div class="item item-body" id="proveedores-list-item-container1">
+		<ion-list">
+            <ion-item class="item-icon-left" ng-repeat="proveedor in proveedores" ng-click="informacionProveedor(proveedor)">
+                 <i class="icon ion-android-clipboard"></i> {{proveedor.nombre}}
+            </ion-item>
+		</ion-list>
+	 </div>
     </form>
-    <a ui-sref="menu.nuevoProveedor" id="proveedores-button18" class="button button-positive  button-block">Nuevo proveedor</a>
   </ion-content>
 </ion-view>
+<ion-footer-bar style="height: 60px;">
+  <button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="nuevoProveedor()">Nuevo proveedor</button>
+</ion-footer-bar>

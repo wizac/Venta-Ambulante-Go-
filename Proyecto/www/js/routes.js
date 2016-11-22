@@ -111,6 +111,16 @@ angular.module('app.routes', [])
       }
     }
   })
+  
+  .state('menu.infoCliente', {
+    url: '/infoCliente',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/infoCliente.html',
+        controller: 'infoClienteCtrl'
+      }
+    }
+  })
 
   .state('menu.proveedores', {
     url: '/page11',

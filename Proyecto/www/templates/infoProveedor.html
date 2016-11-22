@@ -1,33 +1,33 @@
-<ion-view title="Info proveedor" id="page13">
+<ion-view title="Información proveedor" id="page13">
   <ion-content padding="true" class="has-header">
     <h2 id="infoProveedor-heading42" style="color:#000000;">Nombre</h2>
     <form id="infoProveedor-form20" class="list">
       <label class="item item-input" id="infoProveedor-input20">
-        <span class="input-label">Alejo</span>
-        <input type="text" placeholder="">
+        <input type="text" placeholder="" ng-model="nombreProveedor">
       </label>
     </form>
-    <h2 id="infoProveedor-heading45" style="color:#000000;">Apellido</h2>
+    <h2 id="infoProveedor-heading45" style="color:#000000;">Dirección</h2>
     <form id="infoProveedor-form19" class="list">
       <label class="item item-input" id="infoProveedor-input19">
-        <span class="input-label">Gagliardi</span>
-        <input type="text" placeholder="">
+        <input type="text" placeholder="" ng-model="direccionProveedor">
       </label>
     </form>
     <h2 id="infoProveedor-heading43" style="color:#000000;">CUIT</h2>
     <form id="infoProveedor-form21" class="list">
       <label class="item item-input" id="infoProveedor-input22">
-        <span class="input-label">67394450310</span>
-        <input type="text" placeholder="">
+        <input type="text" placeholder="" ng-model="cuitProveedor">
       </label>
     </form>
-    <h2 id="infoProveedor-heading44" style="color:#000000;">Direccion</h2>
+    <h2 id="infoProveedor-heading44" style="color:#000000;">Telefono</h2>
     <form id="infoProveedor-form22" class="list">
       <label class="item item-input" id="infoProveedor-input21">
-        <span class="input-label">Calle falsa 123</span>
-        <input type="text" placeholder="">
+        <input type="text" placeholder="" ng-model="telefonoProveedor">
       </label>
     </form>
-    <a ui-sref="menu.proveedores" id="infoProveedor-button20" class="button button-positive  button-block">Terminar</a>
   </ion-content>
 </ion-view>
+
+<ion-footer-bar style="height: 55px;">
+<button  style="height: 40px; font-size:18px;" class="button button-positive  button-line" ng-click="eliminarProveedor()">Eliminar</button>
+<button  style="height: 40px; font-size:18px;" class="button button-positive  button-block" ng-click="guardarCambios(nombreProveedor, direccionProveedor, cuitProveedor, telefonoProveedor)">Guardar cambios</button>
+</ion-footer-bar>
