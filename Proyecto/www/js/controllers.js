@@ -834,21 +834,23 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 
 })
    
-.controller('productosCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
+.controller('productosCtrl', function ($scope, $stateParams, $rootScope, $state, $ionicPopup, API) {
 	
 	var cantidadVisiblesProductos = 0;
 	var cantidadVerMas = 5;
 	var cantidadVerMenos = 5;
 	$scope.productos = [];
 	var productos = [];
+	var contador;
 	
 	API.getProductos(function(result){
 		console.log('Los productos se recuperaron con exito');
         productos = result;
 		console.log(result);
+		contador = productos.length;
 		for(var i = 0; i < productos.length; i ++){
 			if(cantidadVisiblesProductos + 1 <= productos.length){
-				$scope.productos.push(productos[$scope.productos.length]);
+				$scope.productos.push(productos[--contador]);
 				cantidadVisiblesProductos = cantidadVisiblesProductos + 1;
 			}
 		}
@@ -860,6 +862,34 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 	$scope.nuevoProducto = function(){
 		
 		$state.go("menu.nuevoProducto");
+	}
+	
+	var confirmPopup;
+	
+	$scope.eliminarProducto = function(producto){
+		
+		confirmPopup = $ionicPopup.confirm({
+			title: 'Confirmar',
+			template: 'Esta seguro que desea eliminar este producto?'
+		});
+		
+		confirmPopup.then(function(res) {
+				if(res) {
+					API.eliminarProducto(producto._id, function(result){
+						$ionicPopup.alert({
+							title: 'Producto eliminado',
+							template: result.message
+						});
+					}, function(error) {
+						$ionicPopup.alert({
+							title: 'Error',
+							template: error
+						});
+						console.log('la promesa se ha rechazado ' + error);
+						$scope.errormessage = error
+					});
+				} 
+			});
 	}
 
 })
@@ -1680,6 +1710,28 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 					"id" : id
 				};
 				$http.post('http://localhost:8080/api/cliente/eliminar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		eliminarProducto: function(id, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id" : id
+				};
+				$http.post('http://localhost:8080/api/producto/eliminar?token=' + $rootScope.token, data).success(function(response){
 					
 					if (response.success) {
 						cexito(response)
