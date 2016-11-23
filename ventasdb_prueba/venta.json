@@ -2,39 +2,114 @@
     "_id" : ObjectId("58313132a133d4e0cf393afc"), 
     "fecha" : ISODate("2012-12-25T05:50:58.047+0000"), 
     "producto" : [
-        "58312c2a89ab2646fa84f83d"
+        {
+            "_id" : ObjectId("58312c0f89ab2646fa84f83c"), 
+            "nombre" : "remera", 
+            "descripcion" : "Calentita", 
+            "precioVenta" : 52.4, 
+            "precioCompra" : 2.3, 
+            "imagen" : "", 
+            "cantidad" : 250.0, 
+            "categoria" : "Vestimenta"
+        }
     ], 
     "total" : 35.5, 
-    "marcador" : [
-        "583130d4855835c0fed511da"
-    ], 
-    "cliente" : "58312cc7a133d4e0cf393af1", 
+    "marcador" : {
+        "_id" : ObjectId("583130d4855835c0fed511da"), 
+        "lat" : 59.91, 
+        "lng" : 11.75, 
+        "message" : "Mensaje", 
+        "focus" : false, 
+        "draggable" : true
+    }, 
+    "cliente" : {
+        "_id" : ObjectId("58312cb3a133d4e0cf393af0"), 
+        "id" : "58312cb3a133d4e0cf393af0", 
+        "nombre" : "Rodrigo", 
+        "apellido" : "Bertran", 
+        "dni" : "5", 
+        "direccion" : " Mardelplata", 
+        "telefono" : "1223232"
+    }, 
     "estado" : true
 }
 { 
     "_id" : ObjectId("5831313ea133d4e0cf393afd"), 
     "fecha" : ISODate("2010-11-20T05:50:58.047+0000"), 
     "producto" : [
-        "58312c2a89ab2646fa84f83d"
+        {
+            "_id" : ObjectId("58312c0f89ab2646fa84f83c"), 
+            "nombre" : "remera", 
+            "descripcion" : "Calentita", 
+            "precioVenta" : 52.4, 
+            "precioCompra" : 2.3, 
+            "imagen" : "", 
+            "cantidad" : 250.0, 
+            "categoria" : "Vestimenta"
+        }, 
+        {
+            "_id" : ObjectId("58312c2a89ab2646fa84f83d"), 
+            "nombre" : "Ganas de vivir", 
+            "descripcion" : "indispensables", 
+            "precioVenta" : 2.4, 
+            "precioCompra" : 3.3, 
+            "imagen" : "", 
+            "cantidad" : 2.0, 
+            "categoria" : "Motivacion"
+        }
     ], 
     "total" : 35.5, 
-    "marcador" : [
-        "583130d4855835c0fed511da", 
-        "583130df855835c0fed511db"
-    ], 
-    "cliente" : "58312cc7a133d4e0cf393af1", 
+    "marcador" : {
+        "_id" : ObjectId("583130e9855835c0fed511dc"), 
+        "lat" : 30.11, 
+        "lng" : 3.75, 
+        "message" : "Mensaje generico2", 
+        "focus" : false, 
+        "draggable" : true
+    }, 
+    "cliente" : {
+        "_id" : ObjectId("58312c94a133d4e0cf393aee"), 
+        "id" : "58312c94a133d4e0cf393aee", 
+        "nombre" : "Miguel", 
+        "apellido" : "brazoroto", 
+        "dni" : "34444434", 
+        "direccion" : "Aca", 
+        "telefono" : "1223232"
+    }, 
     "estado" : true
 }
 { 
     "_id" : ObjectId("58313159a133d4e0cf393afe"), 
     "fecha" : ISODate("2009-11-20T05:50:58.047+0000"), 
     "producto" : [
-        "58312bf489ab2646fa84f83b"
+        {
+            "_id" : ObjectId("58312c4589ab2646fa84f83e"), 
+            "nombre" : "Caja ", 
+            "descripcion" : "La CAJA", 
+            "precioVenta" : 24.0, 
+            "precioCompra" : 33.0, 
+            "imagen" : "", 
+            "cantidad" : 24.0, 
+            "categoria" : "Varios"
+        }
     ], 
     "total" : 35.5, 
-    "marcador" : [
-        "583130e9855835c0fed511dc"
-    ], 
-    "cliente" : "58312cc7a133d4e0cf393af1", 
+    "marcador" : {
+        "_id" : ObjectId("583130e9855835c0fed511dc"), 
+        "lat" : 30.11, 
+        "lng" : 3.75, 
+        "message" : "Mensaje generico2", 
+        "focus" : false, 
+        "draggable" : true
+    }, 
+    "cliente" : {
+        "_id" : ObjectId("58312cb3a133d4e0cf393af0"), 
+        "id" : "58312cb3a133d4e0cf393af0", 
+        "nombre" : "Rodrigo", 
+        "apellido" : "Bertran", 
+        "dni" : "5", 
+        "direccion" : " Mardelplata", 
+        "telefono" : "1223232"
+    }, 
     "estado" : true
 }

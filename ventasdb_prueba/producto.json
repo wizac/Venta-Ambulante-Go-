@@ -1,14 +1,4 @@
 { 
-    "_id" : ObjectId("58312bf489ab2646fa84f83b"), 
-    "nombre" : "Auriculares", 
-    "descripcion" : "Especial para sordos", 
-    "precioVenta" : 5.4, 
-    "precioCompra" : 2.0, 
-    "imagen" : "", 
-    "cantidad" : 4.0, 
-    "categoria" : "Electronicos"
-}
-{ 
     "_id" : ObjectId("58312c0f89ab2646fa84f83c"), 
     "nombre" : "remera", 
     "descripcion" : "Calentita", 

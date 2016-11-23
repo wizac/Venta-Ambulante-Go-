@@ -32,26 +32,20 @@
 .controller("MarkerController", [ '$scope', function($scope) {
     angular.extend($scope, {
         osloCenter: {
-            lat: 59.91,
-            lng: 10.75,
+          lat: 33.20,
+                lng: 66.20,   
             zoom: 12
         },
         markers: {
-            osloMarker: {
-                lat: 59.91,
-                lng: 10.75,   
+              osloMarker: {
+              lat: 33.20,
+                lng: 66.20,   
                 message: "I want to travel here!",
                 focus: true,
                 draggable: true
-            },
+            } 
 
-          anotherMarker: {
-                lat: 56.91,
-                lng: 11.75,   
-                message: "I want to travel there!",
-                focus: false,
-                draggable: true
-            },
+       
         defaults: {
             scrollWheelZoom: false
         }

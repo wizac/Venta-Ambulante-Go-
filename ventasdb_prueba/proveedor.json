@@ -21,6 +21,7 @@
 }
 { 
     "_id" : ObjectId("58312d03a133d4e0cf393af5"), 
+    "id" : "58312d03a133d4e0cf393af5", 
     "nombre" : "tengo", 
     "direccion" : "sueño", 
     "cuit" : "435434", 
