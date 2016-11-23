@@ -1,9 +1,10 @@
 <ion-view title="Elija punto de venta" id="page8">
   <ion-content padding="true" class="has-header">
-    <h3 id="elijaPuntoDeVenta-heading16" style="color:#000000;text-align:center;">Paso 4/4</h3>
-    <div class="spacer" style="width: 300px; height: 55px;"></div>
-    <h1 id="elijaPuntoDeVenta-heading17" style="color:#000000;text-align:center;">AQUI VA MAPA</h1>
-    <div class="spacer" style="width: 300px; height: 74px;"></div>
-    <button id="elijaPuntoDeVenta-button11" class="button button-positive  button-block">Terminar</button>
+      <div ng-controller="elijaPuntoDeVentaCtrl" data-tap-disable="true" style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px;">
+        <leaflet height="100%" width="100%" markers="markers" center="center" defaults="defaults"></leaflet>
+      </div>
   </ion-content>
 </ion-view>
+<ion-footer-bar style="height: 60px;">
+  <button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="guardarVenta()">Guardar venta</button>
+</ion-footer-bar>

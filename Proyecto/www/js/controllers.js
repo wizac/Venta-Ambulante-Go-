@@ -89,6 +89,7 @@ function ($scope, $stateParams) {
 	
 	
 	$scope.productosSeleccionados = $rootScope.productosSeleccionados;
+	$rootScope.precioTotal = 0;
 	
 	$scope.agregarProductoSeleccionado = function(producto){
 		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
@@ -100,11 +101,11 @@ function ($scope, $stateParams) {
 			$rootScope.productosSeleccionados = $scope.productosSeleccionados;
 		}
 		
-		var precioTotal = 0;
+		$rootScope.precioTotal = 0;
 		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
-			precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
+			$rootScope.precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
 		}
-		$scope.precioTotal = "Precio total: $" + precioTotal;
+		$scope.precioTotal = "Precio total: $" + $rootScope.precioTotal;
 		
 	}
 	
@@ -122,36 +123,101 @@ function ($scope, $stateParams) {
 		}
 		$rootScope.productosSeleccionados = $scope.productosSeleccionados;
 		
-		var precioTotal = 0;
+		$rootScope.precioTotal = 0;
 		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
-			precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
+			$rootScope.precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
 		}
-		$scope.precioTotal = "Precio total: $" + precioTotal;
+		$scope.precioTotal = "Precio total: $" + $rootScope.precioTotal;
 	}
 
-	var precioTotal = 0;
+	$rootScope.precioTotal = 0;
 	for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
-		precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados)
+		$rootScope.precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados)
 	}
-	$scope.precioTotal = "Precio total: $" + precioTotal;
+	$scope.precioTotal = "Precio total: $" + $rootScope.precioTotal;
 
 })
    
-.controller('elijaClienteCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('elijaClienteCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
 
+	
+	$scope.clientes = [];
+	$rootScope.cliente;
+	$scope.clienteSeleccionado = {};
+	$rootScope.clienteSeleccionado = {};
 
-}])
+	API.getClientes(function(result){
+		$scope.clientes = result;
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
+	});;
+	
+	$scope.siguiente3_4 = function(){
+		
+		if(!angular.equals($scope.clienteSeleccionado,{})){
+			$rootScope.clienteSeleccionado = $scope.clienteSeleccionado;
+			console.log($rootScope.clienteSeleccionado);
+			$state.go("menu.elijaPuntoDeVenta")
+		}
+		else{
+			console.log("debe seleccionar un cliente");
+		}
+	}
+
+})
    
-.controller('elijaPuntoDeVentaCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('elijaPuntoDeVentaCtrl', function ($scope, $stateParams, API, $rootScope, $state, $filter) {
+	
+	var fecha;
+	var producto;
+	var total;
+	var marcador;
+	var cliente;
+	var estado;
 
+	angular.extend($scope, {
+        center: {
+            lat: -33.20,
+            lng: -66.30,
+            zoom: 14
+        },
+        markers: {
+            osloMarker: {
+                lat: -33.20,
+                lng: -66.30,   
+                message: "I want to travel here!",
+                focus: true,
+                draggable: true
+            }
+		},
+		defaults: {
+            scrollWheelZoom: true
+        }
+	});
+	
+	
+	
+	$scope.guardarVenta = function(){
+		
+		fecha = ($filter('date')(new Date(), "dd/MM/yyyy"))
+		producto = $rootScope.productosSeleccionados;
+		total = $rootScope.precioTotal;
+		marcador = $scope.markers;
+		cliente = $rootScope.clienteSeleccionado;
+		estado = true;
+		
+		if(!angular.equals(cliente, {})){
+			
+			console.log($scope.markers);
+			
+		}else{
+			console.log("no se pudo completar la venta debido a que faltan datos");
+		}
+		
+	}
 
-}])
+})
    
 .controller('perfilCtrl',
 function (API, $scope, $stateParams, $rootScope, $state) {
@@ -1732,6 +1798,33 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 					"id" : id
 				};
 				$http.post('http://localhost:8080/api/producto/eliminar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		nuevaVenta: function(fecha, producto, total, marcador, cliente, estado, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"fecha" : fecha,
+					"producto" : producto,
+					"total" : total,
+					"marcador" : marcador,
+					"cliente" : cliente,
+					"estado" : estado
+				};
+				$http.post('http://localhost:8080/api/venta/insertar?token=' + $rootScope.token, data).success(function(response){
 					
 					if (response.success) {
 						cexito(response)

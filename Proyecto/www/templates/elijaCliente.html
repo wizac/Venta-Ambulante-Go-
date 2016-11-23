@@ -2,11 +2,17 @@
   <ion-content padding="true" class="has-header">
     <form id="elijaCliente-form8" class="list">
       <h3 id="elijaCliente-heading15" style="color:#000000;text-align:center;">Paso 3/4</h3>
-      <ion-radio id="elijaCliente-radio1">Marcos Lozano</ion-radio>
-      <ion-radio id="elijaCliente-radio2">Mariano Benitez</ion-radio>
-      <ion-radio id="elijaCliente-radio3">Brayam Ojeda</ion-radio>
-      <div class="spacer" style="width: 300px; height: 25px;"></div>
+	  <div class="item item-body" id="clientes-list-item-container1">
+		<ion-list radio-group [(ngModel)]="relationship">
+		  <ion-item ng-repeat="cliente in clientes">
+			 <ion-radio ng-model="clienteSeleccionado.opcionSeleccionada" value={{cliente}}> <i class="icon ion-android-person"></i>  {{cliente.nombre}} {{cliente.apellido}} </ion-radio>
+		  </ion-item>
+		</ion-list>
+		
+	 </div>
     </form>
-    <a ui-sref="menu.elijaPuntoDeVenta" id="elijaCliente-button10" class="button button-positive  button-block">Siguiente</a>
   </ion-content>
 </ion-view>
+<ion-footer-bar style="height: 60px;">
+  <button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="siguiente3_4()">Siguiente</button>
+</ion-footer-bar>
