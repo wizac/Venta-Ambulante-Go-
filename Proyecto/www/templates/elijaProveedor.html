@@ -1,17 +1,28 @@
 <ion-view title="Elija proveedor" id="page15">
-  <ion-content padding="true" class="has-header">
-    <form id="elijaProveedor-form25" class="list">
-      <h2 id="elijaProveedor-heading49" style="color:#000000;text-align:center;">2/2</h2>
-      <div class="spacer" style="width: 300px; height: 26px;"></div>
-      <h3 id="elijaProveedor-heading50" style="color:#000000;text-align:center;">Busque por nombre</h3>
-      <label class="item item-input">
-        <i class="icon ion-search placeholder-icon"></i>
-        <input type="search" placeholder="">
-      </label>
-      <ion-radio id="elijaProveedor-radio6">Alejo Gagliardi</ion-radio>
-      <ion-radio id="elijaProveedor-radio7">Franco Suarez</ion-radio>
-      <ion-radio id="elijaProveedor-radio8">Marta Ramirez</ion-radio>
-    </form>
-    <a ui-sref="menu.pedidos" id="elijaProveedor-button22" class="button button-positive  button-block">Terminar</a>
+    <div class="bar bar-subheader bar-stable item-input-inset">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon "></i>
+            <input type="search" placeholder="Search" ng-change="srchchange()" ng-model="adn.item">
+          </label>
+          <button class="button button-clear " ng-click="ressetserach()"><i class="ion-android-cancel assertive"></i>
+          </button>
+   </div>
+	
+  <ion-content padding="true" class="has-subheader white-bg"  has-bouncing="true">
+	  <ion-list>
+		<div   ng-repeat="proveedor in proveedoresFiltrados"  data="{{proveedoresFiltrados}}" ng-click="getDatapointId(proveedoresFiltrados)" >
+          <ion-item>  
+				<ion-radio ng-model="proveedorSeleccionado.opcionSeleccionada" value={{proveedor}}> <i class="icon ion-android-clipboard"></i>  {{proveedor.nombre}} </ion-radio>
+          </ion-item>
+        </div>
+		<div ng-if="proveedoresFiltrados !== undefined && !proveedoresFiltrados.length" class="no-results">
+			<ion-item >No Results Found..</ion-item >
+		</div>
+	</ion-list>
   </ion-content>
+  
+  <ion-footer-bar style="height: 60px;">
+	<button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="terminarPedido()">Terminar</button>
+  </ion-footer-bar>
+  
 </ion-view>

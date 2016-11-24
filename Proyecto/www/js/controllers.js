@@ -1,16 +1,27 @@
 angular.module('app.controllers', [])
-.controller('misDatosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('misDatosCtrl', function ($scope, $stateParams, $rootScope) {
 
+$scope.nombreUsuario = "Nombre: " + $rootScope.usuario.nombre;
+$scope.apellidoUsuario = "Apellido: " + $rootScope.usuario.apellido;
 
-}])
+})
    
-.controller('menuCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('menuCtrl', ['$scope', '$stateParams', '$ionicHistory', '$rootScope', '$state',  // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+function ($scope, $stateParams, $ionicHistory, $rootScope, $state) {
+	
+	$scope.logout = function(){
+	
+		$ionicHistory.clearCache().then(function() {
+			$ionicHistory.clearHistory();
+			$ionicHistory.nextViewOptions({ disableBack: true, historyRoot: true });
+			$rootScope = $rootScope.$new(true);
+			$scope = $scope.$new(true);
+			$state.go('login');
+		})
+	
+	}
 
 
 }])
@@ -23,14 +34,16 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('elijaLosProductosCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
+.controller('elijaLosProductosCtrl', function ($scope, $stateParams, $rootScope, $state, $filter, API) {
 	
 	$scope.productosStock = [];
 	$rootScope.productosSeleccionados = [];
+	$scope.productosFiltrados = []
 	
 	API.getProductosConStock(function(result){
 		
 		$scope.productosStock = result;
+		$scope.productosFiltrados = $scope.productosStock
 		
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
@@ -81,11 +94,40 @@ function ($scope, $stateParams) {
 			$scope.productosStock[i].cantidadSeleccionados = 0;
 		}
 	}
+	
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.productosFiltrados = null;
+        var filtervalue = [];
+		var serachData=$scope.productosStock;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].nombre);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+       // console.log("last");
+        console.log(filtervalue);
+        $scope.productosFiltrados = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.productosFiltrados =$scope.productosStock;
+    }
+
 
 
 })
    
-.controller('confirmarProductosCtrl', function ($scope, $stateParams, $rootScope) {
+.controller('confirmarProductosCtrl', function ($scope, $stateParams, $rootScope, $state) {
 	
 	
 	$scope.productosSeleccionados = $rootScope.productosSeleccionados;
@@ -95,7 +137,7 @@ function ($scope, $stateParams) {
 		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
 			if($scope.productosSeleccionados[i]._id == producto._id){
 				if($scope.productosSeleccionados[i].cantidad > $scope.productosSeleccionados[i].cantidadSeleccionados){
-					$scope.productosStock[i].cantidadSeleccionados += 1;
+					$scope.productosSeleccionados[i].cantidadSeleccionados += 1;
 				}
 			}
 			$rootScope.productosSeleccionados = $scope.productosSeleccionados;
@@ -134,29 +176,38 @@ function ($scope, $stateParams) {
 	for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
 		$rootScope.precioTotal += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados)
 	}
+	
 	$scope.precioTotal = "Precio total: $" + $rootScope.precioTotal;
+	
+	
+	$scope.seleccionarCliente = function(){
+		
+		$state.go("menu.elijaCliente");
+		
+	}
 
 })
    
-.controller('elijaClienteCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
+.controller('elijaClienteCtrl', function ($scope, $stateParams, $rootScope, $state, API, $filter) {
 
 	
 	$scope.clientes = [];
-	$rootScope.cliente;
+	$scope.clientesFiltrados = [];
 	$scope.clienteSeleccionado = {};
 	$rootScope.clienteSeleccionado = {};
 
 	API.getClientes(function(result){
 		$scope.clientes = result;
+		$scope.clientesFiltrados = $scope.clientes;
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
 	});;
 	
-	$scope.siguiente3_4 = function(){
+	$scope.seleccionarPuntoMapa = function(){
 		
 		if(!angular.equals($scope.clienteSeleccionado,{})){
-			$rootScope.clienteSeleccionado = $scope.clienteSeleccionado;
+			$rootScope.clienteSeleccionado = $scope.clienteSeleccionado.opcionSeleccionada;
 			console.log($rootScope.clienteSeleccionado);
 			$state.go("menu.elijaPuntoDeVenta")
 		}
@@ -164,15 +215,43 @@ function ($scope, $stateParams) {
 			console.log("debe seleccionar un cliente");
 		}
 	}
+	
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.clientesFiltrados = null;
+        var filtervalue = [];
+		var serachData=$scope.clientes;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].nombre + " " +serachData[i].apellido);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+        console.log(filtervalue);
+        $scope.clientesFiltrados = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.clientesFiltrados =$scope.clientes;
+    }
 
 })
    
-.controller('elijaPuntoDeVentaCtrl', function ($scope, $stateParams, API, $rootScope, $state, $filter) {
+.controller('elijaPuntoDeVentaCtrl', function ($scope, $stateParams, API, $rootScope, $state, $filter, $ionicHistory, $ionicPopup) {
 	
 	var fecha;
 	var producto;
 	var total;
 	var marcador;
+	var centrado;
 	var cliente;
 	var estado;
 
@@ -186,7 +265,7 @@ function ($scope, $stateParams) {
             osloMarker: {
                 lat: -33.20,
                 lng: -66.30,   
-                message: "I want to travel here!",
+                message: "Arrastra el marcado hacia el punto de venta!",
                 focus: true,
                 draggable: true
             }
@@ -200,27 +279,37 @@ function ($scope, $stateParams) {
 	
 	$scope.guardarVenta = function(){
 		
-		fecha = ($filter('date')(new Date(), "dd/MM/yyyy"))
+		fecha = ($filter('date')(new Date(), "dd/MM/yyyy"));
 		producto = $rootScope.productosSeleccionados;
 		total = $rootScope.precioTotal;
 		marcador = $scope.markers;
-		cliente = $rootScope.clienteSeleccionado;
-		estado = true;
+		centrado = $scope.center;
+		cliente = angular.fromJson($rootScope.clienteSeleccionado);
+		estado = false;
 		
-		if(!angular.equals(cliente, {})){
-			
-			console.log($scope.markers);
-			
-		}else{
-			console.log("no se pudo completar la venta debido a que faltan datos");
-		}
 		
+		API.nuevaVenta(fecha, producto, total, marcador, centrado, cliente, estado, function(result){
+			
+			console.log(result.message);
+			$ionicPopup.alert({
+							title: 'Aviso!',
+							template: 'La venta se registro correctamente. Debe confirmarla'
+						});
+			$ionicHistory.nextViewOptions({
+				disableBack: true
+			});
+			$state.go("menu.ventasPendientes");
+			
+		}, function(error) {
+			console.log('la promesa se ha rechazado ' + error);
+			$scope.errormessage = error;
+		});;
+			
 	}
 
 })
    
-.controller('perfilCtrl',
-function (API, $scope, $stateParams, $rootScope, $state) {
+.controller('perfilCtrl',function (API, $scope, $stateParams, $rootScope, $state) {
 	
 	
 	var cantidadVisiblesVentas = 0;
@@ -238,7 +327,6 @@ function (API, $scope, $stateParams, $rootScope, $state) {
 		
 	API.getVentasConfirmadasConNombreClienteOrdenado(function(result){
 		console.log('las ventas con nombre del cliente se recuperaron con exito');
-		var dia = new Date();
         $rootScope.ventas = result;
 		console.log($rootScope.ventas);
 		if(cantidadVisiblesVentas + 1 <= $rootScope.ventas.length){
@@ -399,22 +487,85 @@ function (API, $scope, $stateParams, $rootScope, $state) {
 	
 })
    
-.controller('modificarDatosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('modificarDatosCtrl', function ($scope, $stateParams, $state, $rootScope, $ionicPopup, $ionicHistory, API) {
 
+	$scope.nombre = "";
+	$scope.apellido = "";
+	$scope.pass = "";
+	$scope.passRep = "";
+	
+	if($rootScope.usuario != null){
+		
+		$scope.nombre = $rootScope.usuario.nombre;
+		$scope.apellido = $rootScope.usuario.apellido;
+	}
+	else{
+		console.log("no hay usuario");
+		$ionicHistory.nextViewOptions({
+			disableBack: true
+		});
+		$state.go("login");
+	}
+	
+	$scope.guardarCambios = function(nombre, apellido, pass, passRep){
+		
+		if(pass != "" && pass != "" && pass == passRep){
+			
+			if($rootScope.usuario != null){
+				API.actualizarUsuario($rootScope.usuario._id, nombre, apellido, $rootScope.usuario.user, pass,
+				function(result){
+					console.log(result.message);
+					$ionicPopup.alert({
+							title: 'Aviso!',
+							template: 'Los datos se actualizaron correctamente!'
+						});
+						
+					$ionicHistory.nextViewOptions({
+						disableBack: true
+					});
+					$state.go("menu.misDatos");
 
-}])
+				}, function(error) {
+					console.log('la promesa se ha rechazado ' + error);
+					$scope.errormessage = error;
+					$ionicPopup.alert({
+							title: 'Error!',
+							template: error
+						});
+				});
+			}
+			else{
+				console.log("no hay cliente");
+				$ionicHistory.nextViewOptions({
+					disableBack: true
+				});
+				$state.go("login");
+			}
+		}
+		else{
+			
+			$ionicPopup.alert({
+							title: 'Aviso!',
+							template: 'La contraseña no coincide!'
+						});
+			
+		}
+	}
+	
+	
+
+})
    
-.controller('clientesCtrl', function ($scope, $stateParams,$rootScope, $state, API) {
+.controller('clientesCtrl', function ($scope, $stateParams,$rootScope, $state, API, $filter) {
 	
 	
 	$scope.clientes = [];
+	$scope.clientesFiltrados = [];
 	$rootScope.cliente;
 
 	API.getClientes(function(result){
 		$scope.clientes = result;
+		$scope.clientesFiltrados = $scope.clientes;
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
@@ -429,6 +580,34 @@ function ($scope, $stateParams) {
 	$scope.nuevoCliente = function(){
 		$state.go("menu.nuevoCliente");
 	}
+	
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.clientesFiltrados = null;
+        var filtervalue = [];
+		var serachData=$scope.clientes;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].nombre + " " + serachData[i].apellido);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+       // console.log("last");
+        console.log(filtervalue);
+        $scope.clientesFiltrados = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.clientesFiltrados =$scope.clientes;
+    }
 
 
 })
@@ -442,7 +621,6 @@ function ($scope, $stateParams) {
 	$scope.telefonoCliente = "";
 	
 	$scope.nuevoCliente = function(nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoCliente){
-		
 		API.nuevoCliente( nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoCliente,
 			function(result){
 				console.log(result.message);
@@ -480,7 +658,6 @@ function ($scope, $stateParams) {
 	$scope.guardarCambios = function(nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoCliente){
 		
 		if($rootScope.cliente != null){
-			console.log($scope.nombreCliente);
 			API.actualizarCliente($rootScope.cliente._id, nombreCliente, apellidoCliente, dniCliente, direccionCliente, telefonoCliente,
 			function(result){
 				console.log(result.message);
@@ -516,13 +693,15 @@ function ($scope, $stateParams) {
 
 })
    
-.controller('proveedoresCtrl', function ($scope, $stateParams,$rootScope, $state, API) {
+.controller('proveedoresCtrl', function ($scope, $stateParams,$rootScope, $state, API, $filter) {
 
 	$scope.proveedores = [];
+	$scope.proveedoresFiltrados = [];
 	$rootScope.proveedor;
 
 	API.getProveedores(function(result){
 		$scope.proveedores = result;
+		$scope.proveedoresFiltrados = $scope.proveedores;
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
@@ -536,6 +715,33 @@ function ($scope, $stateParams) {
 	$scope.nuevoProveedor = function(){
 		$state.go("menu.nuevoProveedor");
 	}
+	
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.proveedoresFiltrados = null;
+        var filtervalue = [];
+		var serachData=$scope.proveedores;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].nombre);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+        console.log(filtervalue);
+        $scope.proveedoresFiltrados = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.proveedoresFiltrados =$scope.proveedores;
+    }
 })
    
 .controller('nuevoProveedorCtrl', function ($scope, $stateParams,$rootScope, $state, API) {
@@ -604,7 +810,7 @@ function ($scope, $stateParams) {
 		if($rootScope.proveedor != null){
 			API.eliminarProveedor($rootScope.proveedor._id, function(result){
 				console.log(result.message);
-				$state.go("menu.proveedor");
+				$state.go("menu.proveedores");
 			}, function(error) {
 				console.log('la promesa se ha rechazado ' + error);
 				$scope.errormessage = error;
@@ -618,98 +824,289 @@ function ($scope, $stateParams) {
 
 })
    
-.controller('nuevoPedidoCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('elijaLosProductosPedidosCtrl', function ($scope, $stateParams, $rootScope, $state, API, $ionicPopup, $filter) {
 
 
-}])
-   
-.controller('elijaProveedorCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
-
-
-}])
-   
-.controller('pedidosCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
-
-	var cantidadVisiblesPedidosConfirmados = 0;
-	var cantidadVerMas = 5;
-	var cantidadVerMenos = 5;
-	$scope.pedidosConfirmados = [];
-	var pedidos = [];
-	var contador;
+	$scope.productosStock = [];
+	$scope.productosPedidosFiltrados = [];
+	$rootScope.productosSeleccionadosPedidos = [];
 	
-	API.getPedidosConNombreProveedorOrdenado(function(result){
-		console.log('los pedidos se recuperaron con exito');
-        pedidos = result;
-		console.log(result);
-		contador = pedidos.length;
-		for(var i = 0; i < 5; i ++){
-			if(cantidadVisiblesPedidosConfirmados + 1 <= pedidos.length){
-				$scope.pedidosConfirmados.push(pedidos[--contador]);
-				cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados + 1;
-			}
-		}
+	API.getProductosConStock(function(result){
+		
+		$scope.productosStock = result;
+		$scope.productosPedidosFiltrados = $scope.productosStock;
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
 	});
 	
 	
-	$scope.verMasPedidos = function(){
-			if((cantidadVisiblesPedidosConfirmados + cantidadVerMas) <= pedidos.length){
-				for(var cant = cantidadVerMas; cant > 0; cant--){
-						$scope.pedidosConfirmados.push(pedidos[(pedidos.length - 1) - cantidadVisiblesPedidosConfirmados]);
-						cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados + 1;
-				}
+	$scope.agregarProducto = function(producto){
+		for(var i = 0; i < $scope.productosStock.length; i ++){
+			if($scope.productosStock[i]._id == producto._id){
+					$scope.productosStock[i].cantidadSeleccionados += 1;
+				
 			}
-			else
-			{
-				copiaCantVerMas = cantidadVerMas;
-				do {
-					if(--copiaCantVerMas > 0 && (cantidadVisiblesPedidosConfirmados + copiaCantVerMas) <= pedidos.length)
-					{
-						for(var cant = copiaCantVerMas; cant > 0; cant--){
-							$scope.pedidosConfirmados.push(pedidos[(pedidos.length - 1) - cantidadVisiblesPedidosConfirmados]);
-							cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados + 1;
-						}
-					}
-				}
-				while (copiaCantVerMas > 0 && (cantidadVisiblesPedidosConfirmados + copiaCantVerMas) > pedidos.length);
-			}
+		}
+		
 	}
 	
-	$scope.verMenosPedidos = function(){
-			if((cantidadVisiblesPedidosConfirmados - cantidadVerMenos) > 0){
-				for(var cant = cantidadVerMenos; cant > 0; cant--){
-						$scope.pedidosConfirmados.splice($scope.pedidosConfirmados.length - 1, 1);
-						cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados - 1;
+	
+	$scope.quitarProducto = function(producto){
+		for(var i = 0; i < $scope.productosStock.length; i ++){
+			if($scope.productosStock[i]._id == producto._id){
+				if($scope.productosStock[i].cantidadSeleccionados > 0){
+					$scope.productosStock[i].cantidadSeleccionados -= 1;
 				}
 			}
-			else
-			{
-				copiaCantVerMenos = cantidadVerMenos;
-				do {
-					if(--copiaCantVerMenos > 0 && (cantidadVisiblesPedidosConfirmados - copiaCantVerMenos) > 0)
-					{
-						for(var cant = copiaCantVerMenos; cant > 0; cant--){
-							$scope.pedidosConfirmados.splice($scope.pedidosConfirmados.length - 1, 1);
-							cantidadVisiblesPedidosConfirmados = cantidadVisiblesPedidosConfirmados - 1;
-						}
-					}
-				}
-				while (copiaCantVerMenos > 0 && (cantidadVisiblesPedidosConfirmados - copiaCantVerMenos) < 1);
-			}
+		}
+		
 	}
+	
+	$scope.confirmarProductos = function(){
+		$rootScope.productosSeleccionadosPedidos = [];
+		for(var i = 0; i < $scope.productosStock.length; i ++){
+			if($scope.productosStock[i].cantidadSeleccionados > 0){
+				$rootScope.productosSeleccionadosPedidos.push($scope.productosStock[i]);
+			}
+		}
+		if($rootScope.productosSeleccionadosPedidos.length > 0){
+			$state.go("menu.confirmarProductosPedidos");
+		}
+		else{
+			$ionicPopup.alert({
+							title: 'Aviso!',
+							template: 'debe seleccionar algún producto para realizar el pedido'
+						});
+			console.log("debe seleccionar algún producto para realizar la venta");
+		}
+	}
+	
+	$scope.limpiar = function(){
+		for(var i = 0; i < $scope.productosStock.length; i ++){
+			$scope.productosStock[i].cantidadSeleccionados = 0;
+		}
+	}
+	
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.productosPedidosFiltrados = null;
+        var filtervalue = [];
+		var serachData=$scope.productosStock;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].nombre);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+        console.log(filtervalue);
+        $scope.productosPedidosFiltrados = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.productosPedidosFiltrados = $scope.productosStock;
+    }
+
+})
+
+.controller('confirmarProductosPedidosCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
+	
+	if(!angular.isUndefined($rootScope.productosSeleccionadosPedidos)){
+		$scope.productosSeleccionados = $rootScope.productosSeleccionadosPedidos
+	}
+	else{
+		$scope.productosSeleccionados = [];
+	}
+	$rootScope.precioTotalPedidos = 0;
+	
+	$scope.agregarProductoSeleccionado = function(producto){
+		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+			if($scope.productosSeleccionados[i]._id == producto._id){
+				$scope.productosSeleccionados[i].cantidadSeleccionados += 1;
+			}
+			$rootScope.productosSeleccionadosPedidos = $scope.productosSeleccionados;
+		}
+		
+		$rootScope.precioTotalPedidos = 0;
+		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+			$rootScope.precioTotalPedidos += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
+		}
+		$scope.precioTotal = "Precio total: $" + $rootScope.precioTotalPedidos;
+		
+	}
+	
+	
+	$scope.quitarProductoSeleccionado = function(producto){
+		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+			if($scope.productosSeleccionados[i]._id == producto._id){
+				if($scope.productosSeleccionados[i].cantidadSeleccionados > 1){
+					$scope.productosSeleccionados[i].cantidadSeleccionados -= 1;
+				}
+				else{
+					$scope.productosSeleccionados.splice(i, 1);
+				}
+			}
+		}
+		$rootScope.productosSeleccionadosPedidos = $scope.productosSeleccionados;
+		
+		$rootScope.precioTotalPedidos = 0;
+		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+			$rootScope.precioTotalPedidos += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
+		}
+		$scope.precioTotal = "Precio total: $" + $rootScope.precioTotalPedidos;
+	}
+
+	$rootScope.precioTotalPedidos = 0;
+	for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
+		$rootScope.precioTotalPedidos += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados)
+	}
+	$scope.precioTotal = "Precio total: $" + $rootScope.precioTotalPedidos;
+	
+	
+	$scope.seleccionarProveedor = function(){
+		$state.go("menu.elijaProveedor");
+	}
+
+	
+})
+   
+.controller('elijaProveedorCtrl', function ($scope, $stateParams, $rootScope, $state, API, $filter, $ionicHistory, $ionicPopup) {
+
+	$scope.proveedores = [];
+	$scope.proveedoresFiltrados = [];
+	$scope.proveedorSeleccionado = {};
+	$rootScope.proveedorSeleccionado = {};
+
+	API.getProveedores(function(result){
+		$scope.proveedores = result;
+		$scope.proveedoresFiltrados = $scope.proveedores;
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
+	});;
+	
+	$scope.terminarPedido = function(){
+		
+		if(!angular.equals($scope.proveedorSeleccionado,{})){
+			$rootScope.proveedorSeleccionado = $scope.proveedorSeleccionado.opcionSeleccionada;
+			
+			var fecha = ($filter('date')(new Date(), "dd/MM/yyyy"))
+			var producto = $rootScope.productosSeleccionadosPedidos;
+			var total = $rootScope.totalPedidos;
+			var proveedor = angular.fromJson($rootScope.proveedorSeleccionado);
+			var estado = true;
+			
+			API.nuevoPedido(fecha, producto, total, proveedor, estado, function(result){
+				console.log(result.message);
+				$ionicPopup.alert({
+							title: 'Aviso!',
+							template: 'el pedido se registró correctamente!'
+				});
+				
+				$ionicHistory.nextViewOptions({
+					disableBack: true
+				});
+				$state.go("menu.pedidos");
+				
+			}, function(error) {
+				console.log('la promesa se ha rechazado ' + error);
+				$scope.errormessage = error;
+			});;
+		}
+		else{
+			$ionicPopup.alert({
+							title: 'Aviso!',
+							template: 'debe seleccionar un proveedor'
+						});
+		}
+	}
+	
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.proveedoresFiltrados = null;
+        var filtervalue = [];
+		var serachData=$scope.proveedores;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].nombre);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+        console.log(filtervalue);
+        $scope.proveedoresFiltrados = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.proveedoresFiltrados =$scope.proveedores;
+    }
+
+
+})
+   
+.controller('pedidosCtrl', function ($scope, $stateParams, $rootScope, $state, $filter, API) {
+
+	$scope.pedidosConfirmados = [];
+	$scope.pedidosFiltrados = [];
+	var contador;
+	
+	API.getPedidosConNombreProveedorOrdenado(function(result){
+		console.log('los pedidos se recuperaron con exito');
+        $scope.pedidosConfirmados = result;
+		$scope.pedidosFiltrados=$scope.pedidosConfirmados;
+		console.log(result);
+	}, function(error) {
+		console.log('la promesa se ha rechazado ' + error);
+		$scope.errormessage = error;
+	});
+	
 	
 	$scope.nuevoPedido = function(){
 		
-		$state.go("menu.nuevoPedido");
+		$state.go("menu.elijaLosProductosPedidos");
 	}
+	
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.pedidosFiltrados = null;
+        var filtervalue = [];
+		var serachData=$scope.pedidosConfirmados;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].proveedor.nombre);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+        console.log(filtervalue);
+        $scope.pedidosFiltrados = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.pedidosFiltrados =$scope.pedidosConfirmados;
+    }
 
 })
    
@@ -721,12 +1118,10 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('ventasConfirmadasCtrl', function (API, $scope, $stateParams) {
+.controller('ventasConfirmadasCtrl', function (API, $scope, $stateParams, $filter) {
 	
-	var cantidadVisiblesVentasConfirmadas = 0;
-	var cantidadVerMas = 5;
-	var cantidadVerMenos = 5;
 	$scope.ventasConfirmadas = [];
+	$scope.ventasConfirmadasFiltradas = [];
 	var ventas = [];
 	var contador;
 	
@@ -735,63 +1130,41 @@ function ($scope, $stateParams) {
         ventas = result;
 		console.log(result);
 		contador = ventas.length;
-		for(var i = 0; i < 5; i ++){
-			if(cantidadVisiblesVentasConfirmadas + 1 <= ventas.length){
-				$scope.ventasConfirmadas.push(ventas[--contador]);
-				cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas + 1;
-			}
+		for(var i = 0; i < ventas.length; i ++){
+			$scope.ventasConfirmadas.push(ventas[--contador]);
 		}
+		$scope.ventasConfirmadasFiltradas = $scope.ventasConfirmadas;
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
 	});
 	
-	
-	$scope.verMasVentasConfirmadas = function(){
-			if((cantidadVisiblesVentasConfirmadas + cantidadVerMas) <= ventas.length){
-				for(var cant = cantidadVerMas; cant > 0; cant--){
-						$scope.ventasConfirmadas.push(ventas[(ventas.length - 1) - cantidadVisiblesVentasConfirmadas]);
-						cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas + 1;
-				}
-			}
-			else
-			{
-				copiaCantVerMas = cantidadVerMas;
-				do {
-					if(--copiaCantVerMas > 0 && (cantidadVisiblesVentasConfirmadas + copiaCantVerMas) <= ventas.length)
-					{
-						for(var cant = copiaCantVerMas; cant > 0; cant--){
-							$scope.ventasConfirmadas.push(ventas[(ventas.length - 1) - cantidadVisiblesVentasConfirmadas]);
-							cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas + 1;
-						}
-					}
-				}
-				while (copiaCantVerMas > 0 && (cantidadVisiblesVentasConfirmadas + copiaCantVerMas) > ventas.length);
-			}
-	}
-	
-	$scope.verMenosVentasConfirmadas = function(){
-			if((cantidadVisiblesVentasConfirmadas - cantidadVerMenos) > 0){
-				for(var cant = cantidadVerMenos; cant > 0; cant--){
-						$scope.ventasConfirmadas.splice($scope.ventasConfirmadas.length - 1, 1);
-						cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas - 1;
-				}
-			}
-			else
-			{
-				copiaCantVerMenos = cantidadVerMenos;
-				do {
-					if(--copiaCantVerMenos > 0 && (cantidadVisiblesVentasConfirmadas - copiaCantVerMenos) > 0)
-					{
-						for(var cant = copiaCantVerMenos; cant > 0; cant--){
-							$scope.ventasConfirmadas.splice($scope.ventasConfirmadas.length - 1, 1);
-							cantidadVisiblesVentasConfirmadas = cantidadVisiblesVentasConfirmadas - 1;
-						}
-					}
-				}
-				while (copiaCantVerMenos > 0 && (cantidadVisiblesVentasConfirmadas - copiaCantVerMenos) < 1);
-			}
-	}
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.ventasConfirmadasFiltradas = null;
+        var filtervalue = [];
+		var serachData=$scope.ventasConfirmadas;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].cliente.nombre + " " + serachData[i].cliente.apellido);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+        console.log(filtervalue);
+        $scope.ventasConfirmadasFiltradas = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.ventasConfirmadasFiltradas = $scope.ventasConfirmadas;
+    }
 	
 
 
@@ -805,107 +1178,125 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('ventasPendientesCtrl', function ($scope, $stateParams, API) {
+.controller('ventasPendientesCtrl', function ($scope, $stateParams, API, $filter, $ionicPopup) {
 
-var cantidadVisiblesVentasNoConfirmadas = 0;
-	var cantidadVerMas = 5;
-	var cantidadVerMenos = 5;
-	$scope.ventasNoConfirmadas = [];
+	$scope.ventasPendientes = [];
+	$scope.ventasPendientesFiltradas = [];
 	var ventas = [];
 	var contador;
 	
 	API.getVentasNoConfirmadasConNombreClienteOrdenado(function(result){
 		console.log('las ventas se recuperaron con exito');
-        ventas = result;
 		console.log(result);
+        ventas = result;
 		contador = ventas.length;
-		for(var i = 0; i < 5; i ++){
-			if(cantidadVisiblesVentasNoConfirmadas + 1 <= ventas.length){
-				$scope.ventasNoConfirmadas.push(ventas[--contador]);
-				cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas + 1;
-			}
+		for(var i = 0; i < ventas.length; i ++){
+			$scope.ventasPendientes.push(ventas[--contador]);
 		}
+		$scope.ventasPendientesFiltradas = $scope.ventasPendientes
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
 	});
 	
 	
-	$scope.verMasVentasNoConfirmadas = function(){
-			if((cantidadVisiblesVentasNoConfirmadas + cantidadVerMas) <= ventas.length){
-				for(var cant = cantidadVerMas; cant > 0; cant--){
-						$scope.ventasNoConfirmadas.push(ventas[(ventas.length - 1) - cantidadVisiblesVentasNoConfirmadas]);
-						cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas + 1;
-				}
-			}
-			else
-			{
-				copiaCantVerMas = cantidadVerMas;
-				do {
-					if(--copiaCantVerMas > 0 && (cantidadVisiblesVentasNoConfirmadas + copiaCantVerMas) <= ventas.length)
-					{
-						for(var cant = copiaCantVerMas; cant > 0; cant--){
-							$scope.ventasNoConfirmadas.push(ventas[(ventas.length - 1) - cantidadVisiblesVentasNoConfirmadas]);
-							cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas + 1;
-						}
-					}
-				}
-				while (copiaCantVerMas > 0 && (cantidadVisiblesVentasNoConfirmadas + copiaCantVerMas) > ventas.length);
-			}
-	}
-	
-	$scope.verMenosVentasNoConfirmadas = function(){
-			if((cantidadVisiblesVentasNoConfirmadas - cantidadVerMenos) > 0){
-				for(var cant = cantidadVerMenos; cant > 0; cant--){
-						$scope.ventasNoConfirmadas.splice($scope.ventasNoConfirmadas.length - 1, 1);
-						cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas - 1;
-				}
-			}
-			else
-			{
-				copiaCantVerMenos = cantidadVerMenos;
-				do {
-					if(--copiaCantVerMenos > 0 && (cantidadVisiblesVentasNoConfirmadas - copiaCantVerMenos) > 0)
-					{
-						for(var cant = copiaCantVerMenos; cant > 0; cant--){
-							$scope.ventasNoConfirmadas.splice($scope.ventasNoConfirmadas.length - 1, 1);
-							cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas - 1;
-						}
-					}
-				}
-				while (copiaCantVerMenos > 0 && (cantidadVisiblesVentasNoConfirmadas - copiaCantVerMenos) < 1);
-			}
-	}
-	
 	$scope.eliminarVentaNoConfirmada = function(venta){
 		
-		API.eliminarVentaNoConfirmada(function(result){
-		console.log('las ventas se recuperaron con exito');
-        ventas = result;
-		console.log(result);
-		contador = ventas.length;
-		for(var i = 0; i < 5; i ++){
-			if(cantidadVisiblesVentasNoConfirmadas + 1 <= ventas.length){
-				$scope.ventasNoConfirmadas.push(ventas[--contador]);
-				cantidadVisiblesVentasNoConfirmadas = cantidadVisiblesVentasNoConfirmadas + 1;
+		API.eliminarVentaNoConfirmada(venta, function(result){
+			
+			$ionicPopup.alert({
+							title: 'Aviso',
+							template: "la venta pendiente fue cancelada"
+			});
+			for(var i = 0; i < $scope.ventasPendientesFiltradas.length; i++){
+				if($scope.ventasPendientesFiltradas[i]._id == venta._id){
+					$scope.ventasPendientesFiltradas.splice(i, 1);
+				}
 			}
-		}
+			for(var i = 0; i < $scope.ventasPendientes.length; i++){
+				if($scope.ventasPendientes[i]._id == venta._id){
+					$scope.ventasPendientes.splice(i, 1);
+				}
+			}
+		
 		}, function(error) {
+			$ionicPopup.alert({
+							title: 'Error',
+							template: error
+			});
 			console.log('la promesa se ha rechazado ' + error);
 			$scope.errormessage = error;
 		});
 		
 	}
+	
+	$scope.confirmarVenta = function(venta){
+		
+		API.confirmarVenta(venta, function(result){
+			
+			$ionicPopup.alert({
+							title: 'Aviso',
+							template: "la venta fue confirmada!"
+			});
+			
+			for(var i = 0; i < $scope.ventasPendientesFiltradas.length; i++){
+				if($scope.ventasPendientesFiltradas[i]._id == venta._id){
+					$scope.ventasPendientesFiltradas.splice(i, 1);
+				}
+			}
+			for(var i = 0; i < $scope.ventasPendientes.length; i++){
+				if($scope.ventasPendientes[i]._id == venta._id){
+					$scope.ventasPendientes.splice(i, 1);
+				}
+			}
+		
+		}, function(error) {
+			console.log('la promesa se ha rechazado ' + error);
+			$scope.errormessage = error;
+			$ionicPopup.alert({
+							title: 'Error',
+							template: error
+			});
+		});
+		
+	}
+	
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.ventasPendientesFiltradas = null;
+        var filtervalue = [];
+		var serachData=$scope.ventasPendientes;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].cliente.nombre + "" +serachData[i].cliente.apellido);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+        console.log(filtervalue);
+        $scope.ventasPendientesFiltradas = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.ventasPendientesFiltradas =$scope.ventasPendientes;
+    }
+
 
 
 })
    
-.controller('productosCtrl', function ($scope, $stateParams, $rootScope, $state, $ionicPopup, API) {
+.controller('productosCtrl', function ($scope, $stateParams, $rootScope, $state, $ionicPopup, API, $filter) {
 	
-	var cantidadVisiblesProductos = 0;
-	var cantidadVerMas = 5;
-	var cantidadVerMenos = 5;
 	$scope.productos = [];
+	$scope.productosFiltrados = [];
+	$rootScope.modificarProducto = [];
 	var productos = [];
 	var contador;
 	
@@ -915,11 +1306,9 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 		console.log(result);
 		contador = productos.length;
 		for(var i = 0; i < productos.length; i ++){
-			if(cantidadVisiblesProductos + 1 <= productos.length){
-				$scope.productos.push(productos[--contador]);
-				cantidadVisiblesProductos = cantidadVisiblesProductos + 1;
-			}
+			$scope.productos.push(productos[--contador]);
 		}
+		$scope.productosFiltrados = $scope.productos;
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
@@ -942,10 +1331,21 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 		confirmPopup.then(function(res) {
 				if(res) {
 					API.eliminarProducto(producto._id, function(result){
+						for(var i = 0; i < $scope.productosFiltrados.length; i++){
+							if($scope.productosFiltrados[i]._id == producto._id){
+								$scope.productosFiltrados.splice(i, 1);
+							}
+						}
+						for(var i = 0; i < $scope.productos.length; i++){
+							if($scope.productos[i]._id == producto._id){
+								$scope.productos.splice(i, 1);
+							}
+						}
 						$ionicPopup.alert({
 							title: 'Producto eliminado',
 							template: result.message
 						});
+						
 					}, function(error) {
 						$ionicPopup.alert({
 							title: 'Error',
@@ -957,16 +1357,51 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 				} 
 			});
 	}
+	
+	$scope.modificarProducto = function(producto){
+		$rootScope.producto = producto;
+		$state.go("menu.infoProducto");
+	}
+	
+	$scope.adn = {};
+	 $scope.srchchange = function () {
+
+        $scope.productosFiltrados = null;
+        var filtervalue = [];
+		var serachData=$scope.productos;
+		console.log(serachData);
+        for (var i = 0; i <serachData.length; i++) {
+
+            var fltvar = $filter('uppercase')($scope.adn.item);
+            var jsval = $filter('uppercase')(serachData[i].nombre);
+
+            if (jsval.indexOf(fltvar) >= 0) {
+                filtervalue.push(serachData[i]);
+            }
+        }
+        console.log(filtervalue);
+        $scope.productosFiltrados = filtervalue;
+
+    };
+
+    $scope.ressetserach = function () {
+
+        $scope.adn.item = "";
+        $scope.productosFiltrados =$scope.productos;
+    }
 
 })
    
-.controller('nuevoProductoCtrl', function ($scope, $stateParams, API) {
+.controller('nuevoProductoCtrl', function ($scope, $stateParams, API, $ionicPopup) {
 	
 	$scope.nuevoProducto = function(nombre, descripcion, precioVenta, precioCompra, cantidad,categoria) {
 
         API.nuevoProducto(nombre, descripcion, precioVenta, precioCompra, cantidad, categoria, function(result){
         console.log(result.message);
-         //$state.go("menu.productos");
+		$ionicPopup.alert({
+			title: 'Aviso',
+			template: "El producto se cargo correctamente!"
+		});
       }, function(error) {
         $scope.errormessage = error;
         console.log("error traje esto: "+ error);
@@ -977,39 +1412,128 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 
 })
 
-.controller('signupCtrl', function ($scope, $stateParams, API) {
+.controller('infoProductoCtrl', function ($scope, $stateParams, API, $ionicPopup, $rootScope, $state) {
+	
+	
+	$scope.nombreProducto = "";
+	$scope.descripcionProducto = "";
+	$scope.precioVentaProducto = "";
+	$scope.precioCompraProducto = "";
+	$scope.cantidadProducto = "";
+	$scope.categoriaProducto = "";
+	
+	if($rootScope.producto != null){
+		
+		$scope.nombreProducto = $rootScope.producto.nombre;
+		$scope.descripcionProducto = $rootScope.producto.descripcion;
+		$scope.precioVentaProducto = $rootScope.producto.precioVenta;
+		$scope.precioCompraProducto = $rootScope.producto.precioCompra;
+		$scope.cantidadProducto = $rootScope.producto.cantidad;
+		$scope.categoriaProducto = $rootScope.producto.categoria;
+	}
+	else{
+		console.log("no hay producto");
+	}
+	
+	$scope.guardarCambios = function(nombreProducto, descripcionProducto, precioVentaProducto, precioCompraProducto, cantidadProducto, categoriaProducto){
+		
+		if($rootScope.producto != null){
+			API.actualizarProducto($rootScope.producto._id, nombreProducto, descripcionProducto, precioVentaProducto, precioCompraProducto, cantidadProducto, categoriaProducto,
+			function(result){
+				console.log(result.message);
+				$ionicPopup.alert({
+					title: 'Aviso',
+					template: "El producto se actualizo correctamente!"
+				});
+
+			}, function(error) {
+				console.log('la promesa se ha rechazado ' + error);
+				$scope.errormessage = error;
+				$ionicPopup.alert({
+					title: 'Error',
+					template: error
+					});
+			});
+		}
+		else{
+			console.log("no hay producto");
+		}
+	}
+	
+	
+
+})
+
+.controller('signupCtrl', function ($scope, $stateParams, API, $state, $ionicPopup, $ionicHistory) {
 
 
 	$scope.signup = function(nombre, apellido, user, pass) {
 
 		    API.signUp(nombre, apellido, user, pass, function(result){
 				console.log(result.message);
+				$ionicPopup.alert({
+							title: 'Aviso!',
+							template: result.message
+						});
+				$ionicHistory.nextViewOptions({
+					disableBack: true
+				});
+				$state.go("login");
+				
 			}, function(error) {
 				$scope.errormessage = error;
-				console.log("error traje esto: "+ error);
+				$ionicPopup.alert({
+							title: 'Error!',
+							template: error
+						});
+				console.log("error, la api retorno : "+ error);
 			}	
 			);
+		
+	}
+	
+	$scope.irLogin = function(){
+		
+		$ionicHistory.nextViewOptions({
+					disableBack: true
+		});
+		$state.go("login");
 		
 	}
 
 
 })
 
-.controller('loginCtrl', function ($scope, $state,$rootScope, API) {
+.controller('loginCtrl', function ($scope, $state,$rootScope, API, $ionicPopup, $ionicHistory) {
 	
 	$rootScope.token = "";
+	$rootScope.usuario = {};
 	
 	$scope.login = function(user, pass) {
 
-		    API.logIn(user, pass, function(token){
-				$rootScope.token = token;
-				console.log("token devuelto: "+ token);
+		    API.logIn(user, pass, function(result){
+				$rootScope.token = result.token;
+				$rootScope.usuario = result.user;
+				console.log("token devuelto: "+ result.token);
 				$state.go('menu.perfil');
 			}, function(error) {
 				$scope.errormessage = error;
-				console.log("error traje esto: "+ error);
+				$ionicPopup.alert({
+							title: 'Error!',
+							template: error
+						});
+				console.log("error, la api retorno : "+ error);
 			}	
 			);
+		
+	}
+	
+	$scope.irSignUp = function(){
+		
+		$ionicHistory.nextViewOptions({
+			disableBack: true
+		});
+		$state.go("signup");
 		
 	}
 
@@ -1032,7 +1556,7 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 			$http.post('http://localhost:8080/autentificacion',data).success(function(response){
 		  
 				if (response.success) {
-					cexito(response.token);
+					cexito(response);
 				} else {
 					cerror(response.message);
 				}
@@ -1256,26 +1780,10 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 			{
 				$http.post('http://localhost:8080/api/ventasOrdenadasConfirmadas?token=' + $rootScope.token).success(function(responseVenta){
 					if (responseVenta.success) {
-						if($rootScope != null && $rootScope != ""){
 							responseVenta.res.forEach(function (itemVenta) {
-								var data = {
-									"id": itemVenta.cliente
-								}; 
-								$http.post('http://localhost:8080/api/cliente/listar?token=' + $rootScope.token, data).success(function(responseCliente){
-									if (responseCliente.success) {
-										itemVenta.fecha = $filter('date')(itemVenta.fecha, "dd/MM/yyyy");
-										itemVenta.nombreCliente = responseCliente.res.nombre + " " + responseCliente.res.apellido;
-									} else {
-										cerror(responseCliente.message);
-									}
-								});
+								itemVenta.fecha = $filter('date')(itemVenta.fecha, "dd/MM/yyyy");	
 							});
-						cexito(responseVenta.res)
-						}
-						else{
-							cerror("conexion perdida");
-						}
-
+							cexito(responseVenta.res)
 					} else{
 							cerror(responseVenta.message);
 					}
@@ -1292,26 +1800,11 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 			{
 				$http.post('http://localhost:8080/api/ventasOrdenadasNoConfirmadas?token=' + $rootScope.token).success(function(responseVenta){
 					if (responseVenta.success) {
-						if($rootScope != null && $rootScope != ""){
-							responseVenta.res.forEach(function (itemVenta) {
-								var data = {
-									"id": itemVenta.cliente
-								}; 
-								$http.post('http://localhost:8080/api/cliente/listar?token=' + $rootScope.token, data).success(function(responseCliente){
-									if (responseCliente.success) {
-										itemVenta.fecha = $filter('date')(itemVenta.fecha, "dd/MM/yyyy");
-										itemVenta.nombreCliente = responseCliente.res.nombre + " " + responseCliente.res.apellido;
-									} else {
-										cerror(responseCliente.message);
-									}
-								});
-							});
+						responseVenta.res.forEach(function (itemVenta) {
+							itemVenta.fecha = $filter('date')(itemVenta.fecha, "dd/MM/yyyy");
+						});
 						cexito(responseVenta.res)
-						}
-						else{
-							cerror("conexion perdida");
-						}
-
+						
 					} else{
 							cerror(responseVenta.message);
 					}
@@ -1328,25 +1821,10 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 			{
 				$http.post('http://localhost:8080/api/pedidosOrdenadosConfirmados?token=' + $rootScope.token).success(function(responsePedido){
 					if (responsePedido.success) {
-						if($rootScope != null && $rootScope != ""){
 							responsePedido.res.forEach(function (itemPedido) {
-								var data = {
-									"id": itemPedido.proveedor
-								}; 
-								$http.post('http://localhost:8080/api/proveedor/listar?token=' + $rootScope.token, data).success(function(responseProveedor){
-									if (responseProveedor.success) {
-										itemPedido.fecha = $filter('date')(itemPedido.fecha, "dd/MM/yyyy");
-										itemPedido.nombreProveedor = responseProveedor.res.nombre;
-									} else {
-										cerror(responseProveedor.message);
-									}
-								});
+								itemPedido.fecha = $filter('date')(itemPedido.fecha, "dd/MM/yyyy");			
 							});
 						cexito(responsePedido.res)
-						}
-						else{
-							cerror("conexion perdida");
-						}
 
 					} else{
 							cerror(responsePedido.message);
@@ -1624,13 +2102,44 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 		eliminarVentaNoConfirmada: function(venta, cexito, cerror){
 			if($rootScope != null && $rootScope != "")
 			{
+				console.log(venta);
 				var data = {
 					"id": venta._id
 				};
-				$http.post('http://localhost:8080/api/eliminar/listar?token=' + $rootScope.token, data).success(function(response){
+				$http.post('http://localhost:8080/api/venta/eliminar?token=' + $rootScope.token, data).success(function(response){
 					
 					if (response.success) {
-						cexito(response.res)
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		confirmarVenta: function(venta, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id": venta._id,
+					"fecha" : venta.fecha,
+					"producto" : venta.producto,
+					"total" : venta.total,
+					"marcador" : venta.marcador,
+					"centrado" : venta.centrado,
+					"cliente" : venta.cliente,
+					"estado" : true
+					
+				};
+				$http.post('http://localhost:8080/api/venta/actualizar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
 					} else {
 						cerror(response.message);
 					}
@@ -1681,6 +2190,60 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 					"telefono": telefono
 				};
 				$http.post('http://localhost:8080/api/cliente/actualizar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		actualizarProducto: function(id, nombre, descripcion, precioVenta, precioCompra, cantidad, categoria, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id" : id,
+					"nombre" : nombre,
+					"descripcion" : descripcion,
+					"precioVenta" : precioVenta,
+					"precioCompra" : precioCompra,
+					"cantidad" : cantidad,
+					"categoria" : categoria
+				};
+				$http.post('http://localhost:8080/api/producto/actualizar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		actualizarUsuario: function(id, nombre, apellido, user, pass, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"id" : id,
+					"nombre": nombre,
+					"apellido": apellido,
+					"user": user,
+					"pass": pass
+				};
+				$http.post('http://localhost:8080/api/usuario/actualizar?token=' + $rootScope.token, data).success(function(response){
 					
 					if (response.success) {
 						cexito(response)
@@ -1813,7 +2376,7 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 			
 		},
 		
-		nuevaVenta: function(fecha, producto, total, marcador, cliente, estado, cexito, cerror){
+		nuevaVenta: function(fecha, producto, total, marcador, centrado, cliente, estado, cexito, cerror){
 			if($rootScope != null && $rootScope != "")
 			{
 				var data = {
@@ -1821,10 +2384,37 @@ var cantidadVisiblesVentasNoConfirmadas = 0;
 					"producto" : producto,
 					"total" : total,
 					"marcador" : marcador,
+					"centrado" : centrado,
 					"cliente" : cliente,
 					"estado" : estado
 				};
 				$http.post('http://localhost:8080/api/venta/insertar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		nuevoPedido: function(fecha, producto, total, proveedor, estado, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				var data = {
+					"fecha" : fecha,
+					"producto" : producto,
+					"total" : total,
+					"proveedor" : proveedor,
+					"estado" : estado
+				};
+				$http.post('http://localhost:8080/api/pedido/insertar?token=' + $rootScope.token, data).success(function(response){
 					
 					if (response.success) {
 						cexito(response)

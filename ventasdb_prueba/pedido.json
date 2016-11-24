@@ -6,7 +6,13 @@
         "58312c0f89ab2646fa84f83c"
     ], 
     "total" : 11.5, 
-    "proveedor" : ObjectId("58312ce8a133d4e0cf393af2"), 
+    "proveedor" : {
+        "_id" : ObjectId("58312cfca133d4e0cf393af4"), 
+        "nombre" : "mequedo", 
+        "direccion" : "sinideas", 
+        "cuit" : "435434", 
+        "telefono" : "2"
+    }, 
     "estado" : true
 }
 { 
@@ -16,7 +22,13 @@
         "508312bf489ab2646fa84f83b"
     ], 
     "total" : 15.5, 
-    "proveedor" : "58312cfca133d4e0cf393af4", 
+    "proveedor" : {
+        "_id" : ObjectId("58312ce8a133d4e0cf393af2"), 
+        "nombre" : "Marcelo", 
+        "direccion" : "Albondiga", 
+        "cuit" : "4", 
+        "telefono" : "222"
+    }, 
     "estado" : true
 }
 { 
@@ -27,6 +39,12 @@
         "58312c4589ab2646fa84f83e"
     ], 
     "total" : 15.5, 
-    "proveedor" : "58312cfca133d4e0cf393af4", 
+    "proveedor" : {
+        "_id" : ObjectId("58312cf2a133d4e0cf393af3"), 
+        "nombre" : "Nombre", 
+        "direccion" : "Apellido", 
+        "cuit" : "43434", 
+        "telefono" : "2"
+    }, 
     "estado" : true
 }

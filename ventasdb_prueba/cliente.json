@@ -1,5 +1,6 @@
 { 
     "_id" : ObjectId("58312c94a133d4e0cf393aee"), 
+    "id" : "58312c94a133d4e0cf393aee", 
     "nombre" : "Miguel", 
     "apellido" : "brazoroto", 
     "dni" : "34444434", 
@@ -7,15 +8,8 @@
     "telefono" : "1223232"
 }
 { 
-    "_id" : ObjectId("58312ca3a133d4e0cf393aef"), 
-    "nombre" : "Carlos", 
-    "apellido" : "Perez", 
-    "dni" : "34444434", 
-    "direccion" : "Aleatoria 123", 
-    "telefono" : "1223232"
-}
-{ 
     "_id" : ObjectId("58312cb3a133d4e0cf393af0"), 
+    "id" : "58312cb3a133d4e0cf393af0", 
     "nombre" : "Rodrigo", 
     "apellido" : "Bertran", 
     "dni" : "5", 

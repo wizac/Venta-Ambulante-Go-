@@ -16,6 +16,12 @@
 			</ion-list>
 	</div>
     <h3 ng-bind-html="precioTotal" id="confirmarProductos-heading14" style="color:#000000; margin-top:25px; margin-bottom:25px;">Precio total: $0</h3>
-    <a ui-sref="menu.elijaCliente" id="confirmarProductos-button16" class="button button-positive  button-block">Siguiente</a>
+	<ion-checkbox style="margin-bottom:15px;" ng-model="isChecked">Actualizar stock automáticamente</ion-checkbox>
+	
   </ion-content>
+  
+  <ion-footer-bar style="height: 60px;">
+		<button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="seleccionarCliente()">Siguiente</button>
+  </ion-footer-bar>
+  
 </ion-view>

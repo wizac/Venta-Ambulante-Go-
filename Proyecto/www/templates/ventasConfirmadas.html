@@ -1,17 +1,30 @@
 <ion-view title="Ventas Confirmadas" id="page18">
-  <ion-content padding="true" class="has-header">
-    <div class="item item-body" id="ventasConfirmadas-list-item-container10">
-      <ion-list">
-            <ion-item ng-repeat="venta in ventasConfirmadas">
-                <p style="margin-top:0px;color:#000000;"> 
-					Nombre cliente: {{venta.nombreCliente}} <br>
-				    Fecha: {{venta.fecha}} <br>
-					Ganancia total: {{venta.total}}
-				</p>
-            </ion-item>
-		</ion-list>
-	  <button id="ventasConfirmadas-button1" style="font-size:16px;border-radius:51px 0px 0px 51px; margin-top:10px" class="button button-positive button-small button-line" ng-click="verMenosVentasConfirmadas()">Ver Menos</button>
-	  <button id="ventasConfirmadas-button2" style="font-size:16px;border-radius:0px 51px 51px 0px; margin-top:10px" class="button button-positive button-small button-line" ng-click="verMasVentasConfirmadas()">Ver Más</button>
-    </div>
-  </ion-content>
+   <div class="bar bar-subheader bar-stable item-input-inset">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon "></i>
+            <input type="search" placeholder="Search" ng-change="srchchange()" ng-model="adn.item">
+          </label>
+          <button class="button button-clear " ng-click="ressetserach()"><i class="ion-android-cancel assertive"></i>
+          </button>
+   </div>
+	
+  <ion-content class="has-subheader white-bg"  has-bouncing="true">
+  
+	  <ion-list>
+		<div   ng-repeat="ventaConfirmada in ventasConfirmadasFiltradas"  data="{{ventasConfirmadasFiltradas}}" >
+          <ion-item>  
+           <p style="margin-top:0px;color:#000000;"> 
+					<H2 style="weight: bold;">
+					Nombre cliente: {{ventaConfirmada.cliente.nombre}} {{ventaConfirmada.cliente.nombre}} </H2> 
+				    Fecha: {{ventaConfirmada.fecha}} <br>
+					Ganancia total: {{ventaConfirmada.total}}
+			</p>
+          </ion-item>
+        </div>
+		<div ng-if="ventasConfirmadasFiltradas !== undefined && !ventasConfirmadasFiltradas.length" class="no-results">
+			<ion-item >No Results Found..</ion-item >
+		</div>
+	</ion-list>
+	
+	</ion-content>
 </ion-view>

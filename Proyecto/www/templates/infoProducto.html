@@ -1,0 +1,36 @@
+<ion-view title="Nuevo producto" id="page22">
+  <ion-content padding="true" class="has-header">
+    <h2 id="infoProducto-heading56" style="color:#000000;">Nombre</h2>
+    <form id="infoProducto-form10" class="list">
+      <label class="item item-input" id="infoProducto-input8">
+        <input type="text" placeholder="" ng-model="nombreProducto">
+      </label>
+      <h2 id="infoProducto-heading57" style="color:#000000;">Descripcion</h2>
+      <label class="item item-input" id="infoProducto-input9">
+        <input type="text" placeholder=""ng-model="descripcionProducto">
+      </label>
+	  <h2 id="infoProducto-heading60" style="color:#000000;">Categoria</h2>
+      <label class="item item-input" id="infoProducto-input26">
+        <input type="text" placeholder=""ng-model="categoriaProducto">
+      </label>
+      <h2 id="infoProducto-heading58" style="color:#000000;">Precio venta</h2>
+      <label class="item item-input" id="infoProducto-input11">
+        <input type="number" placeholder=""ng-model="precioVentaProducto">
+      </label>
+      <h2 id="infoProducto-heading59" style="color:#000000;">Precio compra</h2>
+      <label class="item item-input" id="infoProducto-input24">
+        <input type="number" placeholder=""ng-model="precioCompraProducto">
+      </label>
+      <h2 id="infoProducto-heading62" style="color:#000000;">Imagen</h2>
+      <div id="infoProducto-markdown54" style="text-align:center;">
+        <p style="color:#000000;font-size:18px;">Imput tipo file</p>
+      </div>
+      <h2 id="infoProducto-heading60" style="color:#000000;">Stock</h2>
+      <label class="item item-input" id="infoProducto-input26">
+        <input type="number" placeholder=""ng-model="cantidadProducto">
+      </label>
+      <a ui-sref="menu.productos" id="infoProducto-button35" class="button button-positive
+      button-block" ng-click="guardarCambios(nombreProducto, descripcionProducto, precioVentaProducto, precioCompraProducto, cantidadProducto, categoriaProducto)">Guardar cambios</a>
+    </form>
+  </ion-content>
+</ion-view>

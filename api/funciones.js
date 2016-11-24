@@ -137,33 +137,38 @@ function registro(db){
 				pass : req.body.pass
 			}
 			
-			var usuarios = db.get('usuario');
-			usuarios.findOne({ user : nuevoUsuario.user}, function( err, doc){
-				if(err){
-					res.send({ success: false, message: 'Se produjo un error cuando se intentaba validar el usuario'});
-				}
-				else{
-					if(doc != null){
-						res.send({ success: false, message: 'El usuario ingresado ya existe'});
+			if(nuevoUsuario.nombre != null && nuevoUsuario.nombre != "" && nuevoUsuario.apellido != null && nuevoUsuario.apellido != "" && nuevoUsuario.user != null && nuevoUsuario.user != "" && nuevoUsuario.pass != null && nuevoUsuario.pass!= ""){
+				var usuarios = db.get('usuario');
+				usuarios.findOne({ user : nuevoUsuario.user}, function( err, doc){
+					if(err){
+						res.send({ success: false, message: 'Se produjo un error cuando se intentaba validar el usuario'});
 					}
 					else{
-						usuarios.insert(nuevoUsuario, function( err, docs){
-							if(err){
-								res.send({ success: false, message: 'Se produjo un error intentando insertar un usuario'});
-							}	
-							else{
-								res.send({
-								success: true,
-								message: 'El usuario se cargo con exito!',
-								res: docs
-								});
-							}
-						});
-						
+						if(doc != null){
+							res.send({ success: false, message: 'El usuario ingresado ya existe'});
+						}
+						else{
+							usuarios.insert(nuevoUsuario, function( err, docs){
+									if(err){
+										res.send({ success: false, message: 'Se produjo un error intentando insertar un usuario'});
+									}	
+									else{
+										res.send({
+										success: true,
+										message: 'El usuario se cargo con exito!',
+										res: docs
+										});
+									}
+							});
+							
+							
+						}
 					}
-				}
-			})
-				
+				})
+			}
+			else{
+				res.send({ success: false, message: 'Debe ingresar todos los datos'});
+			}		
 	}	
 }
 

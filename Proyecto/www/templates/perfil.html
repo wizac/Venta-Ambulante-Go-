@@ -6,7 +6,7 @@
 		<ion-list">
             <ion-item ng-repeat="venta in ultimasVentas" ng-click="verDetalleVenta(venta)">
                 <p style="margin-top:0px;color:#000000;"> 
-					Nombre cliente: {{venta.nombreCliente}} <br>
+					Nombre cliente: {{venta.cliente.nombre}} {{venta.cliente.apellido}} <br>
 				    Fecha: {{venta.fecha}} <br>
 					Ganancia total: {{venta.total}}
 				</p>
@@ -22,7 +22,7 @@
 		<ion-list>
             <ion-item ng-repeat="pedido in ultimosPedidos" ng-click="verDetallePedido(pedido)">
                 <p style="margin-top:0px;color:#000000;"> 
-					Nombre proveedor: {{pedido.nombreProveedor}} <br>
+					Nombre proveedor: {{pedido.proveedor.nombre}} <br>
 				    Fecha: {{pedido.fecha}} <br>
 					Precio total: {{pedido.total}}
 				</p>

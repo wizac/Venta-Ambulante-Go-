@@ -81,7 +81,7 @@ function eliminar(db)
 					}
 					else{ res.send({
 							success: true,
-							message: 'El item con el id ' + req.body.id + ' se elimino correctamente',
+							message: 'El item se elimino correctamente',
 							res:docs
 						});
 					}
@@ -110,13 +110,18 @@ function actualizar(db)
 					res.send({ success: false, message: 'el id enviado no existe'});
 				}
 				else{
-					dbEntidad.updateById(req.body.id, req.body,function(err,docs){
+					var id = req.body.id;
+					delete req.body["id"];
+					console.log("----------------------------------------------");
+					console.log(req.body);
+					console.log("----------------------------------------------");
+					dbEntidad.updateById(id, req.body,function(err,docs){
 						if (err){
 							res.send({ success: false, message: 'no se pudo eliminar el item' });
 						}
 						else{ res.send({
 								success: true,
-								message: 'El item con el id ' + req.body.id + ' se actualizo correctamente',
+								message: 'El item con el id ' + id + ' se actualizo correctamente',
 								res:docs
 							});
 						}

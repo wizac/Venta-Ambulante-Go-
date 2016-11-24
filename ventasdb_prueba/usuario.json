@@ -26,3 +26,10 @@
     "user" : "prueba", 
     "pass" : "prueba"
 }
+{ 
+    "_id" : ObjectId("583490c9820681541c42b482"), 
+    "nombre" : "Sebastian", 
+    "apellido" : "CUk", 
+    "user" : "sebas", 
+    "pass" : "sebas"
+}

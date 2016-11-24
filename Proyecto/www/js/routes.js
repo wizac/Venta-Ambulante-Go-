@@ -11,7 +11,7 @@ angular.module('app.routes', [])
   
 
       .state('menu.misDatos', {
-    url: '/page1',
+    url: '/misDatos',
     views: {
       'side-menu21': {
         templateUrl: 'templates/misDatos.html',
@@ -27,13 +27,13 @@ angular.module('app.routes', [])
   })
 
   .state('registrarse', {
-    url: '/page4',
+    url: '/registrarse',
     templateUrl: 'templates/registrarse.html',
     controller: 'registrarseCtrl'
   })
 
   .state('menu.elijaLosProductos', {
-    url: '/n',
+    url: '/elijaLosProductos',
     views: {
       'side-menu21': {
         templateUrl: 'templates/elijaLosProductos.html',
@@ -43,7 +43,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.confirmarProductos', {
-    url: '/page6',
+    url: '/confirmarProductos',
     views: {
       'side-menu21': {
         templateUrl: 'templates/confirmarProductos.html',
@@ -51,9 +51,19 @@ angular.module('app.routes', [])
       }
     }
   })
+  
+  .state('menu.confirmarProductosPedidos', {
+    url: '/confirmarProductosPedidos',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/confirmarProductosPedidos.html',
+        controller: 'confirmarProductosPedidosCtrl'
+      }
+    }
+  })
 
   .state('menu.elijaCliente', {
-    url: '/page7',
+    url: '/elijaCliente',
     views: {
       'side-menu21': {
         templateUrl: 'templates/elijaCliente.html',
@@ -63,7 +73,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.elijaPuntoDeVenta', {
-    url: '/page8',
+    url: '/elijaPuntoDeVenta',
     views: {
       'side-menu21': {
         templateUrl: 'templates/elijaPuntoDeVenta.html',
@@ -73,7 +83,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.perfil', {
-    url: '/page9',
+    url: '/perfil',
     views: {
       'side-menu21': {
         templateUrl: 'templates/perfil.html',
@@ -83,7 +93,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.modificarDatos', {
-    url: '///page10M',
+    url: '/modificarDatos',
     views: {
       'side-menu21': {
         templateUrl: 'templates/modificarDatos.html',
@@ -121,9 +131,19 @@ angular.module('app.routes', [])
       }
     }
   })
+  
+  .state('menu.infoProducto', {
+    url: '/infoProducto',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/infoProducto.html',
+        controller: 'infoProductoCtrl'
+      }
+    }
+  })
 
   .state('menu.proveedores', {
-    url: '/page11',
+    url: '/proveedores',
     views: {
       'side-menu21': {
         templateUrl: 'templates/proveedores.html',
@@ -133,7 +153,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.nuevoProveedor', {
-    url: '/page12',
+    url: '/nuevoProveedor',
     views: {
       'side-menu21': {
         templateUrl: 'templates/nuevoProveedor.html',
@@ -143,7 +163,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.infoProveedor', {
-    url: '/page13',
+    url: '/infoProveedor',
     views: {
       'side-menu21': {
         templateUrl: 'templates/infoProveedor.html',
@@ -152,18 +172,18 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('menu.nuevoPedido', {
-    url: '/page14',
+  .state('menu.elijaLosProductosPedidos', {
+    url: '/elijaLosProductosPedidos',
     views: {
       'side-menu21': {
-        templateUrl: 'templates/nuevoPedido.html',
-        controller: 'nuevoPedidoCtrl'
+        templateUrl: 'templates/elijaLosProductosPedidos.html',
+        controller: 'elijaLosProductosPedidosCtrl'
       }
     }
   })
 
   .state('menu.elijaProveedor', {
-    url: '/page15',
+    url: '/elijaProveedor',
     views: {
       'side-menu21': {
         templateUrl: 'templates/elijaProveedor.html',
@@ -173,7 +193,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.pedidos', {
-    url: '/page16',
+    url: '/pedidos',
     views: {
       'side-menu21': {
         templateUrl: 'templates/pedidos.html',
@@ -183,7 +203,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.detallesPedido', {
-    url: '/page17',
+    url: '/detallesPedido',
     views: {
       'side-menu21': {
         templateUrl: 'templates/detallesPedido.html',
@@ -193,7 +213,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.ventasConfirmadas', {
-    url: '/page18',
+    url: '/ventasConfirmadas',
     views: {
       'side-menu21': {
         templateUrl: 'templates/ventasConfirmadas.html',
@@ -203,7 +223,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.detalleVenta', {
-    url: '/page19',
+    url: '/detalleVenta',
     views: {
       'side-menu21': {
         templateUrl: 'templates/detalleVenta.html',
@@ -213,7 +233,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.ventasPendientes', {
-    url: '/page20',
+    url: '/ventasPendientes',
     views: {
       'side-menu21': {
         templateUrl: 'templates/ventasPendientes.html',
@@ -223,7 +243,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.productos', {
-    url: '/page21',
+    url: '/productos',
     views: {
       'side-menu21': {
         templateUrl: 'templates/productos.html',
@@ -233,7 +253,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.nuevoProducto', {
-    url: '/page22',
+    url: '/nuevoProducto',
     views: {
       'side-menu21': {
         templateUrl: 'templates/nuevoProducto.html',

@@ -16,7 +16,11 @@
             </ion-list>
             <div style="height: 40px;" class="spacer"></div>
             <button class="button button-stable  button-block" id="login-button1" ng-click="login(user, pass)">Log in</button>
-            <a class="button button-positive  button-block button-clear" id="login-button2" ui-sref="signup">Or create an account</a>
         </form>
+		
+		<ion-footer-bar style="height: 60px;">
+		  <button class="button button-positive  button-block button-clear" ng-click="irSignUp()">No tienes cuenta? Create una</button>
+		</ion-footer-bar>
+		
     </ion-content>
 </ion-view>

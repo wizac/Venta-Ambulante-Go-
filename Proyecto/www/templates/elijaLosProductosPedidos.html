@@ -1,0 +1,35 @@
+<ion-view title="Seleccione los productos" id="page14">
+     <div class="bar bar-subheader bar-stable item-input-inset">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon "></i>
+            <input type="search" placeholder="Search" ng-change="srchchange()" ng-model="adn.item">
+          </label>
+          <button class="button button-clear " ng-click="ressetserach()"><i class="ion-android-cancel assertive"></i>
+          </button>
+   </div>
+	
+	<ion-content class="has-subheader white-bg"  has-bouncing="true">
+  
+		 <ion-list>
+			<div   ng-repeat="productoPedido in productosPedidosFiltrados"  data="{{productosPedidosFiltrados}}" >
+			  <ion-item>  
+			    <h2 style="margin-bottom:8px">{{productoPedido.nombre}}</h2>
+					<h2 style="float:right"> + {{productoPedido.cantidadSeleccionados}} </h2>
+					Categoria: {{productoPedido.categoria}} <br>
+					Precio de venta: {{productoPedido.precioVenta}} <br>
+					Cantidad en stock: {{productoPedido.cantidad}}<br>
+					<button id="perfil-button1" style="font-size:16px;border-radius:51px 0px 0px 51px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="quitarProducto(productoPedido)">Quitar</button>
+					<button id="perfil-button1" style="font-size:16px;border-radius:0px 51px 51px 0px; margin-top:10px;" class="button button-positive button-small button-line" ng-click="agregarProducto(productoPedido)">Añadir</button>
+			  </ion-item>
+			</div>
+			<div ng-if="productosPedidosFiltrados !== undefined && !productosPedidosFiltrados.length" class="no-results">
+				<ion-item >No Results Found..</ion-item >
+			</div>
+		</ion-list>
+	
+	 </ion-content>
+	<ion-footer-bar style="height: 55px;">
+	<button  style="height: 40px; font-size:18px;" class="button button-positive  button-line" ng-click="limpiar()">Limpiar</button>
+	  <button  style="height: 40px; font-size:18px;" class="button button-positive  button-line" ng-click="confirmarProductos()">Siguiente</button>
+	</ion-footer-bar>
+</ion-view>

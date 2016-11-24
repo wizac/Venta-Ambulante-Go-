@@ -1,21 +1,29 @@
 <ion-view title="Proveedores" id="page11">
-  <ion-content padding="true" class="has-header">
-    <form id="proveedores-form14" class="list">
-      <h3 id="proveedores-heading41" style="color:#000000;text-align:center;">Busque por nombre</h3>
-      <label class="item item-input">
-        <i class="icon ion-search placeholder-icon"></i>
-        <input type="search" placeholder="Ingrese nombre"/>
-      </label>
-	  <div class="item item-body" id="proveedores-list-item-container1">
-		<ion-list">
-            <ion-item class="item-icon-left" ng-repeat="proveedor in proveedores" ng-click="informacionProveedor(proveedor)">
-                 <i class="icon ion-android-clipboard"></i> {{proveedor.nombre}}
-            </ion-item>
-		</ion-list>
-	 </div>
-    </form>
+	<div class="bar bar-subheader bar-stable item-input-inset">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon "></i>
+            <input type="search" placeholder="Search" ng-change="srchchange()" ng-model="adn.item">
+          </label>
+          <button class="button button-clear " ng-click="ressetserach()"><i class="ion-android-cancel assertive"></i>
+          </button>
+   </div>
+	
+  <ion-content class="has-subheader white-bg"  has-bouncing="true">
+  
+	  <ion-list>
+		<div ng-repeat="proveedor in proveedoresFiltrados"  data="{{proveedoresFiltrados}}" ng-click="informacionProveedor(proveedor)" >
+          <ion-item>  
+           <i class="icon ion-android-clipboard"></i> {{proveedor.nombre}}
+          </ion-item>
+        </div>
+		<div ng-if="proveedoresFiltrados !== undefined && !proveedoresFiltrados.length" class="no-results">
+			<ion-item >No Results Found..</ion-item >
+		</div>
+	</ion-list>
   </ion-content>
+  
+ <ion-footer-bar style="height: 60px;">
+		<button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="nuevoProveedor()">Nuevo proveedor</button>
+ </ion-footer-bar>
 </ion-view>
-<ion-footer-bar style="height: 60px;">
-  <button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="nuevoProveedor()">Nuevo proveedor</button>
-</ion-footer-bar>
+

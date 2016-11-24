@@ -3,29 +3,29 @@
     <h2 id="modificarDatos-heading33" style="color:#000000;">Nombre</h2>
     <form id="modificarDatos-form11" class="list">
       <label class="item item-input" id="modificarDatos-input10">
-        <span class="input-label">Vicente</span>
-        <input type="text" placeholder="">
+        <input type="text" placeholder="" ng-model="nombre">
       </label>
     </form>
     <h2 id="modificarDatos-heading34" style="color:#000000;">Apellido</h2>
     <form id="modificarDatos-form12" class="list">
       <label class="item item-input" id="modificarDatos-input14">
-        <span class="input-label">Solari </span>
-        <input type="text" placeholder="">
+        <input type="text" placeholder="" ng-model="apellido">
       </label>
       <h2 id="modificarDatos-heading35" style="color:#000000;">Contraseña</h2>
       <label class="item item-input" id="modificarDatos-input12">
-        <span class="input-label">123123</span>
-        <input type="password" placeholder="">
+        <input type="password" placeholder="" ng-model="pass">
       </label>
       <h2 id="modificarDatos-heading36" style="color:#000000;">Repita contraseña</h2>
     </form>
     <form id="modificarDatos-form13" class="list">
       <label class="item item-input" id="modificarDatos-input13">
-        <span class="input-label">123123</span>
-        <input type="password" placeholder="">
+        <input type="password" placeholder="" ng-model="passRep">
       </label>
     </form>
-    <button id="modificarDatos-button17" class="button button-positive  button-block">Guardar</button>
+ 
+	<ion-footer-bar style="height: 60px;">
+		<button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="guardarCambios(nombre, apellido, pass, passRep)">Guardar cambios</button>
+	</ion-footer-bar>
+	 
   </ion-content>
 </ion-view>

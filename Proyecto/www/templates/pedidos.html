@@ -1,20 +1,33 @@
-<ion-view title="Pedidos" id="page16">
-  <ion-content padding="true" class="has-header">
-    <div class="item item-body" id="Pedidos-list-item-container10">
-      <ion-list">
-            <ion-item ng-repeat="pedido in pedidosConfirmados">
-                <p style="margin-top:0px;color:#000000;"> 
-					Nombre proveedor: {{pedido.nombreProveedor}} <br>
+<ion-view view-title="Pedidos">
+   <div class="bar bar-subheader bar-stable item-input-inset">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon "></i>
+            <input type="search" placeholder="Search" ng-change="srchchange()" ng-model="adn.item">
+          </label>
+          <button class="button button-clear " ng-click="ressetserach()"><i class="ion-android-cancel assertive"></i>
+          </button>
+   </div>
+	
+  <ion-content class="has-subheader white-bg"  has-bouncing="true">
+  
+	  <ion-list>
+		<div   ng-repeat="pedido in pedidosFiltrados"  data="{{pedidosFiltrados}}" ng-click="getDatapointId(pedidosFiltrados)" >
+          <ion-item>  
+           <p style="margin-top:0px;color:#000000;"> 
+			   <H2 style="weight: bold;"> Nombre proveedor: {{pedido.proveedor.nombre}} </H2> 
 				    Fecha: {{pedido.fecha}} <br>
-					Ganancia total: {{pedido.total}}
-				</p>
-            </ion-item>
-		</ion-list>
-    </div>
-	<button id="ventasConfirmadas-button1" style="font-size:16px;border-radius:51px 0px 0px 51px; margin-top:10px" class="button button-positive button-small button-line" ng-click="verMenosPedidos()">Ver Menos</button>
-	<button id="ventasConfirmadas-button2" style="font-size:16px;border-radius:0px 51px 51px 0px; margin-top:10px" class="button button-positive button-small button-line" ng-click="verMasPedidos()">Ver Más</button>
-  </ion-content>
+					Ganancia total $: {{pedido.total}}
+			</p>
+          </ion-item>
+        </div>
+		<div ng-if="pedidosFiltrados !== undefined && !pedidosFiltrados.length" class="no-results">
+			<ion-item >No Results Found..</ion-item >
+		</div>
+	</ion-list>
+	
+	 </ion-content>
+		
+	<ion-footer-bar style="height: 60px;">
+		<button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="nuevoPedido()">Nuevo pedido</button>
+	</ion-footer-bar>
 </ion-view>
-<ion-footer-bar style="height: 60px;">
-  <button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="nuevoPedido()">Nuevo pedido</button>
-</ion-footer-bar>
