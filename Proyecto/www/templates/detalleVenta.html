@@ -1,58 +1,35 @@
 <ion-view title="Detalle venta" id="page19">
   <ion-content padding="true" class="has-header">
-    <h3 id="detalleVenta-heading18" style="color:#000000;">Cliente: Brayam Ojeda</h3>
-    <h3 id="detalleVenta-heading23" style="color:#000000;">Total: $500</h3>
-    <h3 id="detalleVenta-heading25" style="color:#000000;">Fecha: 26/05/2016</h3>
-    <h3 id="detalleVenta-heading30" style="color:#000000;">Ubicacion:</h3>
-    <div class="spacer" style="width: 300px; height: 43px;"></div>
-    <h2 id="detalleVenta-heading32" style="color:#000000;text-align:center;">Mapa</h2>
-    <div class="spacer" style="width: 300px; height: 43px;"></div>
-    <h3 id="detalleVenta-heading47" style="color:#000000;">Productos:</h3>
-    <div class="item item-body" id="detalleVenta-list-item-container12">
-      <div>
-        <img src="img/vdA28BaOQMq0rD7duMDl_f254782e409a2635d4b69a6f8ad7eecd.jpg" width="100%" height="100" style="display: block; margin-left: auto; margin-right: auto;">
-      </div>
-      <div id="detalleVenta-markdown18">
-        <p style="margin-top:0px;color:#000000;">Nombre: Vasos descartables</p>
-      </div>
-      <div id="detalleVenta-markdown21">
-        <p style="margin-top:0px;color:#000000;">Descripcion: Vaso desechable 1 litro</p>
-      </div>
-      <div id="detalleVenta-markdown25">
-        <p style="margin-top:0px;color:#000000;">Categoria: Cotillon</p>
-      </div>
-      <div id="detalleVenta-markdown32">
-        <p style="margin-top:0px;color:#000000;">Precio unidad: $0,30</p>
-      </div>
-      <div id="detalleVenta-markdown33">
-        <p style="margin-top:0px;color:#000000;">Cantidad: 1000</p>
-      </div>
-      <div id="detalleVenta-markdown34">
-        <p style="margin-top:0px;color:#000000;">Total: $300</p>
-      </div>
+	<div class="spacer" style="width: 300px; height: 5px;"></div>
+	<h3 id="detalleVenta-heading1" style="color:#000000; margin-bottom:20px;">Información general</h3>
+    <ion-item>
+    <h2 ng-bind-html="nombreClienteVenta" id="detalleVenta-heading18" style="color:#000000; weight: bold;">Cliente:</h2>
+    <h2 ng-bind-html="fechaVenta" id="detalleVenta-heading25" style="color:#000000;">Fecha:</h2>
+	<h2 ng-bind-html="totalVenta" id="detalleVenta-heading23" style="color:#000000;">Total:</h2>
+	</ion-item>
+    <h3 id="detalleVenta-heading47" style="color:#000000; margin-bottom:20px;">Ubicación</h3>
+	<div ng-controller="detalleVentaCtrl" data-tap-disable="true" style="position: relative; top: 0px; bottom: 0px; left: 0px; right: 0px;">
+        <leaflet height="300px" width="100%" markers="markers" center="center" defaults="defaults"></leaflet>
     </div>
-    <div class="item item-body" id="detalleVenta-list-item-container13">
-      <div>
-        <img src="img/0bLwJFkBQierNtGuJZek_BOLSA-CONSORCIO-GUARDIN-NEGRO-60x90.jpg" width="100%" height="100" style="display: block; margin-left: auto; margin-right: auto;">
-      </div>
-      <div id="detalleVenta-markdown35">
-        <p style="margin-top:0px;color:#000000;">Nombre: Bolsa consorcio</p>
-      </div>
-      <div id="detalleVenta-markdown36">
-        <p style="margin-top:0px;color:#000000;">Descripcion: Bolsa de 20L</p>
-      </div>
-      <div id="detalleVenta-markdown37">
-        <p style="margin-top:0px;color:#000000;">Categoria: Cotillon</p>
-      </div>
-      <div id="detalleVenta-markdown38">
-        <p style="margin-top:0px;color:#000000;">Precio unidad: $0,10</p>
-      </div>
-      <div id="detalleVenta-markdown39">
-        <p style="margin-top:0px;color:#000000;">Cantidad: 2000</p>
-      </div>
-      <div id="detalleVenta-markdown40">
-        <p style="margin-top:0px;color:#000000;">Total: $200</p>
-      </div>
-    </div>
+    <h3 id="detalleVenta-heading47" style="color:#000000; margin-bottom:20px;">Productos</h3>
+    
+	  <ion-list>
+		<div ng-repeat="producto in productos" >
+          <ion-item>  
+				<div>
+					<img src="img/productos.jpg" width="100%" height="100" style="display: block; margin-left: auto; margin-right: auto;">
+				</div>
+				Nombre: {{producto.nombre}} <br>
+				Descripcion: {{producto.descripcion}} <br>
+				Categoria: {{producto.categoria}} <br>
+				Cantidad vendidos: {{producto.cantidad}}<br>
+				Precio compra: {{producto.precioCompra}}<br>
+				Precio venta: {{producto.precioVenta}}<br>
+          </ion-item>
+        </div>
+	</ion-list>
   </ion-content>
+  <ion-footer-bar style="height: 60px;">
+		<button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="eliminarVenta()">Eliminar</button>
+  </ion-footer-bar>
 </ion-view>

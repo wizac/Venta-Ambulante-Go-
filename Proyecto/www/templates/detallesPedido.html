@@ -1,31 +1,30 @@
 <ion-view title="Detalles pedido" id="page17">
   <ion-content padding="true" class="has-header">
-    <h3 id="detallesPedido-heading51" style="color:#000000;">Proveedor: Alejo Gagliardi</h3>
-    <h3 id="detallesPedido-heading53" style="color:#000000;">Fecha: 24/5/2016</h3>
-    <h3 id="detallesPedido-heading52" style="color:#000000;">Total: $700</h3>
-    <h3 id="detallesPedido-heading54" style="color:#000000;text-align:center;">Productos</h3>
-    <div class="item item-body" id="detallesPedido-list-item-container9">
-      <div>
-        <img src="img/vdA28BaOQMq0rD7duMDl_f254782e409a2635d4b69a6f8ad7eecd.jpg" width="100%" height="100" style="display: block; margin-left: auto; margin-right: auto;">
-      </div>
-      <div id="detallesPedido-markdown26">
-        <p style="margin-top:0px;color:#000000;">Nombre: Vasos descartables</p>
-      </div>
-      <div id="detallesPedido-markdown27">
-        <p style="margin-top:0px;color:#000000;">Descripcion: Vaso desechable 1 litro</p>
-      </div>
-      <div id="detallesPedido-markdown31">
-        <p style="margin-top:0px;color:#000000;">Categoria: Cotillon</p>
-      </div>
-      <div id="detallesPedido-markdown28">
-        <p style="margin-top:0px;color:#000000;">Precio unidad: $0,30</p>
-      </div>
-      <div id="detallesPedido-markdown29">
-        <p style="margin-top:0px;color:#000000;">Cantidad: 2330</p>
-      </div>
-      <div id="detallesPedido-markdown30">
-        <p style="margin-top:0px;color:#000000;">Total: $700</p>
-      </div>
-    </div>
+	<div class="spacer" style="width: 300px; height: 5px;"></div>
+	<h3 id="detallePedido-heading1" style="color:#000000; margin-bottom:20px;">Información general</h3>
+    <ion-item>
+    <h2 ng-bind-html="nombreProveedorPedido" id="detallePedido-heading18" style="color:#000000; weight: bold;">Cliente:</h2>
+    <h2 ng-bind-html="fechaPedido" id="detallePedido-heading25" style="color:#000000;">Fecha:</h2>
+	<h2 ng-bind-html="totalPedido" id="detallePedido-heading23" style="color:#000000;">Total:</h2>
+	</ion-item>
+    <h3 id="detalleVenta-heading47" style="color:#000000; margin-bottom:20px;">Productos</h3>
+	  <ion-list>
+		<div ng-repeat="producto in productos" >
+          <ion-item>  
+				<div>
+					<img src="img/productos.jpg" width="100%" height="100" style="display: block; margin-left: auto; margin-right: auto;">
+				</div>
+				Nombre: {{producto.nombre}} <br>
+				Descripcion: {{producto.descripcion}} <br>
+				Categoria: {{producto.categoria}} <br>
+				Cantidad pedidos: {{producto.cantidad}}<br>
+				Precio compra: {{producto.precioCompra}}<br>
+				Precio venta: {{producto.precioVenta}}<br>
+          </ion-item>
+        </div>
+	</ion-list>
   </ion-content>
+  <ion-footer-bar style="height: 60px;">
+		<button  style="height: 37px; font-size:18px;" class="button button-positive  button-block" ng-click="eliminarPedido()">Eliminar</button>
+  </ion-footer-bar>
 </ion-view>

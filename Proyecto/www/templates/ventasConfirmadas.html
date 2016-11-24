@@ -11,7 +11,7 @@
   <ion-content class="has-subheader white-bg"  has-bouncing="true">
   
 	  <ion-list>
-		<div   ng-repeat="ventaConfirmada in ventasConfirmadasFiltradas"  data="{{ventasConfirmadasFiltradas}}" >
+		<div   ng-repeat="ventaConfirmada in ventasConfirmadasFiltradas"  data="{{ventasConfirmadasFiltradas}}" ng-click="verDetalleVenta(ventaConfirmada)" >
           <ion-item>  
            <p style="margin-top:0px;color:#000000;"> 
 					<H2 style="weight: bold;">

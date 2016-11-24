@@ -11,7 +11,7 @@
   <ion-content class="has-subheader white-bg"  has-bouncing="true">
   
 	  <ion-list>
-		<div   ng-repeat="pedido in pedidosFiltrados"  data="{{pedidosFiltrados}}" ng-click="getDatapointId(pedidosFiltrados)" >
+		<div   ng-repeat="pedido in pedidosFiltrados"  data="{{pedidosFiltrados}}" ng-click="verDetallePedido(pedido)" >
           <ion-item>  
            <p style="margin-top:0px;color:#000000;"> 
 			   <H2 style="weight: bold;"> Nombre proveedor: {{pedido.proveedor.nombre}} </H2> 

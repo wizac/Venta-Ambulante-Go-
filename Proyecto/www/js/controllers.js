@@ -281,6 +281,9 @@ function ($scope, $stateParams) {
 		
 		fecha = ($filter('date')(new Date(), "dd/MM/yyyy"));
 		producto = $rootScope.productosSeleccionados;
+		for(var i = 0; i < producto.length; i++){
+			producto[i].cantidad = producto[i].cantidadSeleccionados;
+		}
 		total = $rootScope.precioTotal;
 		marcador = $scope.markers;
 		centrado = $scope.center;
@@ -323,6 +326,7 @@ function ($scope, $stateParams) {
 	$scope.gananciaSemanal = "Ultima semana: $0";
 	$rootScope.ventas = [];
 	$rootScope.pedidos = [];
+	$rootScope.ventaDetallada = [];
 	
 		
 	API.getVentasConfirmadasConNombreClienteOrdenado(function(result){
@@ -432,7 +436,7 @@ function ($scope, $stateParams) {
 	
 	
 	$scope.verDetalleVenta = function(venta){
-		
+		$rootScope.ventaDetallada = venta;
 		$state.go('menu.detalleVenta');
 	}
 	
@@ -919,13 +923,14 @@ function ($scope, $stateParams) {
 
 .controller('confirmarProductosPedidosCtrl', function ($scope, $stateParams, $rootScope, $state, API) {
 	
+	$rootScope.totalPedidos = 0;
+	
 	if(!angular.isUndefined($rootScope.productosSeleccionadosPedidos)){
 		$scope.productosSeleccionados = $rootScope.productosSeleccionadosPedidos
 	}
 	else{
 		$scope.productosSeleccionados = [];
 	}
-	$rootScope.precioTotalPedidos = 0;
 	
 	$scope.agregarProductoSeleccionado = function(producto){
 		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
@@ -935,11 +940,10 @@ function ($scope, $stateParams) {
 			$rootScope.productosSeleccionadosPedidos = $scope.productosSeleccionados;
 		}
 		
-		$rootScope.precioTotalPedidos = 0;
 		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
-			$rootScope.precioTotalPedidos += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
+			$rootScope.totalPedidos += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
 		}
-		$scope.precioTotal = "Precio total: $" + $rootScope.precioTotalPedidos;
+		$scope.precioTotal = "Precio total: $" + $rootScope.totalPedidos;
 		
 	}
 	
@@ -957,18 +961,18 @@ function ($scope, $stateParams) {
 		}
 		$rootScope.productosSeleccionadosPedidos = $scope.productosSeleccionados;
 		
-		$rootScope.precioTotalPedidos = 0;
+		$rootScope.totalPedidos = 0;
 		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
-			$rootScope.precioTotalPedidos += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
+			$rootScope.totalPedidos += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados);
 		}
-		$scope.precioTotal = "Precio total: $" + $rootScope.precioTotalPedidos;
+		$scope.precioTotal = "Precio total: $" + $rootScope.totalPedidos;
 	}
 
-	$rootScope.precioTotalPedidos = 0;
+	$rootScope.totalPedidos = 0;
 	for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
-		$rootScope.precioTotalPedidos += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados)
+		$rootScope.totalPedidos += ($scope.productosSeleccionados[i].precioVenta * $scope.productosSeleccionados[i].cantidadSeleccionados)
 	}
-	$scope.precioTotal = "Precio total: $" + $rootScope.precioTotalPedidos;
+	$scope.precioTotal = "Precio total: $" + $rootScope.totalPedidos;
 	
 	
 	$scope.seleccionarProveedor = function(){
@@ -1000,6 +1004,10 @@ function ($scope, $stateParams) {
 			
 			var fecha = ($filter('date')(new Date(), "dd/MM/yyyy"))
 			var producto = $rootScope.productosSeleccionadosPedidos;
+			for(var i = 0; i < producto.length; i++){
+				producto[i].cantidad = producto[i].cantidadSeleccionados;
+			}
+			console.log($rootScope.totalPedidos);
 			var total = $rootScope.totalPedidos;
 			var proveedor = angular.fromJson($rootScope.proveedorSeleccionado);
 			var estado = true;
@@ -1063,17 +1071,23 @@ function ($scope, $stateParams) {
 
 	$scope.pedidosConfirmados = [];
 	$scope.pedidosFiltrados = [];
-	var contador;
+	var pedidos = [];
+	var contador = 0;
 	
 	API.getPedidosConNombreProveedorOrdenado(function(result){
 		console.log('los pedidos se recuperaron con exito');
-        $scope.pedidosConfirmados = result;
-		$scope.pedidosFiltrados=$scope.pedidosConfirmados;
 		console.log(result);
+		pedidos = result;
+		contador = pedidos.length;
+		for(var i = 0; i < pedidos.length; i ++){
+			$scope.pedidosConfirmados.push(pedidos[--contador]);
+		}
+		$scope.pedidosFiltrados=$scope.pedidosConfirmados;
 	}, function(error) {
 		console.log('la promesa se ha rechazado ' + error);
 		$scope.errormessage = error;
 	});
+
 	
 	
 	$scope.nuevoPedido = function(){
@@ -1107,18 +1121,64 @@ function ($scope, $stateParams) {
         $scope.adn.item = "";
         $scope.pedidosFiltrados =$scope.pedidosConfirmados;
     }
+	
+	$scope.verDetallePedido = function(pedido){
+			console.log("paso");
+			$rootScope.pedidoDetallado = pedido;
+			console.log(pedido);
+			console.log(".-----------------------------------------------------------------")
+			$state.go('menu.detallesPedido');
+	}
+
 
 })
    
-.controller('detallesPedidoCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('detallesPedidoCtrl', function ($scope, $stateParams, $state, $rootScope, $ionicHistory, $ionicPopup, API) {
 
+	$scope.nombreProveedorPedido = "";
+	$scope.fechaPedido = "";
+	$scope.totalPedido = "";
+	$scope.productos = [];
+	
+	if($rootScope.pedidoDetallado != null){
+		$scope.nombreProveedorPedido = "Nombre: " + $rootScope.pedidoDetallado.proveedor.nombre;
+		$scope.fechaPedido = "Fecha: " + $rootScope.pedidoDetallado.fecha;
+		$scope.totalPedido = "Total: " + $rootScope.pedidoDetallado.total;
+		$scope.productos = $rootScope.pedidoDetallado.producto;
+		console.log($scope.productos);
+		$scope.eliminarPedido = function(){
+			
+			
+			API.eliminarPedido($rootScope.pedidoDetallado, function(result){
+			
+			$ionicPopup.alert({
+							title: 'Aviso',
+							template: "El pedido fue eliminado"
+			});
+			$ionicHistory.nextViewOptions({
+				disableBack: true
+			});
+			$state.go("menu.pedidos");
+			}, function(error) {
+			$ionicPopup.alert({
+							title: 'Error',
+							template: error
+			});
+			console.log('la promesa se ha rechazado ' + error);
+			$scope.errormessage = error;
+		});
+			
+		}
+	
+		
+	}
+	else{
+		console.log("no hay pedido");
+	}
 
-}])
+})
    
-.controller('ventasConfirmadasCtrl', function (API, $scope, $stateParams, $filter) {
+.controller('ventasConfirmadasCtrl', function (API, $scope, $stateParams, $filter, $state, $rootScope) {
 	
 	$scope.ventasConfirmadas = [];
 	$scope.ventasConfirmadasFiltradas = [];
@@ -1166,19 +1226,83 @@ function ($scope, $stateParams) {
         $scope.ventasConfirmadasFiltradas = $scope.ventasConfirmadas;
     }
 	
+	$scope.verDetalleVenta = function(venta){
+		$rootScope.ventaDetallada = venta;
+		$state.go('menu.detalleVenta');
+	}
+	
 
 
 })
    
-.controller('detalleVentaCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('detalleVentaCtrl', function ($scope, $stateParams, $rootScope, $state, $ionicHistory, $ionicPopup, API) {
 
+	$scope.nombreClienteVenta = "";
+	$scope.fechaVenta = "";
+	$scope.totalVenta = "";
+	$scope.productos = [];
+	
+	if($rootScope.ventaDetallada != null){
+		$scope.nombreClienteVenta = "Nombre: " + $rootScope.ventaDetallada.cliente.nombre + " " + $rootScope.ventaDetallada.cliente.apellido;
+		$scope.fechaVenta = "Fecha: " + $rootScope.ventaDetallada.fecha;
+		$scope.totalVenta = "Total: " + $rootScope.ventaDetallada.total;
 
-}])
+		angular.extend($scope, {
+			center: {
+				lat: -33.20,
+				lng: -66.30,
+				zoom: 14
+			},
+			markers: {
+				osloMarker: {
+					lat: -33.20,
+					lng: -66.30,   
+					message: "Arrastra el marcado hacia el punto de venta!",
+					focus: true,
+					draggable: true
+				}
+			},
+			defaults: {
+				scrollWheelZoom: true
+			}
+		});
+	
+		$scope.productos = $rootScope.ventaDetallada.producto;
+		$scope.markers = $rootScope.ventaDetallada.marcador;
+		$scope.center = $rootScope.ventaDetallada.centrado;
+		
+		$scope.eliminarVenta = function(){
+			
+			
+			API.eliminarVenta($rootScope.ventaDetallada, function(result){
+			
+			$ionicPopup.alert({
+							title: 'Aviso',
+							template: "la venta fue eliminada"
+			});
+			$ionicHistory.nextViewOptions({
+				disableBack: true
+			});
+			$state.go("menu.perfil");
+			}, function(error) {
+			$ionicPopup.alert({
+							title: 'Error',
+							template: error
+			});
+			console.log('la promesa se ha rechazado ' + error);
+			$scope.errormessage = error;
+		});
+			
+		}
+	}
+	else{
+		console.log("no hay venta");
+	}
+	
+
+})
    
-.controller('ventasPendientesCtrl', function ($scope, $stateParams, API, $filter, $ionicPopup) {
+.controller('ventasPendientesCtrl', function ($scope, $stateParams, API, $filter, $ionicPopup, $rootScope, $state) {
 
 	$scope.ventasPendientes = [];
 	$scope.ventasPendientesFiltradas = [];
@@ -1288,6 +1412,11 @@ function ($scope, $stateParams) {
         $scope.ventasPendientesFiltradas =$scope.ventasPendientes;
     }
 
+	
+	/*$scope.verDetalleVenta = function(venta){
+		$rootScope.ventaDetallada = venta;
+		$state.go('menu.detalleVenta');
+	}*/
 
 
 })
@@ -2107,6 +2236,52 @@ function ($scope, $stateParams) {
 					"id": venta._id
 				};
 				$http.post('http://localhost:8080/api/venta/eliminar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		eliminarVenta: function(venta, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				console.log(venta);
+				var data = {
+					"id": venta._id
+				};
+				$http.post('http://localhost:8080/api/venta/eliminar?token=' + $rootScope.token, data).success(function(response){
+					
+					if (response.success) {
+						cexito(response)
+					} else {
+						cerror(response.message);
+					}
+				});
+			}
+			else
+			{
+				cerror("conexion perdida");
+			}
+			
+		},
+		
+		eliminarPedido: function(pedido, cexito, cerror){
+			if($rootScope != null && $rootScope != "")
+			{
+				console.log(pedido);
+				var data = {
+					"id": pedido._id
+				};
+				$http.post('http://localhost:8080/api/pedido/eliminar?token=' + $rootScope.token, data).success(function(response){
 					
 					if (response.success) {
 						cexito(response)
