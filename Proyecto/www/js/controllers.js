@@ -74,6 +74,8 @@ function ($scope, $stateParams) {
 		
 	}
 	
+
+
 	$scope.confirmarProductos = function(){
 		$rootScope.productosSeleccionados = [];
 		for(var i = 0; i < $scope.productosStock.length; i ++){
@@ -127,7 +129,7 @@ function ($scope, $stateParams) {
 
 })
    
-.controller('confirmarProductosCtrl', function ($scope, $stateParams, $rootScope, $state) {
+.controller('confirmarProductosCtrl', function ($scope, $stateParams, $rootScope, $state, $ionicPopup) {
 	
 	
 	$scope.productosSeleccionados = $rootScope.productosSeleccionados;
@@ -151,6 +153,17 @@ function ($scope, $stateParams) {
 		
 	}
 	
+	$scope.problema=function(){
+
+		$ionicPopup.alert({
+			title: 'Aviso!',
+			template: 'Esta opcion no esta disponible en esta version'
+		});
+		$ionicHistory.nextViewOptions({
+				disableBack: true
+		});
+
+	}
 	
 	$scope.quitarProductoSeleccionado = function(producto){
 		for(var i = 0; i < $scope.productosSeleccionados.length; i ++){
